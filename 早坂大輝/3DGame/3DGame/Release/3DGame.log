@@ -1,0 +1,8 @@
+﻿  camera.cpp
+c:\users\student\documents\visual studio 2015\3dgame\3dgame\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  light.cpp
+c:\users\student\documents\visual studio 2015\3dgame\3dgame\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  main.cpp
+c:\users\student\documents\visual studio 2015\3dgame\3dgame\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
+  polygon.cpp
+c:\users\student\documents\visual studio 2015\3dgame\3dgame\main.h(14): fatal error C1083: include ファイルを開けません。'd3dx9.h':No such file or directory
