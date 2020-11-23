@@ -1,0 +1,12 @@
+﻿  wall.cpp
+  shadow.cpp
+  polygon.cpp
+  model.cpp
+  main.cpp
+  light.cpp
+  input.cpp
+  camera.cpp
+  Billboard.cpp
+  コードを生成中...
+  3D_GAME.vcxproj -> C:\Users\student\Desktop\02_片野裕哉\3D_GAME\Debug\3D_GAME.exe
+  3D_GAME.vcxproj -> C:\Users\student\Desktop\02_片野裕哉\3D_GAME\Debug\3D_GAME.pdb (Full PDB)
