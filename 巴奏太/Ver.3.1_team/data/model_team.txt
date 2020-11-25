@@ -23,7 +23,7 @@ TEXTURE_FILENAME = data/TEXTURE/field001.jpg		# [4]地面テクスチャ 土
 #------------------------------------------------------------------------------
 # モデル数
 #------------------------------------------------------------------------------
-NUM_MODEL = 26
+NUM_MODEL = 29
 
 #------------------------------------------------------------------------------
 # モデルファイル名
@@ -54,6 +54,9 @@ MODEL_FILENAME = data/MODEL/House.x					# [22]家
 MODEL_FILENAME = data/MODEL/car000.x				# [23]車
 MODEL_FILENAME = data/MODEL/car001.x				# [24]車
 MODEL_FILENAME = data/MODEL/heri_break.x			# [25]墜落ヘリ
+MODEL_FILENAME = data/MODEL/fence00.x				# [26]フェンス
+MODEL_FILENAME = data/MODEL/dentyu00.x				# [27]電柱 (壊れた)
+MODEL_FILENAME = data/MODEL/dentyu01.x				# [28]電柱
 
 #------------------------------------------------------------------------------
 # カメラ情報
@@ -187,15 +190,6 @@ MODELSET
 END_MODELSET
 
 #---------
-#車_2
-#---------
-MODELSET
-	TYPE = 24
-	POS = 300 0 -300
-	ROT = 0 0 0
-END_MODELSET
-
-#---------
 #墜落ヘリ
 #---------
 MODELSET
@@ -204,16 +198,42 @@ MODELSET
 	ROT = 0 0 0
 END_MODELSET
 
+#---------
+#フェンス
+#---------
+MODELSET
+	TYPE = 26
+	POS = 0 0 -600
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#壊れた電柱
+#---------
+MODELSET
+	TYPE = 27
+	POS = 300 0 -600
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#電柱
+#---------
+MODELSET
+	TYPE = 28
+	POS = -300 0 -600
+	ROT = 0 0 0
+END_MODELSET
 
 #------------------------------------------------------------------------------
 # プレイヤー情報
 #------------------------------------------------------------------------------
-#PLAYERSET
-#	MOTION_FILENAME = data/motion_runningman.txt
-#	POS = -240 0 0
-#	ROT = 0 0 0
-#END_PLAYERSET
-#
+PLAYERSET
+	MOTION_FILENAME = data/motion_runningman.txt
+	POS = -240 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
 #PLAYERSET
 #	MOTION_FILENAME = data/motion_runningman_silver.txt
 #	POS = -80 0 0
