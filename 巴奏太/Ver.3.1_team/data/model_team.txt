@@ -1,0 +1,235 @@
+#==============================================================================
+#
+# 『モデルビューワ』スクリプトファイル [model_war.txt]
+# Author : AKIRA TANAKA
+#
+#==============================================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------------------------
+# テクスチャ数
+#------------------------------------------------------------------------------
+NUM_TEXTURE = 5
+
+#------------------------------------------------------------------------------
+# テクスチャファイル名
+#------------------------------------------------------------------------------
+TEXTURE_FILENAME = data/TEXTURE/sky002.jpg			# [0]空テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/mountain000.png		# [1]山テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/field004.jpg		# [2]地面テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/wall100.jpg			# [3]地面テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/field001.jpg		# [4]地面テクスチャ 土
+
+#------------------------------------------------------------------------------
+# モデル数
+#------------------------------------------------------------------------------
+NUM_MODEL = 26
+
+#------------------------------------------------------------------------------
+# モデルファイル名
+#------------------------------------------------------------------------------
+MODEL_FILENAME = data/MODEL/base000.x				# [0]基地(小)
+MODEL_FILENAME = data/MODEL/base001.x				# [1]基地(中)
+MODEL_FILENAME = data/MODEL/base002.x				# [2]基地(大)
+MODEL_FILENAME = data/MODEL/wall100.x				# [3]壁(小)
+MODEL_FILENAME = data/MODEL/wall101.x				# [4]壁(中)
+MODEL_FILENAME = data/MODEL/wall102.x				# [5]壁(大)
+MODEL_FILENAME = data/MODEL/debris000.x				# [6]鉄骨ガレキ(小)
+MODEL_FILENAME = data/MODEL/debris001.x				# [7]鉄骨ガレキ(中)
+MODEL_FILENAME = data/MODEL/debris002.x				# [8]鉄骨ガレキ(大)
+MODEL_FILENAME = data/MODEL/debris200.x				# [9]岩壁ガレキ(小)
+MODEL_FILENAME = data/MODEL/debris201.x				# [10]岩壁ガレキ(中)
+MODEL_FILENAME = data/MODEL/debris202.x				# [11]岩壁ガレキ(大)
+MODEL_FILENAME = data/MODEL/gravel000.x				# [12]小石(小)
+MODEL_FILENAME = data/MODEL/gravel001.x				# [13]小石(中)
+MODEL_FILENAME = data/MODEL/gravel002.x				# [14]小石(大)
+MODEL_FILENAME = data/MODEL/pillar000.x				# [15]柱(小)
+MODEL_FILENAME = data/MODEL/pillar001.x				# [16]柱(中)
+MODEL_FILENAME = data/MODEL/pillar002.x				# [17]柱(大)
+MODEL_FILENAME = data/MODEL/smallhouse_ruined00.x	# [18]壊れた家
+MODEL_FILENAME = data/MODEL/home.break.x			# [19]壊れた家2
+MODEL_FILENAME = data/MODEL/ido.break.x				# [20]壊れた井戸
+MODEL_FILENAME = data/MODEL/tree.dead.x				# [21]枯れ木
+MODEL_FILENAME = data/MODEL/House.x					# [22]家
+MODEL_FILENAME = data/MODEL/car000.x				# [23]車
+MODEL_FILENAME = data/MODEL/car001.x				# [24]車
+MODEL_FILENAME = data/MODEL/heri_break.x			# [25]墜落ヘリ
+
+#------------------------------------------------------------------------------
+# カメラ情報
+#------------------------------------------------------------------------------
+CAMERASET
+	POS = 680.0 180.0 -720.0			# 視点
+	REF = 0.0 0.0 0.0				# 注視点
+END_CAMERASET
+
+#------------------------------------------------------------------------------
+# ライト情報
+#------------------------------------------------------------------------------
+LIGHTSET
+	DIRECTION = 0.22 -0.87 0.44		# 方向
+	DIFFUSE = 1.0 1.0 1.0			# 拡散光
+END_LIGHTSET
+
+LIGHTSET
+	DIRECTION = -0.18 0.88 -0.44	# 方向
+	DIFFUSE = 0.65 0.65 0.65		# 拡散光
+END_LIGHTSET
+
+LIGHTSET
+	DIRECTION = 0.89 -0.11 0.44		# 方向
+	DIFFUSE = 0.15 0.15 0.15		# 拡散光
+END_LIGHTSET
+
+#------------------------------------------------------------------------------
+# 空情報
+#------------------------------------------------------------------------------
+SKYSET
+	TEXTYPE = 0
+	MOVE = 0.00002
+END_SKYSET
+
+#------------------------------------------------------------------------------
+# 山情報
+#------------------------------------------------------------------------------
+MOUNTAINSET
+	TEXTYPE = 1
+END_MOUNTAINSET
+
+#------------------------------------------------------------------------------
+# 地面情報
+#------------------------------------------------------------------------------
+FIELDSET
+	TEXTYPE = 2
+	POS = 0 0 0
+	ROT = 0 0 0
+	BLOCK = 12 32
+	SIZE = 80 80
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 4
+	POS = -800 0  0
+	ROT = 0 0 0
+	BLOCK = 8 32
+	SIZE = 80 80
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 4
+	POS = 800 0 0
+	ROT = 0 0 0
+	BLOCK = 8 32
+	SIZE = 80 80
+END_FIELDSET
+
+#------------------------------------------------------------------------------
+# 壁情報
+#------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+# モデル配置情報
+#------------------------------------------------------------------------------
+
+#---------
+#壊れた家
+#---------
+MODELSET
+	TYPE = 18
+	POS = -800 0 0
+	ROT = 0 -90 0
+END_MODELSET
+
+#---------
+#壊れた家_2
+#---------
+MODELSET
+	TYPE = 19
+	POS = 0 0 0
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#壊れた家3
+#---------
+MODELSET
+	TYPE = 22
+	POS = 0 0 300
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#壊れた井戸
+#---------
+MODELSET
+	TYPE = 20
+	POS = 300 0 0
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#枯れ木
+#---------
+MODELSET
+	TYPE = 21
+	POS = -300 0 0
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#車
+#---------
+MODELSET
+	TYPE = 23
+	POS = 0 0 -300
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#車_2
+#---------
+MODELSET
+	TYPE = 24
+	POS = 300 0 -300
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#墜落ヘリ
+#---------
+MODELSET
+	TYPE = 25
+	POS = -300 0 -300
+	ROT = 0 0 0
+END_MODELSET
+
+
+#------------------------------------------------------------------------------
+# プレイヤー情報
+#------------------------------------------------------------------------------
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman.txt
+#	POS = -240 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
+#
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman_silver.txt
+#	POS = -80 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
+#
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman_black.txt
+#	POS = 80 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
+#
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman_switch.txt
+#	POS = 240 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
+
+END_SCRIPT		# この行は絶対消さないこと！
