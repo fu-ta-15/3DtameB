@@ -4,8 +4,8 @@ Format Text Ver 1.0
 Scene {
 	pos -0.4951 -81.2819 3840.0000
 	lookat 0.0000 0.0000 0.0000
-	head 42.8448
-	pich 0.4608
+	head 45.1948
+	pich 0.4008
 	bank 0.0000
 	ortho 0
 	zoom2 1.9530
@@ -19,13 +19,13 @@ Scene {
 }
 Material 9 {
 	"mat1" col(0.302 0.302 0.302 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat2" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\学校\3D制作\チーム制作\廃車シリーズ\TEXTURE\rust000.png") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(100.000 100.000 100.000) proj_angle(0.000 0.000 0.000)
+	"mat2" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\3DtameB\早坂大輝\チーム制作\廃車シリーズ\TEXTURE\rust000.png") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(100.000 100.000 100.000) proj_angle(0.000 0.000 0.000)
 	"mat3" col(0.706 0.020 0.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 	"mat4" col(0.788 0.820 0.012 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 	"mat5" col(0.455 0.655 0.635 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 	"mat6" col(0.878 0.878 0.878 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat7" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\学校\3D制作\チーム制作\廃車シリーズ\TEXTURE\wheel000.png") proj_type(1) proj_pos(0.000 50.009 -56.421) proj_scale(99.007 99.007 99.007) proj_angle(-90.000 -0.000 0.000)
-	"mat8" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\学校\3D制作\チーム制作\廃車シリーズ\TEXTURE\rust001.jpg") proj_type(2) proj_pos(138.254 0.000 -17.994) proj_scale(166.318 420.558 163.032) proj_angle(-84.930 -48.301 83.226)
+	"mat7" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\3DtameB\早坂大輝\チーム制作\廃車シリーズ\TEXTURE\wheel000.png") proj_type(1) proj_pos(0.000 50.009 -56.421) proj_scale(99.007 99.007 99.007) proj_angle(-90.000 -0.000 0.000)
+	"mat8" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\3DtameB\早坂大輝\チーム制作\廃車シリーズ\TEXTURE\rust001.jpg") proj_type(2) proj_pos(138.254 0.000 -17.994) proj_scale(166.318 420.558 163.032) proj_angle(-84.930 -48.301 83.226)
 	"mat9" col(0.886 0.969 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 }
 Object "本体" {

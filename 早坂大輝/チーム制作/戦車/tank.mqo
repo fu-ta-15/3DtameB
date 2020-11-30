@@ -20,9 +20,9 @@ Scene {
 Material 5 {
 	"mat1" col(0.000 0.000 0.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 	"mat2" col(0.314 0.388 0.122 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"mat3" col(0.776 0.776 0.776 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\学校\3D制作\チーム制作\戦車\camofula.jpg")
-	"mat4" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\学校\3D制作\チーム制作\戦車\camofula.jpg") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(100.000 100.000 100.000) proj_angle(0.000 0.000 0.000)
-	"mat5" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\student\Desktop\学校\3D制作\チーム制作\戦車\camofula.jpg") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(100.000 100.000 100.000) proj_angle(90.000 -0.000 0.000)
+	"mat3" col(0.776 0.776 0.776 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("camofula.jpg")
+	"mat4" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("camofula.jpg") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(100.000 100.000 100.000) proj_angle(0.000 0.000 0.000)
+	"mat5" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("camofula.jpg") proj_type(1) proj_pos(0.000 0.000 0.000) proj_scale(100.000 100.000 100.000) proj_angle(90.000 -0.000 0.000)
 }
 Object "キャタピラ左" {
 	visible 15
