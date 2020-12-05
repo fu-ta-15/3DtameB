@@ -36,8 +36,8 @@ CHARACTERSET
 	NUM_PARTS = 14					# パーツ数
 	MOVE = 1.0						# 移動量
 	JUMP = 5.0						# ジャンプ量
-	RADIUS = 5.0					# 半径
-	HEIGHT = 80.0					# 高さ
+	RADIUS = 25.0					# 半径
+	HEIGHT = 70.0					# 高さ
 	
 	PARTSSET
 		INDEX = 0					# 体

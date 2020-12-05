@@ -230,7 +230,7 @@ END_MODELSET
 #------------------------------------------------------------------------------
 PLAYERSET
 	MOTION_FILENAME = data/motion_maeno_model.txt
-	POS = -240 0 0
+	POS = -160 0 0
 	ROT = 0 0 0
 END_PLAYERSET
 
@@ -248,7 +248,19 @@ END_PLAYERSET
 
 PLAYERSET
 	MOTION_FILENAME = data/motion_katano_model.txt
+	POS = 160 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_hayasaka_model.txt
 	POS = 240 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_tomoe_model.txt
+	POS = -240 0 0
 	ROT = 0 0 0
 END_PLAYERSET
 
