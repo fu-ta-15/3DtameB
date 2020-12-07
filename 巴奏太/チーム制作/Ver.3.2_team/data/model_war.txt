@@ -1,0 +1,1008 @@
+#==============================================================================
+#
+# 『モデルビューワ』スクリプトファイル [model_war.txt]
+# Author : AKIRA TANAKA
+#
+#==============================================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------------------------
+# テクスチャ数
+#------------------------------------------------------------------------------
+NUM_TEXTURE = 6
+
+#------------------------------------------------------------------------------
+# テクスチャファイル名
+#------------------------------------------------------------------------------
+TEXTURE_FILENAME = data/TEXTURE/sky002.jpg			# [0]空テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/mountain000.png		# [1]山テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/field004.jpg		# [2]地面テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/wall100.jpg			# [3]地面テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/tree000.png			# [4]木テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/effect000.jpg		# [5]エフェクトテクスチャ
+
+#------------------------------------------------------------------------------
+# モデル数
+#------------------------------------------------------------------------------
+NUM_MODEL = 19
+
+#------------------------------------------------------------------------------
+# モデルファイル名
+#------------------------------------------------------------------------------
+MODEL_FILENAME = data/MODEL/base000.x				# [0]基地(小)
+MODEL_FILENAME = data/MODEL/base001.x				# [1]基地(中)
+MODEL_FILENAME = data/MODEL/base002.x				# [2]基地(大)
+MODEL_FILENAME = data/MODEL/wall100.x				# [3]壁(小)
+MODEL_FILENAME = data/MODEL/wall101.x				# [4]壁(中)
+MODEL_FILENAME = data/MODEL/wall102.x				# [5]壁(大)
+MODEL_FILENAME = data/MODEL/debris000.x				# [6]鉄骨ガレキ(小)
+MODEL_FILENAME = data/MODEL/debris001.x				# [7]鉄骨ガレキ(中)
+MODEL_FILENAME = data/MODEL/debris002.x				# [8]鉄骨ガレキ(大)
+MODEL_FILENAME = data/MODEL/debris200.x				# [9]岩壁ガレキ(小)
+MODEL_FILENAME = data/MODEL/debris201.x				# [10]岩壁ガレキ(中)
+MODEL_FILENAME = data/MODEL/debris202.x				# [11]岩壁ガレキ(大)
+MODEL_FILENAME = data/MODEL/gravel000.x				# [12]小石(小)
+MODEL_FILENAME = data/MODEL/gravel001.x				# [13]小石(中)
+MODEL_FILENAME = data/MODEL/gravel002.x				# [14]小石(大)
+MODEL_FILENAME = data/MODEL/pillar000.x				# [15]柱(小)
+MODEL_FILENAME = data/MODEL/pillar001.x				# [16]柱(中)
+MODEL_FILENAME = data/MODEL/pillar002.x				# [17]柱(大)
+MODEL_FILENAME = data/MODEL/box000.x				# [18]こんぱいるＢＯＸ
+
+#------------------------------------------------------------------------------
+# カメラ情報
+#------------------------------------------------------------------------------
+CAMERASET
+	POS = 0.0 180.0 -720.0			# 視点
+	REF = 0.0 0.0 0.0				# 注視点
+END_CAMERASET
+
+#------------------------------------------------------------------------------
+# ライト情報
+#------------------------------------------------------------------------------
+LIGHTSET
+	DIRECTION = 0.22 -0.87 0.44		# 方向
+	DIFFUSE = 1.0 1.0 1.0			# 拡散光
+END_LIGHTSET
+
+LIGHTSET
+	DIRECTION = -0.18 0.88 -0.44	# 方向
+	DIFFUSE = 0.65 0.65 0.65		# 拡散光
+END_LIGHTSET
+
+LIGHTSET
+	DIRECTION = 0.89 -0.11 0.44		# 方向
+	DIFFUSE = 0.15 0.15 0.15		# 拡散光
+END_LIGHTSET
+
+#------------------------------------------------------------------------------
+# 空情報
+#------------------------------------------------------------------------------
+SKYSET
+	TEXTYPE = 0
+	MOVE = 0.00002
+END_SKYSET
+
+#------------------------------------------------------------------------------
+# 山情報
+#------------------------------------------------------------------------------
+MOUNTAINSET
+	TEXTYPE = 1
+END_MOUNTAINSET
+
+#------------------------------------------------------------------------------
+# 地面情報
+#------------------------------------------------------------------------------
+FIELDSET
+	TEXTYPE = 2
+	POS = 0 0 0
+	ROT = 0 0 0
+	BLOCK = 16 16
+	SIZE = 80 80
+END_FIELDSET
+
+#------------------------------------------------------------------------------
+# 壁情報
+#------------------------------------------------------------------------------
+WALLSET
+	TEXTYPE = 3
+	POS = 0 -80 640
+	ROT = 0 180 0
+	BLOCK = 16 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 3
+	POS = 640 -80 0
+	ROT = 0 270 0
+	BLOCK = 16 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 3
+	POS = 0 -80 -640
+	ROT = 0 0 0
+	BLOCK = 16 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 3
+	POS = -640 -80 0
+	ROT = 0 90 0
+	BLOCK = 16 1
+	SIZE = 80 80
+END_WALLSET
+
+
+#------------------------------------------------------------------------------
+# モデル配置情報
+#------------------------------------------------------------------------------
+#------------------
+# 奥壁１個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = -370 0 485
+	ROT = 0 0 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 奥壁２個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = -70 0 480
+	ROT = 0 0 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 奥壁３個目
+#------------------
+MODELSET
+	TYPE = 11
+	POS = 310 0 480
+	ROT = 0 0 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 右壁１個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = 480 0 420
+	ROT = 0 90 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 右壁２個目
+#------------------
+MODELSET
+	TYPE = 9
+	POS = 480 0 10
+	ROT = 0 90 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 右壁３個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = 480 0 -350
+	ROT = 0 90 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 後壁１個目
+#------------------
+MODELSET
+	TYPE = 11
+	POS = 300 0 -480
+	ROT = 0 180 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 後壁２個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = -50 0 -480
+	ROT = 0 180 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 後壁３個目
+#------------------
+MODELSET
+	TYPE = 11
+	POS = -390 0 -480
+	ROT = 0 180 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 左壁１個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = -480 0 -370
+	ROT = 0 -90 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 左壁２個目
+#------------------
+MODELSET
+	TYPE = 10
+	POS = -480 0 -50
+	ROT = 0 -90 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 左壁３個目
+#------------------
+MODELSET
+	TYPE = 11
+	POS = -480 0 290
+	ROT = 0 -90 0
+	COLLISION = 0
+	SHADOW = 0
+END_MODELSET
+
+#------------------
+# 壁１個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -300 0 380
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 壁２個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -140 0 380
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 壁３個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 60 0 380
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 壁４個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 300 0 380
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 壁５個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 380 0 300
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 壁６個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 380 0 120
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 壁７個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 380 0 -60
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 壁８個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 380 0 -280
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 壁９個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = 100 0 -380
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 壁１０個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -60 0 -380
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 壁１１個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -260 0 -380
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 壁１２個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -380 0 -280
+	ROT = 0 -90 0
+END_MODELSET
+
+#------------------
+# 壁１３個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -380 0 -120
+	ROT = 0 -90 0
+END_MODELSET
+
+#------------------
+# 壁１４個目
+#------------------
+MODELSET
+	TYPE = 4
+	POS = -380 0 240
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 基地１個目
+#------------------
+MODELSET
+	TYPE = 2
+	POS = -180 0 220
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 基地２個目
+#------------------
+MODELSET
+	TYPE = 2
+	POS = -180 0 80
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 基地３個目
+#------------------
+MODELSET
+	TYPE = 2
+	POS = -180 0 -220
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 基地４個目
+#------------------
+MODELSET
+	TYPE = 1
+	POS = 40 0 -180
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 基地５個目
+#------------------
+MODELSET
+	TYPE = 1
+	POS = 140 0 -180
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 基地６個目
+#------------------
+MODELSET
+	TYPE = 1
+	POS = 240 0 -180
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)１個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = 280 0 280
+	ROT = 0 180 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)２個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = 60 0 200
+	ROT = 0 0 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)３個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = 80 0 120
+	ROT = 0 90 0
+	STATE = 3
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)４個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = 320 0 40
+	ROT = 0 90 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)５個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = -120 0 -120
+	ROT = 0 90 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)６個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = 220 0 -380
+	ROT = 0 90 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)７個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = -240 0 -340
+	ROT = 0 0 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(大)８個目
+#------------------
+MODELSET
+	TYPE = 8
+	POS = -320 0 280
+	ROT = 0 180 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)１個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = -450 0 450
+	ROT = 0 180 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)２個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = -240 0 410
+	ROT = 0 0 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)３個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = 40 0 410
+	ROT = 0 0 0
+	STATE = 3
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)４個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = 260 0 450
+	ROT = 0 0 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)５個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = 450 0 -140
+	ROT = 0 90 0
+	STATE = 3
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)６個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = 450 0 -180
+	ROT = 0 180 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)７個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = 50 0 -450
+	ROT = 0 180 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)８個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = -410 0 -350
+	ROT = 0 0 0
+	STATE = 3
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)９個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = -450 0 -30
+	ROT = 0 90 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(中)１０個目
+#------------------
+MODELSET
+	TYPE = 7
+	POS = -450 0 20
+	ROT = 0 0 0
+	STATE = 3
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(小)１個目
+#------------------
+MODELSET
+	TYPE = 6
+	POS = -120 0 130
+	ROT = 0 0 0
+	STATE = 2
+END_MODELSET
+
+#------------------
+# 鉄骨ガレキ(小)２個目
+#------------------
+MODELSET
+	TYPE = 6
+	POS = 280 0 -250
+	ROT = 0 0 0
+	STATE = 2
+END_MODELSET
+
+
+#------------------
+# 小石(小)１個目
+#------------------
+MODELSET
+	TYPE = 12
+	POS = -50 0 -220
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(中)１個目
+#------------------
+MODELSET
+	TYPE = 13
+	POS = 440 0 100
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(中)２個目
+#------------------
+MODELSET
+	TYPE = 13
+	POS = -330 0 -50
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(中)３個目
+#------------------
+MODELSET
+	TYPE = 13
+	POS = -80 0 160
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(中)４個目
+#------------------
+MODELSET
+	TYPE = 13
+	POS = 190 0 -210
+	ROT = 0 10 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)１個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = 430 0 340
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)２個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = 450 0 -250
+	ROT = 0 130 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)３個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = 320 0 -450
+	ROT = 0 190 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)４個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = -430 0 -420
+	ROT = 0 100 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)５個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = 90 0 -80
+	ROT = 0 70 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)６個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = 150 0 180
+	ROT = 0 110 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------
+# 小石(大)７個目
+#------------------
+MODELSET
+	TYPE = 14
+	POS = -110 0 -330
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+
+#------------------
+# 柱(大)１個目
+#------------------
+MODELSET
+	TYPE = 17
+	POS = -280 0 260
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 柱(大)２個目
+#------------------
+MODELSET
+	TYPE = 17
+	POS = 240 0 160
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 柱(大)３個目
+#------------------
+MODELSET
+	TYPE = 17
+	POS = 280 0 -300
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 柱(大)４個目
+#------------------
+MODELSET
+	TYPE = 17
+	POS = -170 0 -360
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 柱(大)５個目
+#------------------
+MODELSET
+	TYPE = 17
+	POS = -270 0 -140
+	ROT = 0 200 0
+END_MODELSET
+
+#------------------
+# 柱(中)１個目
+#------------------
+MODELSET
+	TYPE = 16
+	POS = 30 0 -95
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 柱(中)２個目
+#------------------
+MODELSET
+	TYPE = 16
+	POS = 130 0 -95
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 柱(中)３個目
+#------------------
+MODELSET
+	TYPE = 16
+	POS = 230 0 -95
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 柱(小)１個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = -370 0 -350
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 柱(小)２個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = -370 0 -250
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 柱(小)３個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = -370 0 -150
+	ROT = 0 270 0
+END_MODELSET
+
+#------------------
+# 柱(小)４個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = -370 0 -50
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 柱(小)５個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = 30 0 365
+	ROT = 0 180 0
+END_MODELSET
+
+#------------------
+# 柱(小)６個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = 130 0 365
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 柱(小)７個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = 230 0 365
+	ROT = 0 270 0
+END_MODELSET
+
+#------------------
+# 柱(小)８個目
+#------------------
+MODELSET
+	TYPE = 15
+	POS = 330 0 365
+	ROT = 0 270 0
+END_MODELSET
+
+#------------------
+# 鉄(大)１個目
+#------------------
+MODELSET
+	TYPE = 19
+	POS = -396 0 -260
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 鉄(大)２個目
+#------------------
+MODELSET
+	TYPE = 19
+	POS = -393 0 -160
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 鉄(大)３個目
+#------------------
+MODELSET
+	TYPE = 19
+	POS = -395 6 -167
+	ROT = 0 90 0
+END_MODELSET
+
+#------------------
+# 鉄(大)４個目
+#------------------
+MODELSET
+	TYPE = 19
+	POS = -110 0 362
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------
+# 鉄(大)５個目
+#------------------
+MODELSET
+	TYPE = 19
+	POS = -115 6 367
+	ROT = 0 0 0
+END_MODELSET
+
+
+#------------------
+# こんぱいるＢＯＸ
+#------------------
+MODELSET
+	TYPE = 18
+	POS = 0 0 160
+	ROT = 0 0 0
+END_MODELSET
+
+#------------------------------------------------------------------------------
+# ビルボード配置情報
+#------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+# プレイヤー情報
+#------------------------------------------------------------------------------
+PLAYERSET
+	MOTION_FILENAME = data/motion_runningman.txt
+	POS = -240 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_runningman_silver.txt
+	POS = -80 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_runningman_black.txt
+	POS = 80 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_runningman_switch.txt
+	POS = 240 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+END_SCRIPT		# この行は絶対消さないこと！

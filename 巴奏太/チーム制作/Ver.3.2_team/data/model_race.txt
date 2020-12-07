@@ -1,0 +1,2360 @@
+#==============================================================================
+#
+# 『モデルビューワ』スクリプトファイル [model_race.txt]
+# Author : AKIRA TANAKA
+#
+#==============================================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------------------------
+# テクスチャ数
+#------------------------------------------------------------------------------
+NUM_TEXTURE = 7
+
+#------------------------------------------------------------------------------
+# テクスチャファイル名
+#------------------------------------------------------------------------------
+TEXTURE_FILENAME = data/TEXTURE/sky000.jpg			# [0]空テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/mountain000.png		# [1]山テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/field001.jpg		# [2]地面テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/wall100.jpg			# [3]壁テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/tree000.png			# [4]木テクスチャ
+TEXTURE_FILENAME = data/TEXTURE/effect000.jpg		# [5]エフェクトテクスチャ
+TEXTURE_FILENAME = data/TEXTURE/block001.jpg		# [6]ブロックテクスチャ
+
+#------------------------------------------------------------------------------
+# モデル数
+#------------------------------------------------------------------------------
+NUM_MODEL = 33
+
+#------------------------------------------------------------------------------
+# モデルファイル名
+#------------------------------------------------------------------------------
+MODEL_FILENAME = data/MODEL/tree100.x				# [0]木(小)
+MODEL_FILENAME = data/MODEL/tree101.x				# [1]木(中)
+MODEL_FILENAME = data/MODEL/tree102.x				# [2]木(大)
+MODEL_FILENAME = data/MODEL/block000.x				# [3]ブロック
+MODEL_FILENAME = data/MODEL/block001.x				# [4]ブロック
+MODEL_FILENAME = data/MODEL/box000.x				# [5]こんぱいるＢＯＸ[！]
+MODEL_FILENAME = data/MODEL/box001.x				# [6]こんぱいるＢＯＸ[？]
+MODEL_FILENAME = data/MODEL/fence100.x				# [7]フェンス
+MODEL_FILENAME = data/MODEL/fence101.x				# [8]フェンス
+MODEL_FILENAME = data/MODEL/pipe000.x				# [9]土管(小)
+MODEL_FILENAME = data/MODEL/pipe001.x				# [10]土管(中)
+MODEL_FILENAME = data/MODEL/pipe002.x				# [11]土管(大)
+MODEL_FILENAME = data/MODEL/stone000.x				# [12]石(小)
+MODEL_FILENAME = data/MODEL/stone001.x				# [13]石(中)
+MODEL_FILENAME = data/MODEL/stone002.x				# [14]石(大)
+MODEL_FILENAME = data/MODEL/rock000.x				# [15]岩(小)
+MODEL_FILENAME = data/MODEL/rock001.x				# [16]岩(中)
+MODEL_FILENAME = data/MODEL/rock002.x				# [17]岩(大)
+MODEL_FILENAME = data/MODEL/mountain000.x			# [18]山(小)
+MODEL_FILENAME = data/MODEL/mountain001.x			# [19]山(中)
+MODEL_FILENAME = data/MODEL/mountain002.x			# [20]山(大)
+MODEL_FILENAME = data/MODEL/gravel000.x				# [21]小石(小)
+MODEL_FILENAME = data/MODEL/gravel001.x				# [22]小石(中)
+MODEL_FILENAME = data/MODEL/gravel002.x				# [23]小石(大)
+MODEL_FILENAME = data/MODEL/tree000.x				# [24]木(小)
+MODEL_FILENAME = data/MODEL/tree001.x				# [25]木(中)
+MODEL_FILENAME = data/MODEL/tree002.x				# [26]木(大)
+MODEL_FILENAME = data/MODEL/glass000.x				# [27]草(小)
+MODEL_FILENAME = data/MODEL/glass001.x				# [28]草(中)
+MODEL_FILENAME = data/MODEL/glass002.x				# [29]草(大)
+MODEL_FILENAME = data/MODEL/cray000.x				# [30]土(小)
+MODEL_FILENAME = data/MODEL/cray001.x				# [31]土(中)
+MODEL_FILENAME = data/MODEL/cray002.x				# [32]土(大)
+
+#------------------------------------------------------------------------------
+# カメラ情報
+#------------------------------------------------------------------------------
+CAMERASET
+	POS = -320.0 560.0 -680.0			# 視点
+	REF = -20.0 130.0 -140.0			# 注視点
+END_CAMERASET
+
+#------------------------------------------------------------------------------
+# ライト情報
+#------------------------------------------------------------------------------
+LIGHTSET
+	DIRECTION = 0.22 -0.87 0.44		# 方向
+	DIFFUSE = 1.0 1.0 1.0			# 拡散光
+END_LIGHTSET
+
+LIGHTSET
+	DIRECTION = -0.18 0.88 -0.44	# 方向
+	DIFFUSE = 0.65 0.65 0.65		# 拡散光
+END_LIGHTSET
+
+LIGHTSET
+	DIRECTION = 0.89 -0.11 0.44		# 方向
+	DIFFUSE = 0.15 0.15 0.15		# 拡散光
+END_LIGHTSET
+
+#------------------------------------------------------------------------------
+# 空情報
+#------------------------------------------------------------------------------
+SKYSET
+	TEXTYPE = 0
+	MOVE = 0.00002
+END_SKYSET
+
+#------------------------------------------------------------------------------
+# 山情報
+#------------------------------------------------------------------------------
+MOUNTAINSET
+	TEXTYPE = 1
+END_MOUNTAINSET
+
+#------------------------------------------------------------------------------
+# 地面情報
+#------------------------------------------------------------------------------
+FIELDSET
+	TEXTYPE = 2
+	POS = 0 0 0
+	ROT = 0 0 0
+	BLOCK = 32 32
+	SIZE = 80 80
+END_FIELDSET
+
+#------------------------------------------------------------------------------
+# 壁情報
+#------------------------------------------------------------------------------
+WALLSET
+	TEXTYPE = 3
+	POS = 0 -80 1280
+	ROT = 0 180 0
+	BLOCK = 32 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 3
+	POS = 1280 -80 0
+	ROT = 0 270 0
+	BLOCK = 32 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 3
+	POS = 0 -80 -1280
+	ROT = 0 0 0
+	BLOCK = 32 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 3
+	POS = -1280 -80 0
+	ROT = 0 90 0
+	BLOCK = 32 1
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 6
+	POS = 0 0 1280
+	ROT = 0 0 0
+	BLOCK = 32 2
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 6
+	POS = 1280 0 0
+	ROT = 0 90 0
+	BLOCK = 32 2
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 6
+	POS = 0 0 -1280
+	ROT = 0 180 0
+	BLOCK = 32 2
+	SIZE = 80 80
+END_WALLSET
+
+WALLSET
+	TEXTYPE = 6
+	POS = -1280 0 0
+	ROT = 0 -90 0
+	BLOCK = 32 2
+	SIZE = 80 80
+END_WALLSET
+
+
+#------------------------------------------------------------------------------
+# モデル配置情報
+#------------------------------------------------------------------------------
+#--------------------------------------
+# スタートエリア木柵
+#--------------------------------------
+MODELSET
+	TYPE = 8
+	POS = 1080 0 0
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 0
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 100
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 100
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 200
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 200
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 300
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 300
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 400
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 400
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 500
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 500
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 600
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 600
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 1080 0 700
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 8
+	POS = 920 0 700
+	ROT = 0 270 0
+END_MODELSET
+
+#--------------------------------------
+# 岩場エリア木柵
+#--------------------------------------
+MODELSET
+	TYPE = 7
+	POS = -1020 0 740
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1020 0 620
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1020 0 500
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1020 0 380
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1020 0 260
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1020 0 140
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1020 0 20
+	ROT = 0 90 0
+END_MODELSET
+
+#--------------------------------------
+# スタートエリアコース木(中)
+#--------------------------------------
+MODELSET
+	TYPE = 1
+	POS = 1100 0 0
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 0
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 300
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 300
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 400
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 400
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 500
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 500
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 600
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 600
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1100 0 700
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 900 0 700
+	ROT = 0 0 0
+END_MODELSET
+
+#--------------------------------------
+# 序盤コース木(中)
+#--------------------------------------
+MODELSET
+	TYPE = 1
+	POS = 1070 0 820
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 880 0 780
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 1010 0 940
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 840 0 860
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 930 0 1040
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 770 0 920
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 830 0 1130
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 700 0 960
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 730 0 1180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 620 0 980
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 610 0 1200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 550 0 990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 490 0 1180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 480 0 980
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 380 0 1140
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 410 0 960
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 300 0 1100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 340 0 940
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 220 0 1060
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 250 0 900
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 140 0 1030
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 150 0 850
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 60 0 1010
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 40 0 810
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -20 0 1010
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -60 0 790
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -100 0 1020
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -160 0 800
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -180 0 1060
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -240 0 840
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -260 0 1100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -310 0 900
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -340 0 1160
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -380 0 960
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -440 0 1200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -460 0 990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -540 0 1200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -560 0 980
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -640 0 1160
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -660 0 950
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -740 0 1140
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -750 0 920
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -840 0 1160
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -830 0 940
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -940 0 1180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -910 0 920
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -1040 0 1160
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -980 0 860
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -1140 0 1080
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -1210 0 960
+	ROT = 0 0 0
+END_MODELSET
+
+#--------------------------------------
+# 中盤コース木(大)
+#--------------------------------------
+MODELSET
+	TYPE = 26
+	POS = -1220 0 820
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 680
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 540
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 420
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 300
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 60
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1220 0 -60
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1210 0 -200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1190 0 -300
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1160 0 -380
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -1090 0 -440
+	ROT = 0 0 0
+END_MODELSET
+
+
+#--------------------------------------
+# 中盤コース木(大)
+#--------------------------------------
+MODELSET
+	TYPE = 2
+	POS = -280 0 660
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = -200 0 720
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = -100 0 720
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 0 0 730
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 100 0 700
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 200 0 660
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 280 0 600
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 360 0 520
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 420 0 420
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 440 0 320
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 460 0 220
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 460 0 120
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 450 0 20
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 430 0 -80
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 430 0 -180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 460 0 -280
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 490 0 -380
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 520 0 -470
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 570 0 -560
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 620 0 -660
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 580 0 -760
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 520 0 -840
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 460 0 -920
+	ROT = 0 0 0
+END_MODELSET
+
+
+#--------------------------------------
+# 終盤土管(大)
+#--------------------------------------
+MODELSET
+	TYPE = 11
+	POS = 380 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = 280 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = 180 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = 80 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -20 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -120 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -220 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -320 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -420 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -520 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -620 0 -990
+	ROT = 0 0 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 11
+	POS = 380 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = 280 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = 180 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = 80 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -20 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -120 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -220 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -320 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -420 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -520 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 11
+	POS = -620 0 -1240
+	ROT = 0 0 0
+END_MODELSET
+
+#--------------------------------------
+# スタートエリア背景木(大)
+#--------------------------------------
+MODELSET
+	TYPE = 2
+	POS = 1200 0 40
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1180 0 140
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1180 0 260
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1220 0 380
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1180 0 500
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1180 0 600
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1160 0 700
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1160 0 820
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1120 0 920
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1060 0 1000
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 980 0 1080
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 900 0 1140
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 780 0 1220
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 660 0 1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 520 0 1240
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 400 0 1200
+	ROT = 0 0 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 2
+	POS = 700 0 -580
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 740 0 -480
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 780 0 -380
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 820 0 -280
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 850 0 -180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 870 0 -80
+	ROT = 0 0 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 2
+	POS = 1130 0 -80
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1220 0 -90
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1180 0 -180
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 1230 0 -280
+	ROT = 0 0 0
+END_MODELSET
+
+
+#--------------------------------------
+# ゴールエリア木(中)
+#--------------------------------------
+MODELSET
+	TYPE = 25
+	POS = 620 0 -920
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 24
+	POS = 650 0 -880
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 25
+	POS = 690 0 -850
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 24
+	POS = 720 0 -800
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 25
+	POS = 740 0 -760
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 24
+	POS = 770 0 -710
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 25
+	POS = 800 0 -660
+	ROT = 0 90 0
+END_MODELSET
+
+
+#--------------------------------------
+# 序盤草(小)
+#--------------------------------------
+MODELSET
+	TYPE = 29
+	POS = 1130 0 770
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = 1080 0 910
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 990 0 1000
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 920 0 1090
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 850 0 1150
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 780 0 1170
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 680 0 1210
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 550 0 1210
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 440 0 1190
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 29
+	POS = -360 0 1220
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -490 0 1230
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = -600 0 1220
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = -700 0 1210
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = -800 0 1210
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = -900 0 1220
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -1000 0 1190
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = -1120 0 1160
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = -1220 0 1040
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+
+#--------------------------------------
+# 中盤草(小)
+#--------------------------------------
+MODELSET
+	TYPE = 28
+	POS = -330 0 640
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = -240 0 710
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -150 0 730
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -50 0 740
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 29
+	POS = 90 0 760
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+#--------------------------------------
+# 終盤草(小)
+#--------------------------------------
+MODELSET
+	TYPE = 29
+	POS = 630 0 -600
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 590 0 -710
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 550 0 -800
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 495 0 -865
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 480 0 -890
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 430 0 -940
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+#--------------------------------------
+# ゴールエリア草(小)
+#--------------------------------------
+MODELSET
+	TYPE = 27
+	POS = 640 0 -900
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 670 0 -870
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 710 0 -820
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 760 0 -730
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 790 0 -680
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 27
+	POS = 1110 0 -50
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 1170 0 -130
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 1210 0 -230
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 1260 0 -310
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+	
+#--------------------------------------
+# コース石(中)
+#--------------------------------------
+MODELSET
+	TYPE = 12
+	POS = -400 0 -200
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 12
+	POS = -240 0 -100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 12
+	POS = -250 0 100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 12
+	POS = -150 0 260
+	ROT = 0 0 0
+END_MODELSET
+
+
+#--------------------------------------
+# 中盤コース岩(大)
+#--------------------------------------
+MODELSET
+	TYPE = 17
+	POS = -500 0 780
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 17
+	POS = -820 0 700
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 17
+	POS = -820 0 400
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 17
+	POS = -820 0 100
+	ROT = 0 270 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 16
+	POS = -960 0 -140
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -960 0 -560
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -760 0 -180
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -740 0 -540
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -560 0 -100
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -540 0 -480
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -340 0 -440
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -440 0 80
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -160 0 -340
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -40 0 -160
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 17
+	POS = 100 0 80
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 17
+	POS = -500 0 320
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = 20 0 300
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -20 0 460
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -420 0 540
+	ROT = 0 0 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 17
+	POS = 120 0 -380
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = 220 0 -600
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -120 0 -520
+	ROT = 0 90 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 16
+	POS = 20 0 -700
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -180 0 -700
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -380 0 -700
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -580 0 -700
+	ROT = 0 90 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 16
+	POS = -1170 0 -540
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -1080 0 -740
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -1180 0 -940
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 16
+	POS = -1080 0 -1140
+	ROT = 0 0 0
+END_MODELSET
+
+
+#--------------------------------------
+# 終盤コース山(小)
+#--------------------------------------
+MODELSET
+	TYPE = 15
+	POS = 80 0 400
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = 140 0 260
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = 120 0 -720
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -720 0 -690
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -850 0 -670
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -930 0 -720
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -1040 0 -880
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -1030 0 -990
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -940 0 -1150
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -850 0 -1200
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -750 0 -1230
+	ROT = 0 180 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 15
+	POS = -310 0 800
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -300 0 730
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 15
+	POS = -250 0 770
+	ROT = 0 90 0
+END_MODELSET
+
+
+#--------------------------------------
+# 序盤山(大)
+#--------------------------------------
+MODELSET
+	TYPE = 18
+	POS = 240 0 770
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 440 0 760
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = 640 0 820
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 720 0 640
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = 520 0 560
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 680 0 400
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 700 0 160
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 630 0 -40
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 640 0 -260
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = 640 0 -460
+	ROT = 0 90 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 18
+	POS = 220 0 1200
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = 100 0 1170
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = -70 0 1160
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = -180 0 1200
+	ROT = 0 270 0
+END_MODELSET
+
+
+#--------------------------------------
+# ゴールエリア山(大)
+#--------------------------------------
+MODELSET
+	TYPE = 20
+	POS = 1120 0 -1120
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 1100 0 -920
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = 1160 0 -800
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = 1170 0 -660
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = 1200 0 -560
+	ROT = 0 180 0
+END_MODELSET
+
+MODELSET
+	TYPE = 20
+	POS = 880 0 -1120
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = 740 0 -1160
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = 680 0 -1200
+	ROT = 0 270 0
+END_MODELSET
+
+MODELSET
+	TYPE = 18
+	POS = 960 0 -980
+	ROT = 0 180 0
+END_MODELSET
+
+
+#--------------------------------------
+# 中盤ガレキ(大)
+#--------------------------------------
+MODELSET
+	TYPE = 23
+	POS = -860 0 -240
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -620 0 -200
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -440 0 -40
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -850 0 -500
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -460 0 -400
+	ROT = 0 90 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -290 0 -320
+	ROT = 0 0 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -150 0 -200
+	ROT = 0 180 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -60 0 -20
+	ROT = 0 270 0
+	COLLISION = 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 22
+	POS = 90 0 460
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = 140 0 340
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = 190 0 240
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+#--------------------------------------
+# 終盤ガレキ(大)
+#--------------------------------------
+MODELSET
+	TYPE = 23
+	POS = -680 0 -750
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -780 0 -700
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -840 0 -730
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -980 0 -820
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -1000 0 -940
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -980 0 -1060
+	ROT = 0 270 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 22
+	POS = -880 0 -1150
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 22
+	POS = -790 0 -1190
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+#--------------------------------------
+# 序盤土(小)
+#--------------------------------------
+MODELSET
+	TYPE = 32
+	POS = 790 0 820
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 680 0 910
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 560 0 910
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+#--------------------------------------
+# 中盤土(小)
+#--------------------------------------
+MODELSET
+	TYPE = 31
+	POS = 180 0 710
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 270 0 660
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 380 0 560
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 470 0 400
+	ROT = 0 270 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 520 0 250
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 470 0 110
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+#--------------------------------------
+# ゴールエリア土(小)
+#--------------------------------------
+MODELSET
+	TYPE = 32
+	POS = 580 0 -1200
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 31
+	POS = 640 0 -1100
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 760 0 -1020
+	ROT = 0 90 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 860 0 -920
+	ROT = 0 270 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 31
+	POS = 960 0 -800
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 31
+	POS = 1040 0 -740
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 31
+	POS = 1200 0 -460
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 31
+	POS = 720 0 -530
+	ROT = 0 180 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 31
+	POS = 750 0 -440
+	ROT = 0 270 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 31
+	POS = 790 0 -330
+	ROT = 0 0 0
+	SHADOW = 0
+	COLLISION = 0
+END_MODELSET
+
+#------------------------------------------------------------------------------
+# プレイヤー情報
+#------------------------------------------------------------------------------
+PLAYERSET
+	MOTION_FILENAME = data/motion.txt
+	POS = -200 0 -100
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_blue.txt
+	POS = 200 0 -100
+	ROT = 0 0 0
+END_PLAYERSET
+
+END_SCRIPT		# この行は絶対消さないこと！
