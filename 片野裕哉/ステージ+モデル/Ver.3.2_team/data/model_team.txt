@@ -23,7 +23,7 @@ TEXTURE_FILENAME = data/TEXTURE/field001.jpg		# [4]地面テクスチャ 土
 #------------------------------------------------------------------------------
 # モデル数
 #------------------------------------------------------------------------------
-NUM_MODEL = 29
+NUM_MODEL = 38
 
 #------------------------------------------------------------------------------
 # モデルファイル名
@@ -57,6 +57,15 @@ MODEL_FILENAME = data/MODEL/heri_break.x			# [25]墜落ヘリ
 MODEL_FILENAME = data/MODEL/fence00.x				# [26]フェンス
 MODEL_FILENAME = data/MODEL/dentyu00.x				# [27]電柱 (壊れた)
 MODEL_FILENAME = data/MODEL/dentyu01.x				# [28]電柱
+MODEL_FILENAME = data/MODEL/tank.x					# [29]戦車
+MODEL_FILENAME = data/MODEL/home.break2.x			# [30]壊れた家2(大)
+MODEL_FILENAME = data/MODEL/minibreak.x				# [31]ビル
+MODEL_FILENAME = data/MODEL/rock000.x				# [32]瓦礫1
+MODEL_FILENAME = data/MODEL/rock001.x				# [33]瓦礫2
+MODEL_FILENAME = data/MODEL/rock000_big.x			# [34]瓦礫1 (大)
+MODEL_FILENAME = data/MODEL/rock001_big.x			# [35]瓦礫2 (大)
+MODEL_FILENAME = data/MODEL/contaner00.x			# [36]コンテナ
+MODEL_FILENAME = data/MODEL/heri.x					# [37]ヘリ
 
 #------------------------------------------------------------------------------
 # カメラ情報
@@ -136,6 +145,120 @@ END_FIELDSET
 #------------------------------------------------------------------------------
 
 #---------
+#瓦礫1 (大)
+#---------
+#---
+#左
+#---
+MODELSET
+	TYPE = 34
+	POS = -1300 0 1300
+	ROT = 0 167 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = -1300 0 -800
+	ROT = 0 280 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = -1300 0 -1500
+	ROT = 0 305 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = -600 0 -1500
+	ROT = 0 52 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = 0 0 -1500
+	ROT = 0 320 0
+END_MODELSET
+
+#---
+#右
+#---
+MODELSET
+	TYPE = 34
+	POS = 1300 0 1300
+	ROT = 0 -167 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = 1300 0 -800
+	ROT = 0 -280 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = 1300 0 -1500
+	ROT = 0 -305 0
+END_MODELSET
+
+MODELSET
+	TYPE = 34
+	POS = 600 0 -1500
+	ROT = 0 -52 0
+END_MODELSET
+
+#---------
+#瓦礫2 (大)
+#---------
+#---
+#左
+#---
+MODELSET
+	TYPE = 35
+	POS = -1300 0 600
+	ROT = 0 29 0
+END_MODELSET
+
+MODELSET
+	TYPE = 35
+	POS = -1300 0 -100
+	ROT = 0 58 0
+END_MODELSET
+
+MODELSET
+	TYPE = 35
+	POS = -600 0 1500
+	ROT = 0 228 0
+END_MODELSET
+
+#---
+#右
+#---
+MODELSET
+	TYPE = 35
+	POS = 1300 0 600
+	ROT = 0 -29 0
+END_MODELSET
+
+MODELSET
+	TYPE = 35
+	POS = 1300 0 -100
+	ROT = 0 -58 0
+END_MODELSET
+
+MODELSET
+	TYPE = 35
+	POS = 600 0 1500
+	ROT = 0 -228 0
+END_MODELSET
+
+MODELSET
+	TYPE = 35
+	POS = 0 0 1500
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
 #壊れた家
 #---------
 MODELSET
@@ -144,12 +267,47 @@ MODELSET
 	ROT = 0 -90 0
 END_MODELSET
 
+
+MODELSET
+	TYPE = 18
+	POS = 800 0 0
+	ROT = 0 90 0
+END_MODELSET
+
 #---------
 #壊れた家_2
 #---------
 MODELSET
 	TYPE = 19
-	POS = 0 0 0
+	POS = -800 0 300
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = -800 0 900
+	ROT = 0 180 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 19
+	POS = 800 0 300
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 19
+	POS = 800 0 900
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#壊れた家_2(大)
+#---------
+MODELSET
+	TYPE = 30
+	POS = -800 0 -1000
 	ROT = 0 0 0
 END_MODELSET
 
@@ -158,17 +316,27 @@ END_MODELSET
 #---------
 MODELSET
 	TYPE = 22
-	POS = 0 0 300
-	ROT = 0 0 0
+	POS = -800 0 600
+	ROT = 0 -90 0
 END_MODELSET
 
-#---------
-#壊れた井戸
-#---------
 MODELSET
-	TYPE = 20
-	POS = 300 0 0
-	ROT = 0 0 0
+	TYPE = 22
+	POS = -800 0 -450
+	ROT = 0 -90 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 22
+	POS = 800 0 600
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 22
+	POS = 800 0 -450
+	ROT = 0 90 0
 END_MODELSET
 
 #---------
@@ -176,35 +344,101 @@ END_MODELSET
 #---------
 MODELSET
 	TYPE = 21
-	POS = -300 0 0
-	ROT = 0 0 0
+	POS = -541 0 1100
+	ROT = 0 101 0
+	SHADOW = 0
 END_MODELSET
 
-#---------
-#車
-#---------
 MODELSET
-	TYPE = 23
-	POS = 0 0 -300
-	ROT = 0 0 0
+	TYPE = 21
+	POS = -553 0 700
+	ROT = 0 158 0
+	SHADOW = 0
 END_MODELSET
 
-#---------
-#墜落ヘリ
-#---------
 MODELSET
-	TYPE = 25
-	POS = -300 0 -300
-	ROT = 0 0 0
+	TYPE = 21
+	POS = -576 0 400
+	ROT = 0 260 0
+	SHADOW = 0
 END_MODELSET
 
-#---------
-#フェンス
-#---------
 MODELSET
-	TYPE = 26
-	POS = 0 0 -600
-	ROT = 0 0 0
+	TYPE = 21
+	POS = -563 0 200
+	ROT = 0 192 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = -589 0 -100
+	ROT = 0 137 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = -550 0 -300
+	ROT = 0 238 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = -511 0 -700
+	ROT = 0 37 0
+	SHADOW = 0
+END_MODELSET
+
+
+MODELSET
+	TYPE = 21
+	POS = 541 0 1100
+	ROT = 0 101 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = 553 0 700
+	ROT = 0 158 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = 576 0 400
+	ROT = 0 260 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = 563 0 200
+	ROT = 0 192 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = 589 0 -100
+	ROT = 0 137 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = 550 0 -300
+	ROT = 0 238 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 21
+	POS = 511 0 -700
+	ROT = 0 37 0
+	SHADOW = 0
 END_MODELSET
 
 #---------
@@ -212,8 +446,25 @@ END_MODELSET
 #---------
 MODELSET
 	TYPE = 27
-	POS = 300 0 -600
+	POS = 400 0 1100
 	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 27
+	POS = 400 0 -400
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+
+
+MODELSET
+	TYPE = 27
+	POS = -400 0 -400
+	ROT = 0 0 0
+	SHADOW = 0
 END_MODELSET
 
 #---------
@@ -221,47 +472,221 @@ END_MODELSET
 #---------
 MODELSET
 	TYPE = 28
-	POS = -300 0 -600
+	POS = -400 0 1100
 	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -400 0 600
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -400 0 100
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = -400 0 -900
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+
+
+MODELSET
+	TYPE = 28
+	POS = 400 0 600
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 400 0 100
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 28
+	POS = 400 0 -900
+	ROT = 0 0 0
+	SHADOW = 0
+END_MODELSET
+
+#---------
+#ビル
+#---------
+MODELSET
+	TYPE = 31
+	POS = 800 0 -1000
+	ROT = 0 90 0
+END_MODELSET
+
+#---------
+#フェンス
+#---------
+MODELSET
+	TYPE = 26
+	POS = 100 0 900
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -100 0 900
+	ROT = 0 90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = -300 0 950
+	ROT = 0 120 0
+END_MODELSET
+
+MODELSET
+	TYPE = 26
+	POS = 300 0 950
+	ROT = 0 -120 0
+END_MODELSET
+
+#---------
+#瓦礫1
+#---------
+MODELSET
+	TYPE = 32
+	POS = 200 0 -900
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 32
+	POS = 300 0 -500
+	ROT = 0 152 0
+END_MODELSET
+
+#---------
+#瓦礫2
+#---------
+MODELSET
+	TYPE = 33
+	POS = -200 0 -900
+	ROT = 0 0 0
+END_MODELSET
+
+MODELSET
+	TYPE = 33
+	POS = -200 0 400
+	ROT = 0 52 0
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#戦車
+#---------
+MODELSET
+	TYPE = 29
+	POS = 0 0 -900
+	ROT = 0 200 0
+END_MODELSET
+
+#---------
+#車
+#---------
+MODELSET
+	TYPE = 23
+	POS = 350 0 800
+	ROT = 0 70 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = 200 0 850
+	ROT = 0 20 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = 0 0 850
+	ROT = 0 -90 0
+END_MODELSET
+
+MODELSET
+	TYPE = 23
+	POS = -450 0 1000
+	ROT = 0 -20 0
+END_MODELSET
+
+#---------
+#墜落ヘリ
+#---------
+MODELSET
+	TYPE = 25
+	POS = -600 0 -1000
+	ROT = 0 90 0
+END_MODELSET
+
+#---------
+#壊れた井戸
+#---------
+MODELSET
+	TYPE = 20
+	POS = 900 0 900
+	ROT = 0 0 0
+END_MODELSET
+
+#---------
+#コンテナ
+#---------
+MODELSET
+	TYPE = 36
+	POS = 0 0 0
+	ROT = 0 45 0
+	COLLISION = 0
+END_MODELSET
+
+#---------
+#ヘリ
+#---------
+MODELSET
+	TYPE = 37
+	POS = 0 900 0
+	ROT = 0 0 0
+	COLLISION = 0
 END_MODELSET
 
 #------------------------------------------------------------------------------
 # プレイヤー情報
 #------------------------------------------------------------------------------
 PLAYERSET
-	MOTION_FILENAME = data/motion_maeno_model.txt
-	POS = -160 0 0
-	ROT = 0 0 0
-END_PLAYERSET
-
-PLAYERSET
-	MOTION_FILENAME = data/motion_hukuyama_model.txt
-	POS = -80 0 0
-	ROT = 0 0 0
-END_PLAYERSET
-
-PLAYERSET
-	MOTION_FILENAME = data/motion_suzuki_model.txt
-	POS = 80 0 0
-	ROT = 0 0 0
-END_PLAYERSET
-
-PLAYERSET
-	MOTION_FILENAME = data/motion_katano_model.txt
-	POS = 160 0 0
-	ROT = 0 0 0
-END_PLAYERSET
-
-PLAYERSET
-	MOTION_FILENAME = data/motion_hayasaka_model.txt
-	POS = 240 0 0
-	ROT = 0 0 0
-END_PLAYERSET
-
-PLAYERSET
-	MOTION_FILENAME = data/motion_tomoe_model.txt
+	MOTION_FILENAME = data/motion_runningman.txt
 	POS = -240 0 0
 	ROT = 0 0 0
 END_PLAYERSET
+
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman_silver.txt
+#	POS = -80 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
+#
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman_black.txt
+#	POS = 80 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
+#
+#PLAYERSET
+#	MOTION_FILENAME = data/motion_runningman_switch.txt
+#	POS = 240 0 0
+#	ROT = 0 0 0
+#END_PLAYERSET
 
 END_SCRIPT		# この行は絶対消さないこと！
