@@ -11,10 +11,15 @@
 #include "camera.h"
 #include "light.h"
 #include "input.h"
-#include "model.h"
+#include "player.h"
 #include "shadow.h"
 #include "wall.h"
+#include "meshwall.h"
 #include "Billboard.h"
+#include "meshfield.h"
+#include "bullet.h"
+#include "explosion.h"
+#include "effect.h"
 
 #include <stdio.h>
 
@@ -276,28 +281,40 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	InitKeyboard(hInstance, hWnd);
 
 	//ポリゴンの初期化処理
-	InitPolygon();
+//	InitPolygon();
+
+	//メッシュフィールドの初期化処理
+	InitMeshfield();
 
 	//壁の初期化処理
-	InitWall();
+//	InitWall();
+
+	//壁(メッシュ)の初期化処理
+	InitMeshwall();
 
 	//ビルボードの初期化処理
 	InitBillboard();
 
-	//モデルの初期化処理
-	InitModel();
+	//弾の初期化処理
+	InitBullet();
+
+	//爆発の初期化処理
+	InitExplosion();
 
 	//影の初期化処理
 	InitShadow();
+
+	//エフェクトの初期化処理
+	InitEffect();
+
+	//モデルの初期化処理
+	InitPlayer();
 
 	//カメラの初期化処理
 	InitCamera();
 
 	//ライトの初期化処理
 	InitLight();
-
-	//壁の配置
-	SetWall();
 
 	return S_OK;
 }
@@ -311,19 +328,34 @@ void Uninit(void)
 	UninitKeyboard();
 
 	//ポリゴンの終了処理
-	UninitPolygon();
+//	UninitPolygon();
+
+	//メッシュフィールドの終了処理
+	UninitMeshfield();
 
 	//壁の終了処理
-	UninitWall();
+//	UninitWall();
+
+	//壁(メッシュ)の終了処理
+	UninitMeshwall();
 
 	//ビルボードの終了処理
 	UninitBillboard();
 
-	//モデルの終了処理
-	UninitModel();
+	//弾の終了処理
+	UninitBullet();
+
+	//爆発の終了処理
+	UninitExplosion();
 
 	//影の終了処理
 	UninitShadow();
+
+	//エフェクトの終了処理
+	UninitEffect();
+
+	//モデルの終了処理
+	UninitPlayer();
 
 	//カメラの終了処理
 	UninitCamera();
@@ -362,19 +394,34 @@ void Update(void)
 	UpdateKeyboard();
 
 	//ポリゴンの更新処理
-	UpdatePolygon();
+//	UpdatePolygon();
+
+	//メッシュフィールドの更新処理
+	UpdateMeshfield();
 
 	//壁の更新処理
-	UpdateWall();
+//	UpdateWall();
 
+	//壁(メッシュ)の更新処理
+	UpdateMeshwall();
+	
 	//ビルボードの更新処理
 	UpdateBillboard();
 
-	//モデルの更新処理
-	UpdateModel();
+	//弾の更新処理
+	UpdateBullet();
+
+	//爆発の更新処理
+	UpdateExplosion();
 
 	//影の更新処理
 	UpdateShadow();
+
+	//エフェクトの更新処理
+	UpdateEffect();
+
+	//モデルの更新処理
+	UpdatePlayer();
 
 	//カメラの更新処理
 	UpdateCamera();
@@ -409,19 +456,34 @@ void Draw(void)
 #endif
 
 		//ポリゴンの描画処理
-		DrawPolygon();
+//		DrawPolygon();
+
+		//メッシュフィールドの描画処理
+		DrawMeshfield();
 
 		//壁の描画処理
-		DrawWall();
+//		DrawWall();
+
+		//壁(メッシュ)の描画処理
+		DrawMeshwall();
 
 		//ビルボードの描画処理
 		DrawBillboard();
 
-		//モデルの描画処理
-		DrawModel();
+		//弾の描画処理
+		DrawBullet();
+
+		//爆発の描画処理
+		DrawExplosion();
 
 		//影の描画処理
 		DrawShadow();
+
+		//エフェクトの描画処理
+		DrawEffect();
+
+		//モデルの描画処理
+		DrawPlayer();
 
 		//描画の終了
 		g_pD3DDevice->EndScene();
@@ -450,13 +512,18 @@ void DrawFPS(void)
 void DrawPoint(void)
 {
 	Camera *pCamera;
+	Player *pPlayer;
 	pCamera = GetCamera();
+	pPlayer = GetPlayer();
 
 	RECT rect = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 	char aStr[512];
 	int nNum = sprintf(&aStr[0], "[カメラの視点  :(%.2f : %.2f : %.2f)]\n", pCamera->posV.x, pCamera->posV.y, pCamera->posV.z);
 	nNum += sprintf(&aStr[nNum], "[カメラの注視点:(%.2f : %.2f : %.2f)]\n", pCamera->posR.x, pCamera->posR.y, pCamera->posR.z);
-	nNum += sprintf(&aStr[nNum], "[カメラの向き  :(%.2f)]", pCamera->rot.y);
+	nNum += sprintf(&aStr[nNum], "[カメラの向き  :(%.2f)]\n", pCamera->rot.y);
+
+	nNum += sprintf(&aStr[nNum], "\n[モデルの向き  :(%.2f)]\n", pPlayer->rot.y);
+	nNum += sprintf(&aStr[nNum], "[ブースト残量  :(%.0f)]\n", pPlayer->boost);
 
 //	wsprintf(&aStr[0], "FPS:%d\n", g_nCountFPS);
 
@@ -470,14 +537,4 @@ void DrawPoint(void)
 LPDIRECT3DDEVICE9 GetDevice(void)
 {
 	return g_pD3DDevice;
-}
-
-//=============================================================================
-// 壁の配置
-//=============================================================================
-void SetWall(void)
-{
-	SetWall(D3DXVECTOR3(0.0f, 0.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));	//奥
-//	SetWall(D3DXVECTOR3(0.0f, 0.0f, -90.0f), D3DXVECTOR3(0.0f, -3.14f, 0.0f));	//手前
-
 }

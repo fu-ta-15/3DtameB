@@ -150,22 +150,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Billboard.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="effect.h" />
+    <ClInclude Include="explosion.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="model.h" />
+    <ClInclude Include="meshfield.h" />
+    <ClInclude Include="meshwall.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="shadow.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="effect.cpp" />
+    <ClCompile Include="explosion.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="model.cpp" />
+    <ClCompile Include="meshfield.cpp" />
+    <ClCompile Include="meshwall.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="shadow.cpp" />
     <ClCompile Include="wall.cpp" />
