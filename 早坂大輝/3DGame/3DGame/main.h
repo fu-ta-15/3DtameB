@@ -54,6 +54,5 @@ typedef struct
 // プロトタイプ宣言
 //=============================================================================
 LPDIRECT3DDEVICE9 GetDevice(void);
-void SetWall(void);
 
 #endif

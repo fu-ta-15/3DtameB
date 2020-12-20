@@ -14,10 +14,13 @@
 //=============================================================================
 typedef struct
 {
-	D3DXVECTOR3 posV;			//視点
+	D3DXVECTOR3 posV;			//現在の視点
+	D3DXVECTOR3 posVDest;		//目的の視点
 	D3DXVECTOR3 posR;			//注視点
+	D3DXVECTOR3	posRDest;		//目的の注視点
 	D3DXVECTOR3 rot;			//カメラの向き
 	D3DXVECTOR3 vecU;			//上方向ベクトル
+	D3DXVECTOR3 move;			// 移動量
 	D3DXMATRIX mtxProjection;	//プロジェクションマトリックス
 	D3DXMATRIX mtxView;			//ビューマトリックス
 }Camera;
@@ -29,6 +32,8 @@ void InitCamera(void);
 void UninitCamera(void);
 void UpdateCamera(void);
 void SetCamera(void);		//Drawの最初に呼び出す
+void FollowCamera(void);
+
 Camera *GetCamera(void);
 
 

@@ -55,7 +55,7 @@ void InitLight(void)
 	g_light[1].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	//ƒ‰ƒCƒg‚Ì•ûŒü‚ğİ’è
-	vecDir = D3DXVECTOR3(0.2f, 0.8f, -0.4f);
+	vecDir = D3DXVECTOR3(0.2f, 0.8f, -0.8f);
 	D3DXVec3Normalize(&vecDir, &vecDir);	//³‹K‰»‚·‚é
 	g_light[0].Direction = vecDir;
 

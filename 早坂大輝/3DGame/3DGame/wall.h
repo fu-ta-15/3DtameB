@@ -14,8 +14,11 @@
 //=============================================================================
 typedef struct
 {
+	D3DXMATRIX mtxWorld;	// ワールドマトリックス
 	D3DXVECTOR3 pos;		//位置
 	D3DXVECTOR3 rot;		//向き
+	float fWidth;			//幅
+	float fHeight;			//高さ
 	bool bUse;				//使用しているかどうか
 }Wall;
 
@@ -26,8 +29,7 @@ HRESULT InitWall(void);
 void UninitWall(void);
 void UpdateWall(void);
 void DrawWall(void);
-void SetVertexWall(int nCntWall);
-void SetWall(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+void SetWall(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fWidth, float fHeight);
 Wall *GetWall(void);
 
 #endif
