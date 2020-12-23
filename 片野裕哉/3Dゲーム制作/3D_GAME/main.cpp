@@ -10,10 +10,13 @@
 #include "polygon.h"
 #include "camera.h"
 #include "light.h"
-#include "model.h"
 #include "shadow.h"
 #include "wall.h"
 #include "Billboard.h"
+#include "meshfield.h"
+#include "bullet.h"
+#include "player.h"
+#include "particle.h"
 
 #include <stdio.h>
 
@@ -45,6 +48,7 @@ LPDIRECT3D9 g_pD3D = NULL;					// Direct3Dオブジェクトへのポインタ
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;		// Direct3Dデバイスへのポインタ(描画処理に必要)
 LPD3DXFONT g_pFont = NULL;					// フォントへのポインタ
 int g_nCountFPS;							// FPSカウンタ
+bool g_bPause;								// ポーズしているかどうか
 
 //=========================================================================================================================
 // メイン関数
@@ -309,6 +313,8 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		"Terminal",
 		&g_pFont);
 
+	g_bPause = false;
+
 	InitKeyboard(hInstance, hWnd);									// 入力の初期化
 
 	InitCamera();
@@ -317,14 +323,19 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	InitPolygon();
 
+	InitMeshField();
+
 	InitWall();
 
 	InitShadow();
 
 	InitBillboard();
 
-	InitModel();
+	InitBullet();
 
+	InitParticle();
+
+	InitPlayer();
 
 	return S_OK;
 }
@@ -334,13 +345,19 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 //=========================================================================================================================
 void Uninit(void)
 {
-	UninitModel();
+	UninitPlayer();
+
+	UninitParticle();
+
+	UninitBullet();
 
 	UninitBillboard();
 
 	UninitShadow();
 
 	UninitWall();
+
+	UninitMeshField();
 
 	UninitPolygon();
 
@@ -378,18 +395,36 @@ void Uninit(void)
 //=========================================================================================================================
 void Update(void)
 {
+	if (GetKeyboardTrigger(DIK_P) == true)
+	{
+		g_bPause = g_bPause ? false : true;
+	}
+
 	// 入力の更新
 	UpdateKeyboard();
 
-	UpdateLight();
+	if (g_bPause == false)
+	{
+		UpdateLight();
 
-	UpdateCamera();
+		UpdateCamera();
 
-	UpdatePolygon();
+		UpdatePolygon();
 
-	UpdateWall();
+		UpdateMeshField();
 
-	UpdateModel();
+		UpdateWall();
+
+		UpdateBillboard();
+
+		UpdatePlayer();
+
+		UpdateParticle();
+
+		UpdateBullet();
+
+		UpdateShadow();
+	}
 }
 
 //=========================================================================================================================
@@ -409,15 +444,21 @@ void Draw(void)
 	// 描画の開始
 	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
 	{
-		DrawPolygon();
+		//DrawPolygon();
+
+		DrawMeshField();
 
 		DrawWall();
 
 		DrawShadow();
 
-		DrawBillboard();
+		//DrawBillboard();
 
-		DrawModel();
+		DrawBullet();
+
+		DrawParticle();
+
+		DrawPlayer();
 
 		SetCamera();
 
@@ -469,16 +510,17 @@ void DrawFPS(void)
 //=========================================================================================================================
 void DrawInfo(void)
 {
-	Camera pCamera = *GetCamera();
-	MODEL pModel = *GetModel();
+	Camera *pCamera = GetCamera();
+	//MODEL *pModel = GetModel();
+	PLAYER *pPlayer = GetPlayer();
 
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	char aStr[1024];
 
-	int nNum =  sprintf(&aStr[0], "[カメラの視点　　　　:(%.2f : %.2f : %.2f)]\n", pCamera.posV.x, pCamera.posV.y, pCamera.posV.z);
-	 nNum += sprintf(&aStr[nNum], "[カメラの注視　　　　:(%.2f : %.2f : %.2f)]\n", pCamera.posR.x, pCamera.posR.y, pCamera.posR.z);
-	 nNum += sprintf(&aStr[nNum], "[カメラの向き　　　　:(%.2f)]\n", pCamera.rot.y);
-	 nNum += sprintf(&aStr[nNum], "[視点と注視点の距離　:(%.2f)]\n", pCamera.fDistance);
+	int nNum =  sprintf(&aStr[0], "[カメラの視点　　　　:(%.2f : %.2f : %.2f)]\n", pCamera->posV.x, pCamera->posV.y, pCamera->posV.z);
+	 nNum += sprintf(&aStr[nNum], "[カメラの注視　　　　:(%.2f : %.2f : %.2f)]\n", pCamera->posR.x, pCamera->posR.y, pCamera->posR.z);
+	 nNum += sprintf(&aStr[nNum], "[カメラの向き　　　　:(%.2f)]\n", pCamera->rot.y);
+	 nNum += sprintf(&aStr[nNum], "[視点と注視点の距離　:(%.2f)]\n", pCamera->fDistance);
 	 nNum += sprintf(&aStr[nNum], "\n");
 	 nNum += sprintf(&aStr[nNum], "*** カメラ移動 ***\n");
 	 nNum += sprintf(&aStr[nNum], "前移動 : W\n");
@@ -502,20 +544,28 @@ void DrawInfo(void)
 	 nNum += sprintf(&aStr[nNum], "カメラの視点・注視点リセット : SPACE\n");
 	 nNum += sprintf(&aStr[nNum], "\n");
 	 nNum += sprintf(&aStr[nNum], "*** モデル操作 ***\n");
-	 nNum += sprintf(&aStr[nNum], "[モデルの位置　　　　:(%.2f : %.2f : %.2f)]\n", pModel.pos.x, pModel.pos.y, pModel.pos.z);
-	 nNum += sprintf(&aStr[nNum], "[モデルの移動量　　　:(%.2f : %.2f : %.2f)]\n", pModel.move.x, pModel.move.y, pModel.move.z);
+	 nNum += sprintf(&aStr[nNum], "[モデルの位置　　　　:(%.2f : %.2f : %.2f)]\n", pPlayer->pos.x, pPlayer->pos.y, pPlayer->pos.z);
+	 nNum += sprintf(&aStr[nNum], "[モデルの移動量　　　:(%.2f : %.2f : %.2f)]\n", pPlayer->move.x, pPlayer->move.y, pPlayer->move.z);
 	 nNum += sprintf(&aStr[nNum], "移動 : [ ↑ / ↓ / ← / → ]\n");
 	 nNum += sprintf(&aStr[nNum], "上昇 : I\n");
 	 nNum += sprintf(&aStr[nNum], "下降 : K\n");
 	 nNum += sprintf(&aStr[nNum], "\n");
-	 nNum += sprintf(&aStr[nNum], "[モデルの向き　　　　:(%.2f)]\n", pModel.rot.y);
-	 nNum += sprintf(&aStr[nNum], "[モデルの目的の向き　:(%.2f)]\n", pModel.rotObjective.y);
+	 nNum += sprintf(&aStr[nNum], "[モデルの向き　　　　:(%.2f)]\n", pPlayer->rot.y);
+	 nNum += sprintf(&aStr[nNum], "[モデルの目的の向き　:(%.2f)]\n", pPlayer->rotDest.y);
 	 nNum += sprintf(&aStr[nNum], "左旋回 : LSHIFT\n");
 	 nNum += sprintf(&aStr[nNum], "右旋回 : RSHIFT\n");
 	 nNum += sprintf(&aStr[nNum], "\n");
 	 nNum += sprintf(&aStr[nNum], "モデルの位置・向きリセット : ENTER\n");
 	 nNum += sprintf(&aStr[nNum], "\n");
-	 nNum += sprintf(&aStr[nNum], "[ビルボードの位置　　:(%.2f)]\n", pModel.rotObjective.y);
+	 nNum += sprintf(&aStr[nNum], "*** カメラ追従処理 ***\n");
+	 if (pCamera->bFollow == true)
+	 {
+		 nNum += sprintf(&aStr[nNum], "ON / OFF ： [ F4 ] 【 現在：ON 】\n");
+	 }
+	 else if (pCamera->bFollow == false)
+	 {
+		 nNum += sprintf(&aStr[nNum], "ON / OFF ： [ F4 ] 【 現在：OFF 】\n");
+	 }
 
 	// テキストの描画
 	g_pFont->DrawText(

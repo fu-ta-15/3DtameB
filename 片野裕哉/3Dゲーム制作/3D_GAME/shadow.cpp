@@ -5,6 +5,8 @@
 //
 //=========================================================================================================================
 #include "shadow.h"
+#include "model.h"
+#include "player.h"
 
 //
 // マクロ定義
@@ -47,7 +49,7 @@ HRESULT InitShadow(void)
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\shadow000.jpg", &g_pTextureShadow);
 
-	g_posShadow = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	g_posShadow = D3DXVECTOR3(0.0f, 0.1f, 0.0f);
 	g_rotShadow = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 頂点バッファの生成
@@ -125,7 +127,10 @@ void UninitShadow(void)
 //
 void UpdateShadow(void)
 {
+	PLAYER *pPlayer = GetPlayer();
 
+	g_posShadow.x = pPlayer->pos.x;
+	g_posShadow.z = pPlayer->pos.z;
 }
 
 
