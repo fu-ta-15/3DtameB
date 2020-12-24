@@ -666,27 +666,39 @@ END_MODELSET
 # プレイヤー情報
 #------------------------------------------------------------------------------
 PLAYERSET
-	MOTION_FILENAME = data/motion_runningman.txt
-	POS = -240 0 0
+	MOTION_FILENAME = data/motion_maeno_model.txt
+	POS = -160 0 0
 	ROT = 0 0 0
 END_PLAYERSET
 
-#PLAYERSET
-#	MOTION_FILENAME = data/motion_runningman_silver.txt
-#	POS = -80 0 0
-#	ROT = 0 0 0
-#END_PLAYERSET
-#
-#PLAYERSET
-#	MOTION_FILENAME = data/motion_runningman_black.txt
-#	POS = 80 0 0
-#	ROT = 0 0 0
-#END_PLAYERSET
-#
-#PLAYERSET
-#	MOTION_FILENAME = data/motion_runningman_switch.txt
-#	POS = 240 0 0
-#	ROT = 0 0 0
-#END_PLAYERSET
+PLAYERSET
+	MOTION_FILENAME = data/motion_hukuyama_model.txt
+	POS = -80 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_suzuki_model.txt
+	POS = 80 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_katano_model.txt
+	POS = 160 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_hayasaka_model.txt
+	POS = 240 0 0
+	ROT = 0 0 0
+END_PLAYERSET
+
+PLAYERSET
+	MOTION_FILENAME = data/motion_tomoe_model.txt
+	POS = -240 0 0
+	ROT = 0 0 0
+END_PLAYERSET
 
 END_SCRIPT		# この行は絶対消さないこと！
