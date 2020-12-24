@@ -154,24 +154,34 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="meshfield.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="particle.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="shadow.cpp" />
+    <ClCompile Include="Solid.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Billboard.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="meshfield.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="particle.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="shadow.h" />
+    <ClInclude Include="Solid.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -49,10 +49,10 @@ HRESULT InitPolygon(void)
 	g_pVtxBuffPolygon->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 
-	pVtx[0].pos = D3DXVECTOR3(g_posPolygon.x - 100.0f, g_posPolygon.y, g_posPolygon.z + 100.0f);
-	pVtx[1].pos = D3DXVECTOR3(g_posPolygon.x + 100.0f, g_posPolygon.y, g_posPolygon.z + 100.0f);
-	pVtx[2].pos = D3DXVECTOR3(g_posPolygon.x - 100.0f, g_posPolygon.y, g_posPolygon.z - 100.0f);
-	pVtx[3].pos = D3DXVECTOR3(g_posPolygon.x + 100.0f, g_posPolygon.y, g_posPolygon.z - 100.0f);
+	pVtx[0].pos = D3DXVECTOR3(g_posPolygon.x - 100.0f, g_posPolygon.y, g_posPolygon.z - 100.0f);
+	pVtx[1].pos = D3DXVECTOR3(g_posPolygon.x - 100.0f, g_posPolygon.y, g_posPolygon.z + 100.0f);
+	pVtx[2].pos = D3DXVECTOR3(g_posPolygon.x + 100.0f, g_posPolygon.y, g_posPolygon.z - 100.0f);
+	pVtx[3].pos = D3DXVECTOR3(g_posPolygon.x + 100.0f, g_posPolygon.y, g_posPolygon.z + 100.0f);
 
 	// 法線ベクトルの設定
 	pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
