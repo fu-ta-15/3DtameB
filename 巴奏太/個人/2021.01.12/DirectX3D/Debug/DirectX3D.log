@@ -1,0 +1,4 @@
+﻿  player.cpp
+c:\users\student\documents\visual studio 2015\projects\directx3d\player.cpp(57): warning C4129: 'M': エスケープ シーケンスとして正しく認識されませんでした。
+  DirectX3D.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\DirectX3D\Debug\DirectX3D.exe
+  DirectX3D.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\DirectX3D\Debug\DirectX3D.pdb (Full PDB)
