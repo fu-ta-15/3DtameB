@@ -1,0 +1,31 @@
+﻿  Xinput.cpp
+c:\users\student\desktop\hackathon-12-25\final\hackathon\hackathon1225\xinput.cpp(49): warning C4101: 'padKey': ローカル変数は 1 度も使われていません。
+  UI.cpp
+  Tutorial.cpp
+  Title.cpp
+  Sound.cpp
+  Ranking.cpp
+  Player.cpp
+c:\users\student\desktop\hackathon-12-25\final\hackathon\hackathon1225\player.cpp(66): warning C4129: 'M': エスケープ シーケンスとして正しく認識されませんでした。
+  Title1.cpp
+  RedLine.cpp
+  Pause.cpp
+  ModelBillBoard.cpp
+  Model.cpp
+  meteorite.cpp
+  Meshfield.cpp
+  Main.cpp
+  Light.cpp
+  Input.cpp
+  Fade.cpp
+  Effect.cpp
+  DirectX.cpp
+  コードを生成中...
+  コンパイル中...
+  ClearAndOver.cpp
+  Camera.cpp
+  BillBoard.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\student\Desktop\hackathon-12-25\FINAL\Hackathon\Hackathon1225\Debug\Hackathon1225.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  Hackathon1225.vcxproj -> C:\Users\student\Desktop\hackathon-12-25\FINAL\Hackathon\Hackathon1225\Debug\Hackathon1225.exe
+  Hackathon1225.vcxproj -> C:\Users\student\Desktop\hackathon-12-25\FINAL\Hackathon\Hackathon1225\Debug\Hackathon1225.pdb (Full PDB)
