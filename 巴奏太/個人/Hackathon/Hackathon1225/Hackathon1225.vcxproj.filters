@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Screen Transition">
+      <UniqueIdentifier>{fc3ed08b-7e2a-45a7-b771-48a0be3dc3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Screen Transition\Main Game">
+      <UniqueIdentifier>{288cdb0e-b706-4293-9adc-ff43bc47af2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Screen Transition\Main Game\Stage">
+      <UniqueIdentifier>{f305cd31-3c48-430e-8cc7-737c21124eac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen Transition">
+      <UniqueIdentifier>{e321ba7c-4963-49e1-bd6b-ba887aacc8c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen Transition\Main Game">
+      <UniqueIdentifier>{b31f1628-38d6-4644-979d-97632b9a7b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Screen Transition\Main Game\Stage">
+      <UniqueIdentifier>{5f3b6f5b-4989-4e0c-aa04-0c32978f3630}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダー ファイル\Screen Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h">
+      <Filter>ヘッダー ファイル\Screen Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Ranking.h">
+      <Filter>ヘッダー ファイル\Screen Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Title1.h">
+      <Filter>ヘッダー ファイル\Screen Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="Xinput.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Meshfield.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="BillBoard.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="meteorite.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="ClearAndOver.h">
+      <Filter>ヘッダー ファイル\Screen Transition</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelBillBoard.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="RedLine.h">
+      <Filter>ヘッダー ファイル\Screen Transition\Main Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>ソース ファイル\Screen Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル\Screen Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Ranking.cpp">
+      <Filter>ソース ファイル\Screen Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Title1.cpp">
+      <Filter>ソース ファイル\Screen Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="Xinput.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Meshfield.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="BillBoard.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="meteorite.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="ClearAndOver.cpp">
+      <Filter>ソース ファイル\Screen Transition</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelBillBoard.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="RedLine.cpp">
+      <Filter>ソース ファイル\Screen Transition\Main Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
