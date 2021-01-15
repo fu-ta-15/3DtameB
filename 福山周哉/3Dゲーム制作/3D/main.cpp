@@ -12,8 +12,10 @@
 #include "wall.h"
 #include "stdio.h"
 #include "input.h"
-#include "model.h"
+#include "Player.h"
 #include "billboard.h"
+#include "meshfield.h"
+#include "bullet.h"
 
 //=================================================================================================
 //マクロ定義
@@ -269,10 +271,16 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		InitKeyboard(hInstance, hWnd);
 
 		//ポリゴンの初期化
-		InitPolygon();
+		//InitPolygon();
 
-		//モデルの初期化
-		InitModel();
+		//メッシュフィールドの初期化
+		InitMeshField();
+
+		//プレイヤーの初期化
+		InitPlayer();
+
+		//弾の初期化処理
+		InitBullet();
 
 		//影の初期化
 		InitShadow();
@@ -311,10 +319,16 @@ void Uninit(void)
 	UninitKeyboard();
 
 	//ポリゴンの終了処理
-	UninitPolygon();
+	//UninitPolygon();
 
-	//モデルの終了処理
-	UninitModel();
+	//メッシュフィールドの終了処理
+	UninitMeshField();
+
+	//プレイヤーの終了処理
+	UninitPlayer();
+
+	//弾の終了処理
+	UninitBullet();
 
 	//影の終了処理
 	UninitShadow();
@@ -367,10 +381,16 @@ void Update(void)
 	UpdateKeyboard();
 
 	//ポリゴンの更新
-	UpdatePolygon();
+	//UpdatePolygon();
 
-	//モデルの更新処理
-	UpdateModel();
+	//メッシュフィールドの更新処理
+	UpdateMeshField();
+
+	//プレイヤーの更新処理
+	UpdatePlayer();
+
+	//弾の更新処理
+	UpdateBullet();
 
 	//影の更新
 	UpdateShadow();
@@ -401,10 +421,16 @@ void Draw(void)
 		SetCamera();
 		
 		//ポリゴンの描画処理
-		DrawPolygon();
+		//DrawPolygon();
 
-		//モデルの描画処理
-		//DrawModel();
+		//メッシュフィールドの描画処理
+		DrawMeshField();
+
+		//プレイヤーの描画処理
+		DrawPlayer();
+
+		//弾の描画処理
+		DrawBullet();
 
 		//影の描画処理
 		DrawShadow();
@@ -413,7 +439,7 @@ void Draw(void)
 		DrawWall();
 
 		//ビルボードの描画処理
-		DrawBillboard();
+		//DrawBillboard();
 
 		//FPS
 		#ifdef _DEBUG
@@ -454,14 +480,18 @@ void DrawFPS(void)
 //=================================================================================================
 void DrawCoor(void)
 {
-	Camera *camera;
+	Camera *pCamera;
+	PLAYER *pPlayer;
 
-	camera = GetCamera();
+	pCamera = GetCamera();
+	pPlayer = GetPlayer();
 
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	char aStr[256];
-	int nNum = sprintf(&aStr[0], "移動:%.3f\n", camera->posV.x);
-	nNum += sprintf(&aStr[nNum], "カメラの視点:%.3f\n", camera->posR.x);
+	int nNum = sprintf(&aStr[0], "移動[←→]:%.1f\n",pCamera->posV.x);
+	nNum += sprintf(&aStr[nNum], "移動[↓↑]:%.1f\n",pCamera->posR.z);
+	nNum += sprintf(&aStr[nNum], "カメラの視点:%.3f\n", pCamera->posR.x);
+	nNum += sprintf(&aStr[nNum], "モデルの向き:%.2f\n", pPlayer->rot.y);
 	//wsprintf(&aStr[0], "FPS:%d\n", g_nCountFPS);
 
 	//テキストの描画
