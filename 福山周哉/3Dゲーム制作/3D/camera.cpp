@@ -7,6 +7,7 @@
 #include "main.h"
 #include "camera.h"
 #include "input.h"
+#include "Player.h"
 
 //=================================================================================================
 //マクロ定義
@@ -43,6 +44,18 @@ void UninitCamera(void)
 //=================================================================================================
 void UpdateCamera(void)
 {
+	//モデルの取得
+	PLAYER *pPlayer;
+
+	pPlayer = GetPlayer();
+
+	//カメラの追従
+	g_camera.posR = pPlayer->pos;
+
+	g_camera.posV.x = g_camera.posR.x;
+	g_camera.posV.z = g_camera.posR.z - 200.0f;
+	g_camera.posV.y = g_camera.posR.y + 200.0f;
+
 	//カメラの上下左右移動
 	if (GetKeyboardPress(DIK_W) == true)
 	{
@@ -103,19 +116,38 @@ void UpdateCamera(void)
 		g_camera.posV.z = g_camera.posR.z - cosf(g_camera.rot.y) * MAX_POINT;
 	}
 
-	/*if (GetKeyboardPress(DIK_C) == true)
+	if (GetKeyboardPress(DIK_C) == true)
 	{
 		g_camera.rot.y -= 0.06f;
 
 		g_camera.posV.x = g_camera.posR.x - sinf(g_camera.rot.y) * MAX_POINT;
 		g_camera.posV.z = g_camera.posR.z - cosf(g_camera.rot.y) * MAX_POINT;
-	}*/
+	}
+
+	//注視点操作
+	if (GetKeyboardPress(DIK_T) == true)
+	{
+		g_camera.posR.z += cosf(g_camera.rot.y) * 1;
+		g_camera.posV.z += sinf(g_camera.rot.y) * 1;
+	}
+
+	if (GetKeyboardPress(DIK_B) == true)
+	{
+		g_camera.posR.z -= cosf(g_camera.rot.y) * 1;
+		g_camera.posV.z -= sinf(g_camera.rot.y) * 1;
+	}
+
+	//視点操作
+	if (GetKeyboardPress(DIK_Y) == true)
+	{
+
+	}
 
 	//自動回転
-	g_camera.rot.y -= 0.007f;
+	/*g_camera.rot.y -= 0.007f;
 
 	g_camera.posV.x = g_camera.posR.x - sinf(g_camera.rot.y) * MAX_POINT;
-	g_camera.posV.z = g_camera.posR.z - cosf(g_camera.rot.y) * MAX_POINT;
+	g_camera.posV.z = g_camera.posR.z - cosf(g_camera.rot.y) * MAX_POINT;*/
 }
 
 //=================================================================================================

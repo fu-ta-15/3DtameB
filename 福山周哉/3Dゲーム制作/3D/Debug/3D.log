@@ -1,5 +1,5 @@
-﻿  shadow.cpp
-  camera.cpp
-  コードを生成中...
+﻿  Player.cpp
+c:\users\student\documents\visual studio 2015\projects\3d\player.cpp(151): warning C4305: '引数': 'double' から 'FLOAT' へ切り詰めます。
+c:\users\student\documents\visual studio 2015\projects\3d\player.cpp(169): warning C4305: '引数': 'double' から 'FLOAT' へ切り詰めます。
   3D.vcxproj -> C:\Users\student\documents\visual studio 2015\Projects\3D\Debug\3D.exe
   3D.vcxproj -> C:\Users\student\documents\visual studio 2015\Projects\3D\Debug\3D.pdb (Full PDB)
