@@ -5,6 +5,7 @@
 //
 //===========================================================================================================
 #include "billboard.h"
+#include "input.h"
 
 //===========================================================================================================
 //マクロ定義
@@ -95,6 +96,16 @@ void UninitBillboard(void)
 //===========================================================================================================
 void UpdateBillboard(void)
 {
+	//ビルボードの移動
+	if (GetKeyboardPress(DIK_I) == true)
+	{
+		g_posBillboard.z += 1;
+	}
+
+	if (GetKeyboardPress(DIK_K) == true)
+	{
+		g_posBillboard.z -= 1;
+	}
 }
 
 //===========================================================================================================
@@ -102,6 +113,7 @@ void UpdateBillboard(void)
 //===========================================================================================================
 void DrawBillboard(void)
 {
+	//変数宣言
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();		//デバイスのポインタ
 	D3DXMATRIX mtxView;								//ビューマトリックス取得用				
 	D3DXMATRIX mtxTrans;							//計算用マトリックス
@@ -138,10 +150,15 @@ void DrawBillboard(void)
 	//テクスチャの設定
 	pDevice->SetTexture(0, g_pTextureBillboard);
 
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);			//Zテスト
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);				//Zバッファの更新
+
 	//ポリゴンの描画
 	pDevice->DrawPrimitive
 	(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
 		0,						//描画を開始する頂点インデックス
 		2);						//描画するプリミティブ数
 
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
