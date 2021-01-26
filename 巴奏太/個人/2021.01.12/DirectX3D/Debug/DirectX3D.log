@@ -1,4 +1,28 @@
-﻿  player.cpp
-c:\users\student\documents\visual studio 2015\projects\directx3d\player.cpp(57): warning C4129: 'M': エスケープ シーケンスとして正しく認識されませんでした。
-  DirectX3D.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\DirectX3D\Debug\DirectX3D.exe
-  DirectX3D.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\DirectX3D\Debug\DirectX3D.pdb (Full PDB)
+﻿  wall.cpp
+  shadow.cpp
+  polygon.cpp
+  player.cpp
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\player.cpp(57): warning C4129: 'M': エスケープ シーケンスとして正しく認識されませんでした。
+  model.cpp
+  meshfield.cpp
+  main.cpp
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(132): warning C4018: '>': signed と unsigned の数値を比較しようとしました。
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(498): warning C4474: 'sprintf': 書式文字列に渡された引数の数が多すぎます
+  c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(498): note: プレースホルダーとそのパラメーターには 0 の可変個引数が必要ですが、1 が指定されています。
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(499): warning C4474: 'sprintf': 書式文字列に渡された引数の数が多すぎます
+  c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(499): note: プレースホルダーとそのパラメーターには 0 の可変個引数が必要ですが、1 が指定されています。
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(501): warning C4474: 'sprintf': 書式文字列に渡された引数の数が多すぎます
+  c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(501): note: プレースホルダーとそのパラメーターには 0 の可変個引数が必要ですが、1 が指定されています。
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(502): warning C4474: 'sprintf': 書式文字列に渡された引数の数が多すぎます
+  c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(502): note: プレースホルダーとそのパラメーターには 0 の可変個引数が必要ですが、1 が指定されています。
+c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(503): warning C4474: 'sprintf': 書式文字列に渡された引数の数が多すぎます
+  c:\users\student\desktop\3dtameb\巴奏太\個人\2021.01.12\directx3d\main.cpp(503): note: プレースホルダーとそのパラメーターには 0 の可変個引数が必要ですが、1 が指定されています。
+  light.cpp
+  input.cpp
+  camera.cpp
+  bullet.cpp
+  billboard.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\student\Desktop\3DtameB\巴奏太\個人\2021.01.12\DirectX3D\Debug\DirectX3D.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  DirectX3D.vcxproj -> C:\Users\student\Desktop\3DtameB\巴奏太\個人\2021.01.12\DirectX3D\Debug\DirectX3D.exe
+  DirectX3D.vcxproj -> C:\Users\student\Desktop\3DtameB\巴奏太\個人\2021.01.12\DirectX3D\Debug\DirectX3D.pdb (Full PDB)
