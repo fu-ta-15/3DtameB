@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // ポリゴンの処理 [meshfield.cpp]
-// Author:Taiki Hayasaka
+// Author:Taiki Hayasaka, Sota Tomoe
 //
 //=============================================================================
 #include "meshfield.h"
@@ -10,7 +10,6 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MAX_SIZE (400.0f)							//フィールドサイズ
 
 //=============================================================================
 // グローバル変数
@@ -25,7 +24,7 @@ D3DXMATRIX g_mtxWorldMeshfield;						//ワールドマトリックス
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT InitMeshfield(void)
+HRESULT InitMeshfield(int nStageNum)
 {
 	LPDIRECT3DDEVICE9 pDevice;	//デバイスへのポインタ
 	VERTEX_3D *pVtx;			//頂点情報へのポインタ
@@ -35,7 +34,24 @@ HRESULT InitMeshfield(void)
 	pDevice = GetDevice();
 
 	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block000.jpg", &g_pTextureMeshfield);
+	switch (nStageNum)
+	{
+	case 0:
+		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block_stage1.jpg", &g_pTextureMeshfield);
+		break;
+
+	case 1:
+		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block_stage2.jpg", &g_pTextureMeshfield);
+		break;
+
+	case 2:
+		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block_stage3.jpg", &g_pTextureMeshfield);
+		break;
+
+	default:
+		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block000.jpg", &g_pTextureMeshfield);
+		break;
+	}
 
 	g_posMeshfield = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_rotMeshfield = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -52,15 +68,15 @@ HRESULT InitMeshfield(void)
 	g_pVtxBuffMeshfield->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点座標の設定(Z型)
-	pVtx[0].pos = D3DXVECTOR3(g_posMeshfield.x - MAX_SIZE, g_posMeshfield.y, g_posMeshfield.z + MAX_SIZE);
-	pVtx[1].pos = D3DXVECTOR3(g_posMeshfield.x, g_posMeshfield.y, g_posMeshfield.z + MAX_SIZE);
-	pVtx[2].pos = D3DXVECTOR3(g_posMeshfield.x + MAX_SIZE, g_posMeshfield.y, g_posMeshfield.z + MAX_SIZE);
-	pVtx[3].pos = D3DXVECTOR3(g_posMeshfield.x - MAX_SIZE, g_posMeshfield.y, g_posMeshfield.z);
+	pVtx[0].pos = D3DXVECTOR3(g_posMeshfield.x - FIELD_MAXSIZE, g_posMeshfield.y, g_posMeshfield.z + FIELD_MAXSIZE);
+	pVtx[1].pos = D3DXVECTOR3(g_posMeshfield.x, g_posMeshfield.y, g_posMeshfield.z + FIELD_MAXSIZE);
+	pVtx[2].pos = D3DXVECTOR3(g_posMeshfield.x + FIELD_MAXSIZE, g_posMeshfield.y, g_posMeshfield.z + FIELD_MAXSIZE);
+	pVtx[3].pos = D3DXVECTOR3(g_posMeshfield.x - FIELD_MAXSIZE, g_posMeshfield.y, g_posMeshfield.z);
 	pVtx[4].pos = D3DXVECTOR3(g_posMeshfield.x, g_posMeshfield.y, g_posMeshfield.z);
-	pVtx[5].pos = D3DXVECTOR3(g_posMeshfield.x + MAX_SIZE, g_posMeshfield.y, g_posMeshfield.z);
-	pVtx[6].pos = D3DXVECTOR3(g_posMeshfield.x - MAX_SIZE, g_posMeshfield.y, g_posMeshfield.z - MAX_SIZE);
-	pVtx[7].pos = D3DXVECTOR3(g_posMeshfield.x, g_posMeshfield.y, g_posMeshfield.z - MAX_SIZE);
-	pVtx[8].pos = D3DXVECTOR3(g_posMeshfield.x + MAX_SIZE, g_posMeshfield.y, g_posMeshfield.z - MAX_SIZE);
+	pVtx[5].pos = D3DXVECTOR3(g_posMeshfield.x + FIELD_MAXSIZE, g_posMeshfield.y, g_posMeshfield.z);
+	pVtx[6].pos = D3DXVECTOR3(g_posMeshfield.x - FIELD_MAXSIZE, g_posMeshfield.y, g_posMeshfield.z - FIELD_MAXSIZE);
+	pVtx[7].pos = D3DXVECTOR3(g_posMeshfield.x, g_posMeshfield.y, g_posMeshfield.z - FIELD_MAXSIZE);
+	pVtx[8].pos = D3DXVECTOR3(g_posMeshfield.x + FIELD_MAXSIZE, g_posMeshfield.y, g_posMeshfield.z - FIELD_MAXSIZE);
 
 	//法線ベクトルの設定
 	pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
@@ -163,7 +179,6 @@ void UninitMeshfield(void)
 //=============================================================================
 void UpdateMeshfield(void)
 {
-
 }
 
 //=============================================================================

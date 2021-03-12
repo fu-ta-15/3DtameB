@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // DirectX01 [main.h]
-// Author:Taiki Hayasaka
+// Author:Taiki Hayasaka, Sota Tomoe
 //
 //=============================================================================
 #ifndef _MAIN_H_
@@ -30,7 +30,7 @@
 #define SCREEN_HEIGHT (1080)		//画面の高さ
 #define FVF_VERTEX_2D (D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1) //頂点フォーマット
 #define FVF_VERTEX_3D (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)	//頂点フォーマット
-
+#define VERTEX_AMOUNT (4)			// 面の頂点数
 //=============================================================================
 // 頂点フォーマットに合わせた構造体
 //=============================================================================
@@ -56,6 +56,7 @@ typedef struct
 typedef enum
 {
 	MODE_GAME,			//ゲーム画面
+	MODE_RESULT,		//リザルト画面
 	MODE_MAX
 }MODE;
 
