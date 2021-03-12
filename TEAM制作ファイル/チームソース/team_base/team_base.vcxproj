@@ -150,6 +150,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="enemy.h" />
+    <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
@@ -157,9 +159,12 @@
     <ClInclude Include="meshfield.h" />
     <ClInclude Include="meshwall.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="result.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
@@ -167,6 +172,7 @@
     <ClCompile Include="meshfield.cpp" />
     <ClCompile Include="meshwall.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="result.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -93,7 +93,6 @@ void UpdateKeyboard(void)
 	{
 		for (int nKey = 0; nKey < 256; nKey++)
 		{
-
 			g_aKeyStateTrigger[nKey] = (~g_aKeyState[nKey])&aKeyState[nKey];	//トリガー
 			g_aKeyStateRelease[nKey] = (~aKeyState[nKey])&g_aKeyState[nKey];	//リリース
 			g_aKeyState[nKey] = aKeyState[nKey];
