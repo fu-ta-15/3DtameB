@@ -1,18 +1,24 @@
 //=============================================================================
 //
 // ポリゴン処理 [meshfield.h]
-// Author:Taiki Hayasaka
+// Author:Taiki Hayasaka, Sota Tomoe
 //
 //=============================================================================
 #ifndef _MESHFIELD_H_
 #define _MESHFIELD_H_
 
 #include "main.h"
+#include "game.h"
+
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define FIELD_MAXSIZE (400.0f)							//フィールドサイズ
 
 //=============================================================================
 // プロトタイプ宣言
 //=============================================================================
-HRESULT InitMeshfield(void);
+HRESULT InitMeshfield(int nStageNum);
 void UninitMeshfield(void);
 void UpdateMeshfield(void);
 void DrawMeshfield(void);

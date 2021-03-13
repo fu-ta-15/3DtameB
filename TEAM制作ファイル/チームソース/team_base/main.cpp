@@ -1,12 +1,11 @@
 //=============================================================================
 //
-// DirectX01 [main.cpp]
-// Author:Taiki Hayasaka
+// チーム制作ゲーム メイン関数 [main.cpp]
+// Author:Taiki Hayasaka, Sota Tomoe
 //
 //=============================================================================
 #define _CRT_SECURE_NO_WARNINGS
 
-//インクルードファイル
 #include "main.h"	
 #include "camera.h"
 #include "light.h"
@@ -15,6 +14,8 @@
 #include "meshwall.h"
 #include "meshfield.h"
 #include "game.h"
+#include "fade.h"
+#include "result.h"
 
 #include <stdio.h>
 
@@ -276,6 +277,9 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//キーボードの初期化処理
 	InitKeyboard(hInstance, hWnd);
 
+	//フェードの初期化
+	InitFade(MODE_GAME);
+
 	//モードの設定
 	SetMode(g_mode);
 
@@ -289,6 +293,9 @@ void Uninit(void)
 {
 	//キーボードの終了処理
 	UninitKeyboard();
+
+	//フェードの終了
+	UninitFade();
 
 	//ゲーム画面の終了処理
 	UninitGame();
@@ -330,7 +337,14 @@ void Update(void)
 	case MODE_GAME:			//ゲーム画面
 		UpdateGame();
 		break;
+
+	case MODE_RESULT:		//リザルト画面
+		UpdateResult();
+		break;
 	}
+
+	//フェードの更新
+	UpdateFade();
 
 }
 
@@ -355,6 +369,10 @@ void Draw(void)
 		case MODE_GAME:			//ゲーム画面
 			DrawGame();
 			break;
+
+		case MODE_RESULT:		//リザルト画面
+			DrawResult();
+			break;
 		}
 
 #ifdef _DEBUG
@@ -366,6 +384,9 @@ void Draw(void)
 		DrawPoint();
 
 #endif
+
+		//フェードの描画
+		DrawFade();
 
 		//描画の終了
 		g_pD3DDevice->EndScene();
@@ -398,12 +419,12 @@ void DrawPoint(void)
 	pCamera = GetCamera();
 	pPlayer = GetPlayer();
 
-
 	RECT rect = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 	char aStr[512];
 	int nNum = sprintf(&aStr[0], "[カメラの視点  :(%.2f : %.2f : %.2f)]\n", pCamera->posV.x, pCamera->posV.y, pCamera->posV.z);
 	nNum += sprintf(&aStr[nNum], "[カメラの注視点:(%.2f : %.2f : %.2f)]\n", pCamera->posR.x, pCamera->posR.y, pCamera->posR.z);
 	nNum += sprintf(&aStr[nNum], "[カメラの向き  :(%.2f)]\n", pCamera->rot.y);
+	nNum += sprintf(&aStr[nNum], "[プレイヤーの位置]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->pos.x, pPlayer->pos.y, pPlayer->pos.z);
 
 	//テキストの描画
 	g_pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 255, 255, 255));
@@ -429,6 +450,10 @@ void SetMode(MODE mode)
 	case MODE_GAME:			//ゲーム画面
 		UninitGame();
 		break;
+
+	case MODE_RESULT:		//リザルト画面
+		UninitResult();
+		break;
 	}
 	g_mode = mode;
 
@@ -438,6 +463,10 @@ void SetMode(MODE mode)
 	{
 	case MODE_GAME:		//ゲーム画面
 		InitGame();
+		break;
+
+	case MODE_RESULT:	//リザルト画面
+		InitResult();
 		break;
 	}
 
