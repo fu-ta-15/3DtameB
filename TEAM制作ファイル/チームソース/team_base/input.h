@@ -18,6 +18,8 @@ void UpdateKeyboard(void);
 bool GetKeyboardPress(int nKey);
 bool GetKeyboardTrigger(int nKey);
 bool GetKeyboardRelease(int nKey);
+bool GetKeyboardRepeat(int nKey);
+D3DXVECTOR2 GetMouseVelocity(void);
 
 #endif
 

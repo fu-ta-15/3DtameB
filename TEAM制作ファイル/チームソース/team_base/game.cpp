@@ -13,6 +13,9 @@
 #include "input.h"
 #include "fade.h"
 #include "enemy.h"
+#include "portal.h"
+#include "collision.h"
+#include "skybox.h"
 
 //=============================================================================
 // グローバル変数
@@ -33,6 +36,12 @@ HRESULT InitGame(void)
 	//ライトの初期化処理
 	InitLight();
 
+	//ポータルの初期化処理
+	InitPortal();
+
+	//コリジョン処理の初期化
+	InitCollision();
+	
 	//---ステージに依るもの---
 
 	//敵の初期化処理
@@ -46,6 +55,12 @@ HRESULT InitGame(void)
 
 	//壁の配置
 	SetWall();
+	
+	//スカイボックスの処理
+	InitSky();
+
+	//モーションの初期化処理
+	InitMotion();
 
 	return S_OK;
 }
@@ -55,6 +70,9 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	//スカイボックスの終了処理
+	UninitSky();
+
 	//メッシュフィールドの終了処理
 	UninitMeshfield();
 
@@ -72,6 +90,12 @@ void UninitGame(void)
 
 	//ライトの終了処理
 	UninitLight();
+
+	//コリジョン終了処理	
+	UninitCollision();
+
+	//ポータルの終了処理
+	UninitPortal();
 }
 
 //=============================================================================
@@ -79,6 +103,9 @@ void UninitGame(void)
 //=============================================================================
 void UpdateGame(void)
 {
+	//コリジョンの更新処理
+	UpdateCollision();
+
 	//メッシュフィールドの更新処理
 	UpdateMeshfield();
 
@@ -94,8 +121,17 @@ void UpdateGame(void)
 	//カメラの更新処理
 	UpdateCamera();
 
+	//モーションの更新処理
+	UpdateMotion();
+
 	//ライトの更新処理
 	UpdateLight();
+
+	//ポータルの更新処理
+	UpdatePortal();
+
+	//スカイボックスの更新処理
+	UpdateSky();
 
 	if (GetKeyboardTrigger(DIK_RETURN) == true)
 	{
@@ -109,6 +145,9 @@ void UpdateGame(void)
 //=============================================================================
 void DrawGame(void)
 {
+	//コリジョンの描画処理
+	DrawCollision();
+
 	//メッシュフィールドの描画処理
 	DrawMeshfield();
 
@@ -120,6 +159,13 @@ void DrawGame(void)
 
 	//敵の描画処理
 	DrawEnemy();
+
+	//スカイボックスの描画
+	DrawSky();
+
+	//ポータルの描画処理
+	DrawPortal();
+
 }
 
 //=============================================================================
