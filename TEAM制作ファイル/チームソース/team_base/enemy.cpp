@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "input.h"
 #include "fade.h"
+#include "portal.h"
 #include <stdio.h>
 
 //-----------------------------------------------------------------------------
@@ -140,28 +141,52 @@ void UpdateEnemy(void)
 				g_aEnemy[nCntEnemy].rot.y = fRadianToPlayer;
 			}
 
-			//敵に触れる距離だったら消す（デバッグ用）
-			if (fDistanceToPlayer <= 20.0f)
+			//距離が攻撃範囲内だったら
+			if (fDistanceToPlayer <= ENEMY_ATTACK_RADIUS)
 			{
-				g_aEnemy[nCntEnemy].bUse = false;
-				g_nEnemyAlive--;
+				//すでに攻撃していない場合
+				if (g_aEnemy[nCntEnemy].bAttack != true)
+				{
+					//プレイヤーの無敵時間じゃない場合
+					if (pPlayer->bInvincible != true)
+					{
+						//現在時間取得（無敵時間計算）
+						g_aEnemy[nCntEnemy].dwTimeAtk = timeGetTime();
+
+						//現在時間取得（攻撃CT計算）
+						pPlayer->dwTime = timeGetTime();
+
+						//体力減少
+						pPlayer->nLife--;
+
+						//敵から自分に向かうベクトル
+						D3DXVECTOR3 vecEnemyToPlayer = pPlayer->pos - g_aEnemy[nCntEnemy].pos;
+						D3DXVec3Normalize(&vecEnemyToPlayer, &vecEnemyToPlayer);
+
+						//ノックバック
+						pPlayer->move += vecEnemyToPlayer * ENEMY_KNOCKBACK;
+						pPlayer->move.y += 1.0f;
+
+						//無敵になる
+						pPlayer->bInvincible = true;
+
+						//敵が攻撃クールタイムに入る
+						g_aEnemy[nCntEnemy].bAttack = true;
+					}
+				}
 			}
 
+			//時間経過で攻撃CT解除
+			if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME)
+			{
+				//CT解除
+				g_aEnemy[nCntEnemy].bAttack = false;
+			}
+			//敵が全滅したら
 			if (g_nEnemyAlive <= 0)
 			{
-				Stage *pStage = GetStage();
-
-				if (pStage->nStageNum < 2)
-				{
-					pStage->nStageNum++;
-					SetFade(FADE_OUT, MODE_GAME);
-				}
-				else
-				{
-					pStage->nStageNum = 0;
-					SetFade(FADE_OUT, MODE_RESULT);
-				}
-
+				//ポータルを起動
+				ActivatePortal(true, true);
 			}
 		}
 	}

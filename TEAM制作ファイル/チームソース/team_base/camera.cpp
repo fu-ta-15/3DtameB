@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // カメラの処理 [camera.cpp]
-// Author:Taiki Hayasaka
+// Author:Taiki Hayasaka, Sota Tomoe
 //
 //=============================================================================
 #include "camera.h"
@@ -11,8 +11,12 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MOVE_CAMERA (4.0f)			//移動量
-#define CAMERA_DISTANCE (600.0f)	//距離
+#define MOVE_CAMERA (4.0f)				// 移動量
+#define CAMERA_DISTANCE (600.0f)		// 距離
+#define CAMERA_MOUSE_SENSITIVITY (550)	// マウスの感度
+#define CAMERA_ROT_LIMIT_UPPER
+#define CAMERA_ROT_LIMIT_LOWER
+
 
 //=============================================================================
 // グローバル変数
@@ -49,75 +53,21 @@ void UpdateCamera(void)
 {
 	Player *pPlayer = GetPlayer();
 
-	//視点操作
-	if (GetKeyboardPress(DIK_Y) == true)	//Yを押した
-	{
-		//注視点 上
-		g_camera.posV.y += 2.0f;
-	}
-	if (GetKeyboardPress(DIK_N) == true)	//Nを押した
-	{
-		//注視点 下
-		g_camera.posV.y -= 2.0f;
-	}
+	//マウスの移動量を視点の回転に追加
+	g_camera.rot.y += GetMouseVelocity().x / 550;
+	g_camera.rot.z -= GetMouseVelocity().y / 550;
 
-	if (GetKeyboardPress(DIK_Z) == true)	//Zを押した
-	{
-		g_camera.rot.y -= 0.03f;
+	if (g_camera.rot.z > D3DX_PI / 2.0f) g_camera.rot.z = D3DX_PI / 2.0f;
+	else if (g_camera.rot.z < -D3DX_PI / 2.0f) g_camera.rot.z = -D3DX_PI / 2.0f;
+	if (g_camera.rot.z > 0) g_camera.rot.z = 0.0f;	// 下に突き抜けないようにする
 
-		if (g_camera.rot.y < -D3DX_PI)
-		{
-			g_camera.rot.y += D3DX_PI * 2.0f;
-		}
-	}
-	if (GetKeyboardPress(DIK_C) == true)	//Cを押した
-	{
-		g_camera.rot.y += 0.03f;
-
-		if (g_camera.rot.y > D3DX_PI)
-		{
-			g_camera.rot.y -= D3DX_PI * 2.0f;
-		}
-	}
-
-
-	//注視点操作
-	if (GetKeyboardPress(DIK_T) == true)	//Tを押した
-	{
-		//注視点 上
-		g_camera.posR.y += 2.0f;
-	}
-	if (GetKeyboardPress(DIK_B) == true)	//Bを押した
-	{
-		//注視点 下
-		g_camera.posR.y -= 2.0f;
-	}
-	if (GetKeyboardPress(DIK_Q) == true)	//Qを押した
-	{
-		g_camera.rot.y -= 0.02f;
-
-		if (g_camera.rot.y < -D3DX_PI)
-		{
-			g_camera.rot.y += D3DX_PI*2.0f;
-		}
-
-		//左旋回
-		g_camera.posR.x = g_camera.posV.x + sinf(g_camera.rot.y) * CAMERA_DISTANCE;
-		g_camera.posR.z = g_camera.posV.z + cosf(g_camera.rot.y) * CAMERA_DISTANCE;
-	}
-	if (GetKeyboardPress(DIK_E) == true)	//Eを押した
-	{
-		g_camera.rot.y += 0.02f;
-
-		if (g_camera.rot.y > D3DX_PI)
-		{
-			g_camera.rot.y -= D3DX_PI*2.0f;
-		}
-
-		//右旋回
-		g_camera.posR.x = g_camera.posV.x + sinf(g_camera.rot.y) * CAMERA_DISTANCE;
-		g_camera.posR.z = g_camera.posV.z + cosf(g_camera.rot.y) * CAMERA_DISTANCE;
-	}
+	//D3DXPI超えた時の対処
+	if (g_camera.rot.x > D3DX_PI) g_camera.rot.x -= D3DX_PI * 2.0f;
+	if (g_camera.rot.x < -D3DX_PI) g_camera.rot.x += D3DX_PI * 2.0f;
+	if (g_camera.rot.y > D3DX_PI) g_camera.rot.y -= D3DX_PI * 2.0f;
+	if (g_camera.rot.y < -D3DX_PI) g_camera.rot.y += D3DX_PI * 2.0f;
+	if (g_camera.rot.z > D3DX_PI) g_camera.rot.z -= D3DX_PI * 2.0f;
+	if (g_camera.rot.z < -D3DX_PI) g_camera.rot.z += D3DX_PI * 2.0f;
 
 	//追従
 	FollowCamera();
@@ -141,7 +91,7 @@ void SetCamera(void)
 		D3DXToRadian(45.0f),								//画角
 		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,
 		10.0f,												//手前の描画
-		2000.0f);											//奥の描画
+		100000.0f);											//奥の描画
 
 															//プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &g_camera.mtxProjection);
@@ -168,15 +118,17 @@ void FollowCamera(void)
 
 	g_camera.posR = pPlayer->pos;
 
-	// 注視点の更新
-	g_camera.posR.x = pPlayer->pos.x;	// 注視点のX軸座標の決定
-	g_camera.posR.z = pPlayer->pos.z;	// 注視点のZ軸座標の決定
-	g_camera.posR.y = pPlayer->pos.y;	// 注視点のY軸座標の決定
+	//----------------------縦回転バージョン(3次元極座標(球座標))---------------------------------
+	//注視点をモデルに
+	g_camera.posRDest.x = pPlayer->pos.x + sinf(pPlayer->rot.y + D3DX_PI) * 10;
+	g_camera.posRDest.z = pPlayer->pos.z + cosf(pPlayer->rot.y + D3DX_PI) * 10;
+	g_camera.posR.y = pPlayer->pos.y + 30.0f;
 
-										// 視点の更新
-	g_camera.posV.x = g_camera.posR.x - sinf(g_camera.rot.y) * 400;		//視点のX軸座標の決定
-	g_camera.posV.z = g_camera.posR.z - cosf(g_camera.rot.y) * 400;		//視点のZ軸座標の決定
-	g_camera.posV.y = g_camera.posR.y + 200.0f;							//視点のY軸座標の決定
+	//視点をモデルからカメラの向きに長さ分だけ
+	g_camera.posV.x = pPlayer->pos.x - sinf(g_camera.rot.y) * cosf(g_camera.rot.z) * CAMERA_DISTANCE;
+	g_camera.posV.z = pPlayer->pos.z - cosf(g_camera.rot.y) * cosf(g_camera.rot.z) * CAMERA_DISTANCE;
+	g_camera.posV.y = pPlayer->pos.y - sinf(g_camera.rot.z) * CAMERA_DISTANCE;
+	//---------------------------------------------------------------------
 }
 
 //=============================================================================
