@@ -19,6 +19,21 @@
 #define PLAYER_HEIGHT (50.0f)
 #define PLAYER_INVINCIBLE_TIME (500)	// 攻撃された時の無敵時間
 #define PLAYER_HEALTH (10)				// プレイヤーの体力
+#define PLAYER_MODEL_AMOUNT (10)
+
+//-----------------------------------------------------------------------------
+// ファイルから読んでくるキャラクターのモデル情報の構造体
+//-----------------------------------------------------------------------------
+typedef struct
+{
+	int nModelNum;						// モデルの数	
+	int nModelIdx[20];					// モデルの番号
+	int nModelParent[20];				// モデルの親
+	char cModelFileName[20][128];		// モデルのファイル名
+	float fModelPos[20][3];				// モデルの位置(オフセット)
+	float fModelRot[20][3];				// モデルの向き
+
+} CharacterPartsInfo;
 
 //-----------------------------------------------------------------------------
 // モデルの構造体
@@ -32,7 +47,8 @@ typedef struct
 	D3DXVECTOR3 rot;			// 向き
 	D3DXMATRIX mtxWorld;		// ワールドマトリックス
 	int nIdxModelParent;		// 親モデルのインデックス
-	int nMotionCount;
+	LPDIRECT3DTEXTURE9 pTexture[10];	// texture
+	int nNumModel;
 } PlayerModel;
 
 //-----------------------------------------------------------------------------
@@ -46,11 +62,11 @@ typedef struct
 	D3DXVECTOR3 rot;				// 向き
 	D3DXVECTOR3 rotDest;			// 目標の向き
 	D3DXMATRIX mtxWorld;			// ワールドマトリックス
-	PlayerModel aModel[10];			// モデル(パーツ)
+	PlayerModel aModel[PLAYER_MODEL_AMOUNT];	// モデル(パーツ)
 	int nNumModel;					// モデル(パーツ)数
 
 	bool bPlayMotion;				// モーション再生状態
-	MOTION_INFO aMotionInfo[10];	// モーション情報	 (モーションの最大数)
+	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)
 	MOTIONTYPE motionType;			// モーションタイプ
 	bool bLoopMotion;				// ループの有無
 	int nCurrentMotion;				// 現在のモーション
@@ -67,10 +83,6 @@ typedef struct
 	int nCounterMotionBlend;		//
 	int nCounterBlend;
 	int nFrameBlend;
-	float fTest[20];
-	int nTestCounter;
-	int nTestKey;
-	bool bTest;
 
 
 	int nLifeMax;					// 最大体力
@@ -89,4 +101,5 @@ void UpdatePlayer(void);
 void DrawPlayer(void);
 Player *GetPlayer(void);
 KEY *GetDefKey(void);
+void ReadCharacterInfo(CharacterPartsInfo *characterInfo, char* fileName);
 #endif

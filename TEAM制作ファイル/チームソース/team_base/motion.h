@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
+#define MOTION_MAX (10) // max amount of motion
 
 //-----------------------------------------------------------------------------
 // モーションの種類
@@ -75,6 +76,6 @@ void UninitMotion(void);
 void UpdateMotion(void);
 void DrawMotion(void);
 KEY KeyPosRot(float posX, float posY, float posZ, float rotX, float rotY, float rotZ);
-void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType);
+void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy);
 
 #endif

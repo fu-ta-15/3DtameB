@@ -17,7 +17,6 @@
 #define CAMERA_ROT_LIMIT_UPPER
 #define CAMERA_ROT_LIMIT_LOWER
 
-
 //=============================================================================
 // グローバル変数
 //=============================================================================
@@ -80,7 +79,7 @@ void SetCamera(void)
 {
 	LPDIRECT3DDEVICE9 pDevice;//デバイスへのポインタ
 
-							  //デバイスの取得
+	//デバイスの取得
 	pDevice = GetDevice();
 
 	//プロジェクションマトリックスの初期化
@@ -93,7 +92,7 @@ void SetCamera(void)
 		10.0f,												//手前の描画
 		100000.0f);											//奥の描画
 
-															//プロジェクションマトリックスの設定
+	//プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &g_camera.mtxProjection);
 
 	//ビューマトリックスの初期化

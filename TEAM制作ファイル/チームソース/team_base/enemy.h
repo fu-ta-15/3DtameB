@@ -15,17 +15,32 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
-#define ENEMY_AMOUNT_MAX (32)		// 用意している敵の最大数
-#define ENEMY_KNOCKBACK (10)		// ノックバック量
-#define ENEMY_INVINCIBLE_TIME (500)	// 攻撃された時の無敵時間
-#define ENEMY_HEIGHT (20)			// 敵の高さ
-#define ENEMY_WIDTH (20)			// 敵の幅
-#define ENEMY_FALLSPEED (0.4f)		// 落下速度
-#define ENEMY_DETECT_RADIUS (200)	// 敵感知距離
-#define ENEMY_MOVESPEED (0.2f)		// 移動速度
-#define ENEMY_ATTACK_RADIUS (35)	// 攻撃範囲
-#define ENEMY_ATTACK_COOLTIME (1000) // 攻撃CT
-#define ENEMY_HP_MAX (3)			// 敵の体力
+#define ENENY_AMOUNT_SNAKE (32)		// 蛇の敵を用意する数
+#define ENEMY_AMOUNT_ROBOT (32)		// ロボット
+#define ENEMY_AMOUNT_MAX (ENENY_AMOUNT_SNAKE + ENEMY_AMOUNT_ROBOT)			// 用意している敵の最大数
+#define ENEMY_MODEL_PARTS_MAX (10)	// 使用できる最大パーツ数
+#define ENEMY_ROBOT_MODELPARTS (10)	// amount of parts of robot model
+#define ENEMY_HEIGHT (20)				// 敵の高さ
+#define ENEMY_WIDTH (20)				// 敵の幅
+
+#define ENEMY_KNOCKBACK (10)			// ノックバック量
+#define ENEMY_INVINCIBLE_TIME (500)		// 攻撃された時の無敵時間
+#define ENEMY_FALLSPEED (0.4f)			// 落下速度
+#define ENEMY_DETECT_RADIUS (200)		// 敵感知距離
+#define ENEMY_MOVESPEED (0.2f)			// 移動速度
+#define ENEMY_ATTACK_RADIUS (35)		// 攻撃範囲
+#define ENEMY_ATTACK_COOLTIME (1000)	// 攻撃CT
+#define ENEMY_HP_MAX (3)				// 敵の体力
+
+//-----------------------------------------------------------------------------
+// enemy type
+//-----------------------------------------------------------------------------
+typedef enum
+{
+	ENEMYTYPE_SNAKE,	// snake
+	ENEMYTYPE_ROBOT,	// robot
+	ENEMYTYPE_MAX
+} ENEMYTYPE;
 
 //-----------------------------------------------------------------------------
 // 敵の構造体
@@ -38,10 +53,18 @@ typedef struct
 	D3DXVECTOR3 rot;				// 向き
 	D3DXVECTOR3 rotDest;			// 目標の向き
 	D3DXMATRIX mtxWorld;			// ワールドマトリックス
-	LPD3DXMESH pMesh;				// メッシュへのポインタ
-	LPD3DXBUFFER pBuffMat;			// マテリアルへのポインタ
-	DWORD nNumMat;					// マテリアルの数
-	LPDIRECT3DTEXTURE9 pTexture[10];// テクスチャへのポインタ
+	ENEMYTYPE type;					// 敵の種類
+	PlayerModel aModel[ENEMY_MODEL_PARTS_MAX];	// パーツ
+
+	bool bPlayMotion;				// モーション再生状態
+	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)
+	MOTIONTYPE motionType;			// モーションタイプ
+	bool bLoopMotion;				// ループの有無
+	int nCurrentMotion;				// 現在のモーション
+	int nNumMotion;					// モーション数
+	int nNumKey;					// キー数
+	int nKey;						// キーナンバー
+	int nCounterMotion;				// モーションカウンター
 
 	int nLifeMax;					// 最大体力
 	int nLife;						// 体力
@@ -62,7 +85,8 @@ void UninitEnemy(void);
 void UpdateEnemy(void);
 void DrawEnemy(void);
 Enemy *GetEnemy(void);
-void SetEnemy(D3DXVECTOR3 pos);
+PlayerModel *GetEnemyModelParts(ENEMYTYPE type);
+void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type);
 
 #endif
 
