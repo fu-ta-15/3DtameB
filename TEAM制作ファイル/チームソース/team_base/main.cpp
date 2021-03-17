@@ -437,14 +437,7 @@ void DrawPoint(void)
 	nNum += sprintf(&aStr[nNum], "[カメラの向き  :(%.2f)]\n", pCamera->rot.y);
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの位置]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->pos.x, pPlayer->pos.y, pPlayer->pos.z);
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの移動値]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->move.x, pPlayer->move.y, pPlayer->move.z);
-	nNum += sprintf(&aStr[nNum], "[diff] %.2f %.2f %.2f\n", pPlayer->fTest[0], pPlayer->fTest[1], pPlayer->fTest[2]);
-	nNum += sprintf(&aStr[nNum], "[diffBlend] %.2f %.2f %.2f\n", pPlayer->fTest[3], pPlayer->fTest[4], pPlayer->fTest[5]);
-	nNum += sprintf(&aStr[nNum], "[diff Blend - diff ] %.2f %.2f %.2f\n", pPlayer->fTest[6], pPlayer->fTest[7], pPlayer->fTest[8]);
-	nNum += sprintf(&aStr[nNum], "[ CounterMotion ] %.1f\n", (float)pPlayer->nCounterMotion);
-	nNum += sprintf(&aStr[nNum], "[ CounterMotionBlend ] %.1f\n", (float)pPlayer->nCounterMotionBlend);
-	nNum += sprintf(&aStr[nNum], "[ CounterBlend ] %.1f\n", (float)pPlayer->nCounterBlend);
-	nNum += sprintf(&aStr[nNum], "[ TESTCOUNTER ] %.1f\n", (float)pPlayer->nTestCounter);
-	nNum += sprintf(&aStr[nNum], "[ TESTKEY ] %.1f\n", (float)pPlayer->nTestKey);
+
 
 	//テキストの描画
 	g_pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 255, 255, 255));
