@@ -48,6 +48,7 @@ LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;		//Direct3Dデバイスへのポインタ
 LPD3DXFONT g_pFont = NULL;					//フォントへのポインタ
 int g_nCountFPS;							//FPSカウンタ
 MODE g_mode = MODE_GAME;					//モードの種類
+int g_nUpdateSpeed = 60;
 
 //=============================================================================
 // メイン関数
@@ -138,8 +139,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				dwFrameCount = 0;
 			}
 
-			if ((dwCurrentTime - dwExecLastTime) > (1000 / 60))
+			if ((dwCurrentTime - dwExecLastTime) > (unsigned)(1000 / g_nUpdateSpeed))
 			{
+				dwExecLastTime = dwCurrentTime;
+
 				//更新処理
 				Update();
 
@@ -346,6 +349,14 @@ void Update(void)
 	//フェードの更新
 	UpdateFade();
 
+	if (GetKeyboardRepeat(DIK_O) == true)
+	{
+		g_nUpdateSpeed--;
+	}
+	else if (GetKeyboardRepeat(DIK_P) == true)
+	{
+		g_nUpdateSpeed++;
+	}
 }
 
 //=============================================================================
@@ -356,7 +367,7 @@ void Draw(void)
 	//バックバッファ＆Zバッファのクリア（画面のクリア）
 	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);	//ウィンドウの色
 
-																											//カメラの設定処理
+	//カメラの設定処理
 	SetCamera();
 
 	//描画の開始
@@ -425,6 +436,8 @@ void DrawPoint(void)
 	nNum += sprintf(&aStr[nNum], "[カメラの注視点:(%.2f : %.2f : %.2f)]\n", pCamera->posR.x, pCamera->posR.y, pCamera->posR.z);
 	nNum += sprintf(&aStr[nNum], "[カメラの向き  :(%.2f)]\n", pCamera->rot.y);
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの位置]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->pos.x, pPlayer->pos.y, pPlayer->pos.z);
+	nNum += sprintf(&aStr[nNum], "[プレイヤーの移動値]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->move.x, pPlayer->move.y, pPlayer->move.z);
+
 
 	//テキストの描画
 	g_pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 255, 255, 255));

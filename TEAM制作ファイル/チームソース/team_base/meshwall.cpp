@@ -60,7 +60,7 @@ HRESULT InitMeshwall(void)
 	g_nPolygonWall = WIDTH_WALL * HEIGHT_WALL * 2 + (4 * (HEIGHT_WALL - 1));	// 描画するポリゴン数
 	g_nIdxPointWall = (WIDTH_WALL + 1) * (HEIGHT_WALL + 1);						// インデックスバッファでの総頂点数
 
-																				// 頂点バッファの生成
+	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(
 		sizeof(VERTEX_3D) * g_nIdxPointWall * MAX_MWALL,
 		D3DUSAGE_WRITEONLY,

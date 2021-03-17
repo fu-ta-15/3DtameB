@@ -8,6 +8,7 @@
 #define _PLAYER_H_
 
 #include "main.h"
+#include "motion.h"
 
 //-----------------------------------------------------------------------------
 // マクロ定義
@@ -18,49 +19,21 @@
 #define PLAYER_HEIGHT (50.0f)
 #define PLAYER_INVINCIBLE_TIME (500)	// 攻撃された時の無敵時間
 #define PLAYER_HEALTH (10)				// プレイヤーの体力
+#define PLAYER_MODEL_AMOUNT (10)
 
 //-----------------------------------------------------------------------------
-// モーションの種類
-//-----------------------------------------------------------------------------
-typedef enum
-{
-	MOTIONTYPE_NEUTRAL = 0,			// ニュートラルモーション
-	MOTIONTYPE_ATTACK,				// 攻撃モーション
-	MOTIONTYPE_WALK,				// 歩きモーション
-	MOTIONTYPE_MAX
-} MOTIONTYPE;
-
-//-----------------------------------------------------------------------------
-// キーの構造体
+// ファイルから読んでくるキャラクターのモデル情報の構造体
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	float fPosX;		// 位置X
-	float fPosY;		// 位置Y
-	float fPosZ;		// 位置Z
-	float fRotX;		// 向きX
-	float fRotY;		// 向きY
-	float fRotZ;		// 向きZ
-} KEY;
+	int nModelNum;						// モデルの数	
+	int nModelIdx[20];					// モデルの番号
+	int nModelParent[20];				// モデルの親
+	char cModelFileName[20][128];		// モデルのファイル名
+	float fModelPos[20][3];				// モデルの位置(オフセット)
+	float fModelRot[20][3];				// モデルの向き
 
-//-----------------------------------------------------------------------------
-// キー情報の構造体
-//-----------------------------------------------------------------------------
-typedef struct
-{
-	int nFrame;			// 再生フレーム
-	KEY aKey[10];		// キー (パーツ最大数分)
-} KEY_INFO;
-
-//-----------------------------------------------------------------------------
-// モーション情報の構造体
-//-----------------------------------------------------------------------------
-typedef struct
-{
-	bool bLoop;					// ループの有無
-	int nNumKey;				// キーの総数
-	KEY_INFO aKeyInfo[10];		// キー情報	(キーの最大数)
-} MOTION_INFO;
+} CharacterPartsInfo;
 
 //-----------------------------------------------------------------------------
 // モデルの構造体
@@ -74,7 +47,8 @@ typedef struct
 	D3DXVECTOR3 rot;			// 向き
 	D3DXMATRIX mtxWorld;		// ワールドマトリックス
 	int nIdxModelParent;		// 親モデルのインデックス
-	int nMotionCount;
+	LPDIRECT3DTEXTURE9 pTexture[10];	// texture
+	int nNumModel;
 } PlayerModel;
 
 //-----------------------------------------------------------------------------
@@ -88,10 +62,11 @@ typedef struct
 	D3DXVECTOR3 rot;				// 向き
 	D3DXVECTOR3 rotDest;			// 目標の向き
 	D3DXMATRIX mtxWorld;			// ワールドマトリックス
-	PlayerModel aModel[10];			// モデル(パーツ)
+	PlayerModel aModel[PLAYER_MODEL_AMOUNT];	// モデル(パーツ)
 	int nNumModel;					// モデル(パーツ)数
 
-	MOTION_INFO aMotionInfo[10];	// モーション情報	 (モーションの最大数)
+	bool bPlayMotion;				// モーション再生状態
+	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)
 	MOTIONTYPE motionType;			// モーションタイプ
 	bool bLoopMotion;				// ループの有無
 	int nCurrentMotion;				// 現在のモーション
@@ -99,7 +74,16 @@ typedef struct
 	int nNumKey;					// キー数
 	int nKey;						// キーナンバー
 	int nCounterMotion;				// モーションカウンター
-	bool bPlayMotion;				// モーション再生状態
+
+	bool bBlendMotion;				// ブレンドするかどうか
+	MOTIONTYPE motionTypeBlend;		// 次のモーション情報
+	bool bLoopMotionBlend;			// 
+	int nNumKeyBlend;				//
+	int nKeyBlend;					//
+	int nCounterMotionBlend;		//
+	int nCounterBlend;
+	int nFrameBlend;
+
 
 	int nLifeMax;					// 最大体力
 	int nLife;						// 体力
@@ -116,6 +100,6 @@ void UninitPlayer(void);
 void UpdatePlayer(void);
 void DrawPlayer(void);
 Player *GetPlayer(void);
-KEY KeyPosRot(float posX, float posY, float posZ, float rotX, float rotY, float rotZ);
-
+KEY *GetDefKey(void);
+void ReadCharacterInfo(CharacterPartsInfo *characterInfo, char* fileName);
 #endif
