@@ -14,6 +14,9 @@
 #define CA_BUTTON_NUM (4)
 #define CA_BUTTON_WIDTH (50.0f)
 #define CA_BUTTON_HEIGHT (50.0f)
+#define CA_BUTTON_SPACE (75.0f)
+#define CA_BUTTON_POS_X (SCREEN_WIDTH / 2 - CA_BUTTON_SPACE * 2)
+#define CA_BUTTON_POS_Y (SCREEN_WIDTH / 2)
 
 //-----------------------------------------------------------------------------
 // É{É^Éìç\ë¢ëÃ
@@ -23,6 +26,7 @@ typedef struct
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 	LPDIRECT3DTEXTURE9 pTexture[CA_BUTTON_NUM];
 	D3DXVECTOR3 pos[CA_BUTTON_NUM];
+	D3DXVECTOR3 rot[CA_BUTTON_NUM];
 } CAButton;
 
 //-----------------------------------------------------------------------------
