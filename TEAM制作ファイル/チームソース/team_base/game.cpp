@@ -17,6 +17,7 @@
 #include "collision.h"
 #include "skybox.h"
 #include "object.h"
+#include "commandaction.h"
 
 //=============================================================================
 // グローバル変数
@@ -40,7 +41,10 @@ HRESULT InitGame(void)
 	//ポータルの初期化処理
 	InitPortal();
 	
-	//---ステージに依るもの---
+	//コマンドアクション初期化処理
+	InitCommand();
+
+	//---ステージに依るもの----
 
 	//敵の初期化処理
 	InitEnemy();
@@ -90,6 +94,9 @@ void UninitGame(void)
 
 	//壁(メッシュ)の終了処理
 	UninitMeshwall();
+
+	//コマンドアクション終了処理
+	UninitCommand();
 
 	//モデルの終了処理
 	UninitPlayer();
@@ -145,6 +152,9 @@ void UpdateGame(void)
 	//スカイボックスの更新処理
 	UpdateSky();
 
+	//コマンドアクションの更新処理
+	UpdateCommand();
+
 	if (GetKeyboardTrigger(DIK_RETURN) == true)
 	{
 		g_stage.nStageNum += 1;
@@ -180,6 +190,9 @@ void DrawGame(void)
 
 	//ポータルの描画処理
 	DrawPortal();
+
+	//コマンドアクション描画処理
+	DrawCommand();
 
 }
 

@@ -81,6 +81,9 @@
     <ClInclude Include="object.h">
       <Filter>ヘッダー ファイル\GAME</Filter>
     </ClInclude>
+    <ClInclude Include="commandaction.h">
+      <Filter>ヘッダー ファイル\GAME</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -129,6 +132,9 @@
       <Filter>ソース ファイル\GAME</Filter>
     </ClCompile>
     <ClCompile Include="object.cpp">
+      <Filter>ソース ファイル\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="commandaction.cpp">
       <Filter>ソース ファイル\GAME</Filter>
     </ClCompile>
   </ItemGroup>
