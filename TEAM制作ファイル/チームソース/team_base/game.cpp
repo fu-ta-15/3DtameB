@@ -16,6 +16,7 @@
 #include "portal.h"
 #include "collision.h"
 #include "skybox.h"
+#include "object.h"
 
 //=============================================================================
 // グローバル変数
@@ -38,14 +39,14 @@ HRESULT InitGame(void)
 
 	//ポータルの初期化処理
 	InitPortal();
-
-	//コリジョン処理の初期化
-	InitCollision();
 	
 	//---ステージに依るもの---
 
 	//敵の初期化処理
 	InitEnemy();
+
+	//オブジェクトの初期化処理
+	InitObject();
 
 	//メッシュフィールドの初期化処理
 	InitMeshfield(g_stage.nStageNum);
@@ -58,6 +59,11 @@ HRESULT InitGame(void)
 	
 	//スカイボックスの処理
 	InitSky();
+	
+	//-----------------------
+
+	//コリジョン処理の初期化
+	InitCollision();
 
 	//モーションの初期化処理
 	InitMotion();
@@ -78,6 +84,9 @@ void UninitGame(void)
 
 	//敵の終了処理
 	UninitEnemy();
+
+	//オブジェクトの終了処理
+	UninitObject();
 
 	//壁(メッシュ)の終了処理
 	UninitMeshwall();
@@ -117,6 +126,9 @@ void UpdateGame(void)
 
 	//敵の更新処理
 	UpdateEnemy();
+
+	//オブジェクトの更新処理
+	UpdateObject();
 
 	//カメラの更新処理
 	UpdateCamera();
@@ -159,6 +171,9 @@ void DrawGame(void)
 
 	//敵の描画処理
 	DrawEnemy();
+
+	//オブジェクトの描画処理
+	DrawObject();
 
 	//スカイボックスの描画
 	DrawSky();

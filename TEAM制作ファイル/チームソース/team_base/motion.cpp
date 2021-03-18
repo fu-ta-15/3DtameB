@@ -301,7 +301,6 @@ void InitMotion(void)
 			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
 		}
 	}
-
 }
 
 //-----------------------------------------------------------------------------
@@ -416,6 +415,7 @@ void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy
 	}
 
 }
+
 
 /* プレイヤーのモーション */
 void PlayerMotion(bool bPlayMotion)
@@ -699,4 +699,34 @@ void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, b
 			pEnemy[nIdxEnemy].bPlayMotion = false;
 		}
 	}
+}
+
+// モーションをテキストで読み込み
+void MotionText(const char * cXFileName)
+{
+	MOTION_INFO MotionInfo;				// モーション情報保存用
+
+	FILE * pFile = fopen(cXFileName, "r");	// ファイルへのポインタ
+
+	char *str;				// 文字列読み込み用
+	int FileSize;			// ファイルのサイズ保存用
+
+	// ファイルの中の最後までの長さを取得
+	fseek(pFile, 0, SEEK_END);
+	FileSize = ftell(pFile);
+	fseek(pFile, 0, SEEK_SET);
+
+	// メモリの確保
+	str = (char*)malloc(sizeof(char) * FileSize);
+
+	// メモリの初期化
+	memset(str, NULL, sizeof(char) * FileSize);
+
+
+	while (strcmp(str, "MOTION_END") != 0)
+	{
+
+	}
+
+	free(str);
 }

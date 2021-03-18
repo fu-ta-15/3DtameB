@@ -78,6 +78,9 @@
     <ClInclude Include="motion.h">
       <Filter>ヘッダー ファイル\GAME</Filter>
     </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>ヘッダー ファイル\GAME</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -123,6 +126,9 @@
       <Filter>ソース ファイル\RESULT</Filter>
     </ClCompile>
     <ClCompile Include="motion.cpp">
+      <Filter>ソース ファイル\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
       <Filter>ソース ファイル\GAME</Filter>
     </ClCompile>
   </ItemGroup>

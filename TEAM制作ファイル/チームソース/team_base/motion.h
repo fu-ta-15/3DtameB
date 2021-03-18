@@ -77,5 +77,7 @@ void UpdateMotion(void);
 void DrawMotion(void);
 KEY KeyPosRot(float posX, float posY, float posZ, float rotX, float rotY, float rotZ);
 void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy);
+void MotionText(const char* cXFileName);
+
 
 #endif
