@@ -10,6 +10,8 @@
 #include "input.h"
 #include "fade.h"
 #include "portal.h"
+#include "meshfield.h"
+
 #include <stdio.h>
 
 //-----------------------------------------------------------------------------
@@ -108,6 +110,9 @@ void InitEnemy(void)
 	g_bEliminated = false;
 
 	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT);
+	SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT);
+	SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT);
 }
 
 //-----------------------------------------------------------------------------
@@ -135,13 +140,22 @@ void UpdateEnemy(void)
 			g_aEnemy[nCntEnemy].pos += g_aEnemy[nCntEnemy].move;
 
 			//à⁄ìÆó å∏êä
-			g_aEnemy[nCntEnemy].move.x = g_aEnemy[nCntEnemy].move.x * 0.2f;
-			g_aEnemy[nCntEnemy].move.z = g_aEnemy[nCntEnemy].move.z * 0.2f;
+			g_aEnemy[nCntEnemy].move.x += (0 - g_aEnemy[nCntEnemy].move.x) * 0.2f;
+			g_aEnemy[nCntEnemy].move.z += (0 - g_aEnemy[nCntEnemy].move.z) * 0.2f;
 
 			//èdóÕ
-			g_aEnemy[nCntEnemy].move.y -= ENEMY_FALLSPEED;
+			g_aEnemy[nCntEnemy].move.y -= 0.2f;
 
-			if (g_aEnemy[nCntEnemy].pos.y < 0) g_aEnemy[nCntEnemy].pos.y = 0;
+			//à⁄ìÆêßå¿
+			if (g_aEnemy[nCntEnemy].pos.x > FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.x = FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.x < -FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.x = -FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.z > FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.z = FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.z < -FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.z = -FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.y <= 0.0f)
+			{
+				g_aEnemy[nCntEnemy].move.y = 0.0f;
+				g_aEnemy[nCntEnemy].pos.y = 0.0f;
+			}
 
 			//ëÃóÕÇ»Ç≠Ç»Ç¡ÇΩÇÁ
 			if (g_aEnemy[nCntEnemy].nLife <= 0)

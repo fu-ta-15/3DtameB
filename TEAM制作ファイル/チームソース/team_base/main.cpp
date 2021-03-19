@@ -437,6 +437,7 @@ void DrawPoint(void)
 	nNum += sprintf(&aStr[nNum], "[カメラの向き  :(%.2f)]\n", pCamera->rot.y);
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの位置]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->pos.x, pPlayer->pos.y, pPlayer->pos.z);
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの移動値]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->move.x, pPlayer->move.y, pPlayer->move.z);
+	nNum += sprintf(&aStr[nNum], "コマンドアクション実行 [ B ]\n");
 
 
 	//テキストの描画
