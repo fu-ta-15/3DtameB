@@ -10,33 +10,54 @@
 #include "input.h"
 #include "fade.h"
 #include "portal.h"
+#include "meshfield.h"
+
 #include <stdio.h>
 
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
+#define MAX_OBJ				(30)
+#define MAX_ENEMY_TYPE		(ENEMYTYPE_MAX)
+#define MAX_STR				(128)
+#define VECTOR_NUM			(3)			
 
+
+//-----------------------------------------------------------------------------
+// オブジェクト情報の構造体
+//-----------------------------------------------------------------------------
+typedef struct
+{
+	int nEnemyNum;											// モデルの数	
+	int nEnemyIdx[MAX_ENEMY_TYPE];							// モデルの番号
+	char cEnemyFileName[MAX_ENEMY_TYPE][MAX_STR];			// モデルのファイル名
+	char cEnemyTextureName[MAX_ENEMY_TYPE][MAX_STR];		// テクスチャのファイル名
+	float fEnemyPos[MAX_ENEMY_TYPE][VECTOR_NUM];			// モデルの位置(オフセット)
+	float fEnemyRot[MAX_ENEMY_TYPE][VECTOR_NUM];			// モデルの向き
+	int nType;
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 rot;
+} EnemyInfo;
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
-void MoveEnemy(float fMoveAngleDegree, float fMoveSpeed);
-void LoadXFileEnemy(const char* cXFileName, PlayerModel *model);
+void LoadXFileEnemy(const char* cXFileName, Model *model);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
 //-----------------------------------------------------------------------------
-Enemy g_aEnemy[ENEMY_AMOUNT_MAX];	// 敵の情報
-int g_nEnemyAlive = 0;				// 敵の生存数
+Enemy g_aEnemy[ENEMY_AMOUNT_MAX];				// 敵の情報
+int g_nEnemyAlive = 0;							// 敵の生存数
 
-CharacterPartsInfo g_partsRobot;	// 読み込んだパーツ情報(ロボット)
-KEY g_defKeyRobot[ENEMY_ROBOT_MODELPARTS];					//
+CharacterPartsInfo g_partsRobot;				// 読み込んだパーツ情報(ロボット)
+KEY g_defKeyRobot[ENEMY_ROBOT_MODELPARTS];		// 
 
-PlayerModel g_modelSnake;			// 蛇のモデル情報
-PlayerModel g_modelRobot[ENEMY_ROBOT_MODELPARTS];			// ロボットのモデル情報
+Model g_modelRobot[ENEMY_ROBOT_MODELPARTS];		// ロボットのモデル情報
 
-bool g_bEliminated;					// 全滅したか
-DWORD g_dwTimeTransition;			// 画面遷移時間計算
+bool g_bEliminated;								// 全滅したか
+
+EnemyInfo g_ObjInfo;
 
 //-----------------------------------------------------------------------------
 // 初期化処理
@@ -45,11 +66,8 @@ void InitEnemy(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();		// デバイスの取得
 
-	//Xファイルの読み込み
-	LoadXFileEnemy("data\\MODEL\\snake.x", &g_modelSnake);
-
 	//テキストから読み込み
-	ReadCharacterInfo(&g_partsRobot, "model_robot.txt");
+	ReadCharacterInfo(&g_partsRobot, "data//TXT//motion_kogata.txt");
 
 	//読み込んだ情報を使ってXファイル読み込み
 	for (int nCntModel = 0; nCntModel < g_partsRobot.nModelNum; nCntModel++)
@@ -77,6 +95,7 @@ void InitEnemy(void)
 		//初期設定
 		g_aEnemy[nCntEnemy].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置の初期設定
 		g_aEnemy[nCntEnemy].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向きの初期設定
+		g_aEnemy[nCntEnemy].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値の初期設定
 		g_aEnemy[nCntEnemy].bUse = false;
 		g_aEnemy[nCntEnemy].bInvincible = false;
 		g_aEnemy[nCntEnemy].nLife = ENEMY_HP_MAX;
@@ -88,11 +107,12 @@ void InitEnemy(void)
 		g_aEnemy[nCntEnemy].nIdx = NULL;
 	}
 	g_nEnemyAlive = 0;
-	g_dwTimeTransition = NULL;
 	g_bEliminated = false;
 
 	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT);
-	SetEnemy(D3DXVECTOR3(50.0f, 0.0f, 250.0f), ENEMYTYPE_SNAKE);
+	SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT);
+	SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT);
 }
 
 //-----------------------------------------------------------------------------
@@ -100,27 +120,6 @@ void InitEnemy(void)
 //-----------------------------------------------------------------------------
 void UninitEnemy(void)
 {
-	//蛇のマテリアル開放
-	if (g_modelSnake.pBuffMatModel != NULL)
-	{
-		g_modelSnake.pBuffMatModel->Release();
-		g_modelSnake.pBuffMatModel = NULL;
-	}
-	//蛇のメッシュ開放
-	if (g_modelSnake.pMeshModel != NULL)
-	{
-		g_modelSnake.pMeshModel->Release();
-		g_modelSnake.pMeshModel = NULL;
-	}
-	//蛇のテクスチャ開放
-	for (int nCntTex = 0; nCntTex < 10; nCntTex++)
-	{
-		if (g_modelSnake.pTexture[nCntTex] != NULL)
-		{
-			g_modelSnake.pTexture[nCntTex]->Release();
-			g_modelSnake.pTexture[nCntTex] = NULL;
-		}
-	}
 }
 
 //-----------------------------------------------------------------------------
@@ -141,13 +140,22 @@ void UpdateEnemy(void)
 			g_aEnemy[nCntEnemy].pos += g_aEnemy[nCntEnemy].move;
 
 			//移動量減衰
-			g_aEnemy[nCntEnemy].move.x = g_aEnemy[nCntEnemy].move.x * 0.2f;
-			g_aEnemy[nCntEnemy].move.z = g_aEnemy[nCntEnemy].move.z * 0.2f;
+			g_aEnemy[nCntEnemy].move.x += (0 - g_aEnemy[nCntEnemy].move.x) * 0.2f;
+			g_aEnemy[nCntEnemy].move.z += (0 - g_aEnemy[nCntEnemy].move.z) * 0.2f;
 
 			//重力
-			g_aEnemy[nCntEnemy].move.y -= ENEMY_FALLSPEED;
+			g_aEnemy[nCntEnemy].move.y -= 0.2f;
 
-			if (g_aEnemy[nCntEnemy].pos.y < 0) g_aEnemy[nCntEnemy].pos.y = 0;
+			//移動制限
+			if (g_aEnemy[nCntEnemy].pos.x > FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.x = FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.x < -FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.x = -FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.z > FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.z = FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.z < -FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.z = -FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.y <= 0.0f)
+			{
+				g_aEnemy[nCntEnemy].move.y = 0.0f;
+				g_aEnemy[nCntEnemy].pos.y = 0.0f;
+			}
 
 			//体力なくなったら
 			if (g_aEnemy[nCntEnemy].nLife <= 0)
@@ -246,74 +254,6 @@ void DrawEnemy(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();									// デバイス取得
 
-	//蛇タイプの敵描画
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		if (g_aEnemy[nCntEnemy].bUse == true && g_aEnemy[nCntEnemy].type == ENEMYTYPE_SNAKE)
-		{
-			D3DXMATRIX mtxRot, mtxTrans;												// 計算用マトリックス
-			D3DMATERIAL9 matDef;														// 現在のマテリアル保存用
-			D3DXMATERIAL *pMat;															// マテリアルデータへのポインタ
-			D3DXMATERIAL *pMatAlt;														// 代えのマテリアル
-
-			//プレイヤーのワールドマトリックスの初期化
-			D3DXMatrixIdentity(&g_aEnemy[nCntEnemy].mtxWorld);
-
-			//プレイヤーの向き反映
-			D3DXMatrixRotationYawPitchRoll(&mtxRot, g_aEnemy[nCntEnemy].rot.y, g_aEnemy[nCntEnemy].rot.x, g_aEnemy[nCntEnemy].rot.z);
-			D3DXMatrixMultiply(&g_aEnemy[nCntEnemy].mtxWorld, &g_aEnemy[nCntEnemy].mtxWorld, &mtxRot);
-
-			//プレイヤーの位置反映
-			D3DXMatrixTranslation(&mtxTrans, g_aEnemy[nCntEnemy].pos.x, g_aEnemy[nCntEnemy].pos.y, g_aEnemy[nCntEnemy].pos.z);
-			D3DXMatrixMultiply(&g_aEnemy[nCntEnemy].mtxWorld, &g_aEnemy[nCntEnemy].mtxWorld, &mtxTrans);
-
-			//プレイヤーのワールドマトリックス設定
-			pDevice->SetTransform(D3DTS_WORLD, &g_aEnemy[nCntEnemy].mtxWorld);
-
-			//現在のマテリアル取得
-			pDevice->GetMaterial(&matDef);
-
-			//マテリアルデータへのポインタを取得
-			pMat = (D3DXMATERIAL*)g_modelSnake.pBuffMatModel->GetBufferPointer();
-			pMatAlt = (D3DXMATERIAL*)g_modelSnake.pBuffMatModel->GetBufferPointer();
-
-			//無敵状態か見てモデルの色を変える
-			if (g_aEnemy[nCntEnemy].bInvincible == true)
-			{//無敵状態
-				pMatAlt->MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f);
-				for (int nCntMat = 0; nCntMat < (int)g_modelSnake.nNumMatModel; nCntMat++)
-				{
-					//マテリアル設定
-					pDevice->SetMaterial(&pMatAlt[nCntMat].MatD3D);
-
-					//テクスチャの設定
-					pDevice->SetTexture(0, g_modelSnake.pTexture[nCntMat]);
-
-					//モデルパーツの描画
-					g_modelSnake.pMeshModel->DrawSubset(nCntMat);
-				}
-			}
-			else if (g_aEnemy[nCntEnemy].bInvincible == false)
-			{//通常状態
-				pMat->MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0, 1.0f, 1.0f);
-				for (int nCntMat = 0; nCntMat < (int)g_modelSnake.nNumMatModel; nCntMat++)
-				{
-					//マテリアル設定
-					pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
-
-					//テクスチャの設定
-					pDevice->SetTexture(0, g_modelSnake.pTexture[nCntMat]);
-
-					//モデルパーツの描画
-					g_modelSnake.pMeshModel->DrawSubset(nCntMat);
-				}
-			}
-
-			//保存していたマテリアルを戻す
-			pDevice->SetMaterial(&matDef);
-		}
-	}
-
 	//ロボットタイプの敵描画
 	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
 	{
@@ -410,8 +350,6 @@ void DrawEnemy(void)
 					}
 				}
 			}
-
-
 			//保存していたマテリアルを戻す
 			pDevice->SetMaterial(&matDef);
 		}
@@ -429,14 +367,10 @@ Enemy *GetEnemy(void)
 //-----------------------------------------------------------------------------
 // パーツ情報を取得
 //-----------------------------------------------------------------------------
-PlayerModel *GetEnemyModelParts(ENEMYTYPE type)
+Model *GetEnemyModelParts(ENEMYTYPE type)
 {
 	switch (type)
 	{
-	case ENEMYTYPE_SNAKE:
-		return &g_modelSnake;
-		break;
-
 	case ENEMYTYPE_ROBOT:
 		return &g_modelRobot[0];
 		break;
@@ -465,17 +399,14 @@ void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type)
 			//種類付け
 			g_aEnemy[nCntEnemy].type = type;
 
-			//パーツ情報を渡す
 			switch (type)
 			{
-			case ENEMYTYPE_SNAKE:
-				break;
-
 			case ENEMYTYPE_ROBOT:
-				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT_MODELPARTS; nCntRobot++)
-				{
-					g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot[nCntRobot];
-				}
+				//パーツ情報を渡す
+				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT_MODELPARTS; nCntRobot++) g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot[nCntRobot];
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
 				break;
 
 			default:
@@ -492,18 +423,94 @@ void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type)
 	}
 }
 
-/* モデルを移動させる関数 */
-void MoveEnemy(float fMoveAngleDegree, float fMoveSpeed)
+void SetTextEnemy(void)
 {
-	/*Camera *pCamera = GetCamera();	// カメラの情報取得
+	// 外部ファイルへのポインタ
+	FILE *pFile = fopen("data\\TXT\\enemy.txt", "r");	// ファイルオープン
 
-	g_enemy.pos.x += sinf(pCamera->rot.y + D3DXToRadian(fMoveAngleDegree)) * fMoveSpeed;
-	g_enemy.pos.z += cosf(pCamera->rot.y + D3DXToRadian(fMoveAngleDegree)) * fMoveSpeed;
-	g_enemy.rotDest.y = pCamera->rot.y + D3DXToRadian(fMoveAngleDegree) + D3DX_PI;*/
+	char *str;				// 文字列読み込み用
+	int FileSize;			// ファイルのサイズ保存用
+	bool EnemySet = false;	// 設置開始合図用
+	int nModelType = 1;		// モデルのタイプを存用
+
+	// ファイルの中の最後までの長さを取得
+	fseek(pFile, 0, SEEK_END);
+	FileSize = ftell(pFile);
+	fseek(pFile, 0, SEEK_SET);
+
+	// メモリの確保
+	str = (char*)malloc(sizeof(char) * FileSize);
+
+	// メモリの初期化
+	memset(str, NULL, sizeof(char) * FileSize);
+
+	// オープンしたのか確認
+	if (pFile == NULL)
+	{// 開けなかったら
+		printf("ファイルが開きませんでした。");
+	}
+	else
+	{// 開けたら
+	 // 読み込み終了の文字列を読み込むまで
+		while (strcmp(str, "END_SCRIPT") != 0)
+		{
+			// テキストファイルの読み込み
+			fscanf(pFile, "%s", str);
+
+			if (strcmp(str, "MODEL_NAME") == 0)
+			{// モデル情報をタイプごとに保存
+			 // テキストファイルの読み込み
+				fscanf(pFile, "%s %s", str, &g_ObjInfo.cEnemyFileName[nModelType][0]);
+				// モデルのタイプを進める
+				nModelType++;
+			}
+			// モデルの配置開始の合図
+			if (strcmp(str, "MODEL_SET") == 0)
+			{
+				EnemySet = true;
+			}
+
+			while (EnemySet == true)
+			{
+				// テキストファイルの読み込み
+				fscanf(pFile, "%s", str);
+				// モデル情報をタイプごとに保存
+				if (strcmp(str, "TYPE") == 0) fscanf(pFile, "%s %d", str, &g_ObjInfo.nType);
+
+				// 向きと位置を取得
+				if (strcmp(str, "POS") == 0)
+				{
+					// "＝"を読み込む
+					fscanf(pFile, "%s", str);
+					// 数値を読み込む
+					fscanf(pFile, "%f %f %f", &g_ObjInfo.pos.x, &g_ObjInfo.pos.y, &g_ObjInfo.pos.z);
+				}
+				if (strcmp(str, "ROT") == 0)
+				{
+					// "＝"を読み込む
+					fscanf(pFile, "%s", str);
+					// 数値を読み込む
+					fscanf(pFile, "%f %f %f", &g_ObjInfo.rot.x, &g_ObjInfo.rot.y, &g_ObjInfo.rot.z);
+
+				}
+				if (strcmp(str, "SET") == 0)
+				{// オブジェクトの設置
+					//SetObject(g_ObjInfo.pos, g_ObjInfo.rot, (OBJECT_TYPE)g_ObjInfo.nType);
+				}
+				if (strcmp(str, "END_MODEL_SET") == 0)
+				{// オブジェクト配置終了
+					EnemySet = false;
+				}
+			}
+		}
+	}
+	// メモリの開放
+	free(str);
 }
 
+
 /* Xファイルからモデルを読み込む関数*/
-void LoadXFileEnemy(const char* cXFileName, PlayerModel *model)
+void LoadXFileEnemy(const char* cXFileName, Model *model)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイス取得
 
@@ -518,10 +525,6 @@ void LoadXFileEnemy(const char* cXFileName, PlayerModel *model)
 		&model->nNumMatModel,							// マテリアル数
 		&model->pMeshModel);							// メッシュ
 
-	if (hr != S_OK)
-	{
-		Sleep(10);
-	}
 	//マテリアル情報へのポインタ
 	D3DXMATERIAL *pMat = (D3DXMATERIAL*)model->pBuffMatModel->GetBufferPointer();
 

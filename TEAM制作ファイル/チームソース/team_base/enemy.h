@@ -20,8 +20,9 @@
 #define ENEMY_AMOUNT_MAX (ENENY_AMOUNT_SNAKE + ENEMY_AMOUNT_ROBOT)			// 用意している敵の最大数
 #define ENEMY_MODEL_PARTS_MAX (10)	// 使用できる最大パーツ数
 #define ENEMY_ROBOT_MODELPARTS (10)	// amount of parts of robot model
-#define ENEMY_HEIGHT (20)				// 敵の高さ
-#define ENEMY_WIDTH (20)				// 敵の幅
+
+#define ENEMY_ROBOT_COL_HEIGHT (20)				// ロボット型の敵の高さ (判定用)
+#define ENEMY_ROBOT_COL_WIDTH (20)				// 幅
 
 #define ENEMY_KNOCKBACK (10)			// ノックバック量
 #define ENEMY_INVINCIBLE_TIME (500)		// 攻撃された時の無敵時間
@@ -37,8 +38,8 @@
 //-----------------------------------------------------------------------------
 typedef enum
 {
-	ENEMYTYPE_SNAKE,	// snake
 	ENEMYTYPE_ROBOT,	// robot
+	ENEMYTYPE_BOSS,
 	ENEMYTYPE_MAX
 } ENEMYTYPE;
 
@@ -47,34 +48,37 @@ typedef enum
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	D3DXVECTOR3 pos;				// 位置
-	D3DXVECTOR3 posOld;				// 前回の位置
-	D3DXVECTOR3 move;				// 移動
-	D3DXVECTOR3 rot;				// 向き
-	D3DXVECTOR3 rotDest;			// 目標の向き
-	D3DXMATRIX mtxWorld;			// ワールドマトリックス
-	ENEMYTYPE type;					// 敵の種類
-	PlayerModel aModel[ENEMY_MODEL_PARTS_MAX];	// パーツ
+	D3DXVECTOR3 pos;							// 位置
+	D3DXVECTOR3 posOld;							// 前回の位置
+	D3DXVECTOR3 move;							// 移動
+	D3DXVECTOR3 rot;							// 向き
+	D3DXVECTOR3 rotDest;						// 目標の向き
+	D3DXMATRIX mtxWorld;						// ワールドマトリックス
+	ENEMYTYPE type;								// 敵の種類
+	Model aModel[ENEMY_MODEL_PARTS_MAX];		// パーツ
+	float fWidth;								// 幅
+	float fDepth;								// 奥行
+	float fHeight;								// 高さ
 
-	bool bPlayMotion;				// モーション再生状態
-	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)
-	MOTIONTYPE motionType;			// モーションタイプ
-	bool bLoopMotion;				// ループの有無
-	int nCurrentMotion;				// 現在のモーション
-	int nNumMotion;					// モーション数
-	int nNumKey;					// キー数
-	int nKey;						// キーナンバー
-	int nCounterMotion;				// モーションカウンター
+	bool bPlayMotion;							// モーション再生状態
+	MOTION_INFO aMotionInfo[MOTION_MAX];		// モーション情報	 (モーションの最大数)
+	MOTIONTYPE motionType;						// モーションタイプ
+	bool bLoopMotion;							// ループの有無
+	int nCurrentMotion;							// 現在のモーション
+	int nNumMotion;								// モーション数
+	int nNumKey;								// キー数
+	int nKey;									// キーナンバー
+	int nCounterMotion;							// モーションカウンター
 
-	int nLifeMax;					// 最大体力
-	int nLife;						// 体力
-	int nIdx;						// 自分のID
-	bool bUse;						// 使用中か
-	bool bHit;						// 攻撃判定中か
-	bool bInvincible;				// 無敵状態
-	bool bAttack;					// 攻撃した
-	DWORD dwTimeInv;				// 無敵時間計算用
-	DWORD dwTimeAtk;				// 攻撃時間計算用
+	int nLifeMax;								// 最大体力
+	int nLife;									// 体力
+	int nIdx;									// 自分のID
+	bool bUse;									// 使用中か
+	bool bHit;									// 攻撃判定中か
+	bool bInvincible;							// 無敵状態
+	bool bAttack;								// 攻撃した
+	DWORD dwTimeInv;							// 無敵時間計算用
+	DWORD dwTimeAtk;							// 攻撃時間計算用
 } Enemy;
 
 //-----------------------------------------------------------------------------
@@ -85,8 +89,9 @@ void UninitEnemy(void);
 void UpdateEnemy(void);
 void DrawEnemy(void);
 Enemy *GetEnemy(void);
-PlayerModel *GetEnemyModelParts(ENEMYTYPE type);
+Model *GetEnemyModelParts(ENEMYTYPE type);
 void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type);
+void SetTextEnemy(void);
 
 #endif
 

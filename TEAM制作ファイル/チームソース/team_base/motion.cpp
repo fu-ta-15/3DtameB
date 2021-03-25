@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------------------
 void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy);
 void PlayerMotion(bool bPlayMotion);
-void EnemyMotion(bool bPlayMotion);
+void EnemyMotion(bool bPlayMotion, int nIdx);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -301,7 +301,6 @@ void InitMotion(void)
 			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
 		}
 	}
-
 }
 
 //-----------------------------------------------------------------------------
@@ -323,9 +322,13 @@ void UpdateMotion(void)
 	PlayerMotion(pPlayer->bPlayMotion);
 
 	//敵のモーション更新
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++) EnemyMotion(pEnemy[nCntEnemy].bPlayMotion);
-
-	if (GetKeyboardTrigger(DIK_J) == true) Sleep(5000);
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+	{
+		if (pEnemy[nCntEnemy].bUse == true)
+		{
+			EnemyMotion(pEnemy[nCntEnemy].bPlayMotion, nCntEnemy);
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -416,6 +419,7 @@ void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy
 	}
 
 }
+
 
 /* プレイヤーのモーション */
 void PlayerMotion(bool bPlayMotion)
@@ -518,7 +522,7 @@ void PlayerMotion(bool bPlayMotion)
 }
 
 /* Enemyのモーション */
-void EnemyMotion(bool bPlayMotion)
+void EnemyMotion(bool bPlayMotion, int nIdx)
 {
 	Enemy *pEnemy = GetEnemy();
 
@@ -527,98 +531,95 @@ void EnemyMotion(bool bPlayMotion)
 		D3DXVECTOR3 rot[10];
 		D3DXVECTOR3 pos[10];
 
-		for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+		if (pEnemy[nIdx].bUse == true)
 		{
-			if (pEnemy[nCntEnemy].bUse == true)
+			//ループ
+			pEnemy[nIdx].bLoopMotion = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].bLoop;
+
+			//モーションカウントアップ
+			pEnemy[nIdx].nCounterMotion++;
+
+			//プレイヤーの初期状態
+			KEY *pKeyDef = GetDefKey();
+
+			//モデル数分回す
+			for (int nCntModel = 0; nCntModel < pEnemy[nIdx].aModel[0].nNumModel; nCntModel++)
 			{
-				//ループ
-				pEnemy[nCntEnemy].bLoopMotion = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].bLoop;
+				KEY keyDiff[20];
 
-				//モーションカウントアップ
-				pEnemy[nCntEnemy].nCounterMotion++;
-
-				//プレイヤーの初期状態
-				KEY *pKeyDef = GetDefKey();
-
-				//モデル数分回す
-				for (int nCntModel = 0; nCntModel < pEnemy[nCntEnemy].aModel[0].nNumModel; nCntModel++)
-				{
-					KEY keyDiff[20];
-
-					//現在のキーと次のキーとの差分を計算
-					if (pEnemy[nCntEnemy].nKey >= pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].nNumKey - 1 && pEnemy[nCntEnemy].bLoopMotion == true)
-					{	// ループの場合
-						keyDiff[nCntModel].fPosX = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[0].aKey[nCntModel].fPosX - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosX;
-						keyDiff[nCntModel].fPosY = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[0].aKey[nCntModel].fPosY - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosY;
-						keyDiff[nCntModel].fPosZ = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[0].aKey[nCntModel].fPosZ - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosZ;
-						keyDiff[nCntModel].fRotX = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[0].aKey[nCntModel].fRotX - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotX;
-						keyDiff[nCntModel].fRotY = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[0].aKey[nCntModel].fRotY - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotY;
-						keyDiff[nCntModel].fRotZ = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[0].aKey[nCntModel].fRotZ - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotZ;
-					}
-					else
-					{	// それ以外
-						keyDiff[nCntModel].fPosX = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey + 1].aKey[nCntModel].fPosX - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosX;
-						keyDiff[nCntModel].fPosY = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey + 1].aKey[nCntModel].fPosY - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosY;
-						keyDiff[nCntModel].fPosZ = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey + 1].aKey[nCntModel].fPosZ - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosZ;
-						keyDiff[nCntModel].fRotX = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey + 1].aKey[nCntModel].fRotX - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotX;
-						keyDiff[nCntModel].fRotY = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey + 1].aKey[nCntModel].fRotY - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotY;
-						keyDiff[nCntModel].fRotZ = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey + 1].aKey[nCntModel].fRotZ - pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotZ;
-					}
-
-					//pos
-					pos[nCntModel].x = (pKeyDef[nCntModel].fPosX + pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosX) + keyDiff[nCntModel].fPosX * ((float)pEnemy[nCntEnemy].nCounterMotion / (float)pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame);
-					pos[nCntModel].y = (pKeyDef[nCntModel].fPosY + pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosY) + keyDiff[nCntModel].fPosY * ((float)pEnemy[nCntEnemy].nCounterMotion / (float)pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame);
-					pos[nCntModel].z = (pKeyDef[nCntModel].fPosZ + pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fPosZ) + keyDiff[nCntModel].fPosZ * ((float)pEnemy[nCntEnemy].nCounterMotion / (float)pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame);
-
-					//現在モーションの差分を再生フレームで割ったもの rot
-					rot[nCntModel].x = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotX + keyDiff[nCntModel].fRotX * ((float)pEnemy[nCntEnemy].nCounterMotion / (float)pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame);
-					rot[nCntModel].y = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotY + keyDiff[nCntModel].fRotY * ((float)pEnemy[nCntEnemy].nCounterMotion / (float)pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame);
-					rot[nCntModel].z = pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].aKey[nCntModel].fRotZ + keyDiff[nCntModel].fRotZ * ((float)pEnemy[nCntEnemy].nCounterMotion / (float)pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame);
-
-					pEnemy[nCntEnemy].aModel[nCntModel].pos.x = pos[nCntModel].x;
-					pEnemy[nCntEnemy].aModel[nCntModel].pos.y = pos[nCntModel].y;
-					pEnemy[nCntEnemy].aModel[nCntModel].pos.z = pos[nCntModel].z;
-
-					pEnemy[nCntEnemy].aModel[nCntModel].rot.x = rot[nCntModel].x;
-					pEnemy[nCntEnemy].aModel[nCntModel].rot.y = rot[nCntModel].y;
-					pEnemy[nCntEnemy].aModel[nCntModel].rot.z = rot[nCntModel].z;
-
-					if (pEnemy[nCntEnemy].aModel[nCntModel].rot.x > D3DX_PI) pEnemy[nCntEnemy].aModel[nCntModel].rot.x -= D3DX_PI * 2.0f;
-					if (pEnemy[nCntEnemy].aModel[nCntModel].rot.x < -D3DX_PI) pEnemy[nCntEnemy].aModel[nCntModel].rot.x += D3DX_PI * 2.0f;
-					if (pEnemy[nCntEnemy].aModel[nCntModel].rot.y > D3DX_PI) pEnemy[nCntEnemy].aModel[nCntModel].rot.y -= D3DX_PI * 2.0f;
-					if (pEnemy[nCntEnemy].aModel[nCntModel].rot.y < -D3DX_PI) pEnemy[nCntEnemy].aModel[nCntModel].rot.y += D3DX_PI * 2.0f;
-					if (pEnemy[nCntEnemy].aModel[nCntModel].rot.z > D3DX_PI) pEnemy[nCntEnemy].aModel[nCntModel].rot.z -= D3DX_PI * 2.0f;
-					if (pEnemy[nCntEnemy].aModel[nCntModel].rot.z < -D3DX_PI) pEnemy[nCntEnemy].aModel[nCntModel].rot.z += D3DX_PI * 2.0f;
-
+				//現在のキーと次のキーとの差分を計算
+				if (pEnemy[nIdx].nKey >= pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].nNumKey - 1 && pEnemy[nIdx].bLoopMotion == true)
+				{	// ループの場合
+					keyDiff[nCntModel].fPosX = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[0].aKey[nCntModel].fPosX - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosX;
+					keyDiff[nCntModel].fPosY = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[0].aKey[nCntModel].fPosY - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosY;
+					keyDiff[nCntModel].fPosZ = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[0].aKey[nCntModel].fPosZ - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosZ;
+					keyDiff[nCntModel].fRotX = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[0].aKey[nCntModel].fRotX - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotX;
+					keyDiff[nCntModel].fRotY = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[0].aKey[nCntModel].fRotY - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotY;
+					keyDiff[nCntModel].fRotZ = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[0].aKey[nCntModel].fRotZ - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotZ;
+				}
+				else
+				{	// それ以外
+					keyDiff[nCntModel].fPosX = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey + 1].aKey[nCntModel].fPosX - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosX;
+					keyDiff[nCntModel].fPosY = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey + 1].aKey[nCntModel].fPosY - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosY;
+					keyDiff[nCntModel].fPosZ = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey + 1].aKey[nCntModel].fPosZ - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosZ;
+					keyDiff[nCntModel].fRotX = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey + 1].aKey[nCntModel].fRotX - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotX;
+					keyDiff[nCntModel].fRotY = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey + 1].aKey[nCntModel].fRotY - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotY;
+					keyDiff[nCntModel].fRotZ = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey + 1].aKey[nCntModel].fRotZ - pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotZ;
 				}
 
-				//現在キーの再生フレーム数に到達したら
-				if (pEnemy[nCntEnemy].nCounterMotion >= pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].aKeyInfo[pEnemy[nCntEnemy].nKey].nFrame)
-				{
-					//次のキーに
-					pEnemy[nCntEnemy].nKey++;
+				//pos
+				pos[nCntModel].x = (pKeyDef[nCntModel].fPosX + pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosX) + keyDiff[nCntModel].fPosX * ((float)pEnemy[nIdx].nCounterMotion / (float)pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame);
+				pos[nCntModel].y = (pKeyDef[nCntModel].fPosY + pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosY) + keyDiff[nCntModel].fPosY * ((float)pEnemy[nIdx].nCounterMotion / (float)pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame);
+				pos[nCntModel].z = (pKeyDef[nCntModel].fPosZ + pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fPosZ) + keyDiff[nCntModel].fPosZ * ((float)pEnemy[nIdx].nCounterMotion / (float)pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame);
 
-					//モーションカウンタリセット
-					ResetMotion(SELECTMOTION_ENEMY, false, true, false, false, nCntEnemy);
-				}
+				//現在モーションの差分を再生フレームで割ったもの rot
+				rot[nCntModel].x = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotX + keyDiff[nCntModel].fRotX * ((float)pEnemy[nIdx].nCounterMotion / (float)pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame);
+				rot[nCntModel].y = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotY + keyDiff[nCntModel].fRotY * ((float)pEnemy[nIdx].nCounterMotion / (float)pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame);
+				rot[nCntModel].z = pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].aKey[nCntModel].fRotZ + keyDiff[nCntModel].fRotZ * ((float)pEnemy[nIdx].nCounterMotion / (float)pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame);
 
-				//現在キーがモーションのキー数に到達したら
-				if (pEnemy[nCntEnemy].nKey >= pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].nNumKey - 1 && pEnemy[nCntEnemy].bLoopMotion == false)
-				{//ループしない場合
-				 //モーションリセット
-					ResetMotion(SELECTMOTION_ENEMY, false, true, true, true, nCntEnemy);
-				}
-				else if (pEnemy[nCntEnemy].nKey >= pEnemy[nCntEnemy].aMotionInfo[pEnemy[nCntEnemy].motionType].nNumKey && pEnemy[nCntEnemy].bLoopMotion == true)
-				{//ループの場合
-				 //カウンタとキーをリセット
-					ResetMotion(SELECTMOTION_ENEMY, false, true, true, false, nCntEnemy);
-				}
+				pEnemy[nIdx].aModel[nCntModel].pos.x = pos[nCntModel].x;
+				pEnemy[nIdx].aModel[nCntModel].pos.y = pos[nCntModel].y;
+				pEnemy[nIdx].aModel[nCntModel].pos.z = pos[nCntModel].z;
+
+				pEnemy[nIdx].aModel[nCntModel].rot.x = rot[nCntModel].x;
+				pEnemy[nIdx].aModel[nCntModel].rot.y = rot[nCntModel].y;
+				pEnemy[nIdx].aModel[nCntModel].rot.z = rot[nCntModel].z;
+
+				if (pEnemy[nIdx].aModel[nCntModel].rot.x > D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.x -= D3DX_PI * 2.0f;
+				if (pEnemy[nIdx].aModel[nCntModel].rot.x < -D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.x += D3DX_PI * 2.0f;
+				if (pEnemy[nIdx].aModel[nCntModel].rot.y > D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.y -= D3DX_PI * 2.0f;
+				if (pEnemy[nIdx].aModel[nCntModel].rot.y < -D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.y += D3DX_PI * 2.0f;
+				if (pEnemy[nIdx].aModel[nCntModel].rot.z > D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.z -= D3DX_PI * 2.0f;
+				if (pEnemy[nIdx].aModel[nCntModel].rot.z < -D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.z += D3DX_PI * 2.0f;
+
 			}
-			else if (pEnemy[nCntEnemy].bPlayMotion == false)
+
+			//現在キーの再生フレーム数に到達したら
+			if (pEnemy[nIdx].nCounterMotion >= pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].aKeyInfo[pEnemy[nIdx].nKey].nFrame)
 			{
-				//モーションリセット
-				ResetMotion(SELECTMOTION_ENEMY, false, true, true, false, nCntEnemy);
+				//次のキーに
+				pEnemy[nIdx].nKey++;
+
+				//モーションカウンタリセット
+				ResetMotion(SELECTMOTION_ENEMY, false, true, false, false, nIdx);
 			}
+
+			//現在キーがモーションのキー数に到達したら
+			if (pEnemy[nIdx].nKey >= pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].nNumKey - 1 && pEnemy[nIdx].bLoopMotion == false)
+			{//ループしない場合
+			 //モーションリセット
+				ResetMotion(SELECTMOTION_ENEMY, false, true, true, true, nIdx);
+			}
+			else if (pEnemy[nIdx].nKey >= pEnemy[nIdx].aMotionInfo[pEnemy[nIdx].motionType].nNumKey && pEnemy[nIdx].bLoopMotion == true)
+			{//ループの場合
+			 //カウンタとキーをリセット
+				ResetMotion(SELECTMOTION_ENEMY, false, true, true, false, nIdx);
+			}
+		}
+		else if (pEnemy[nIdx].bPlayMotion == false)
+		{
+			//モーションリセット
+			ResetMotion(SELECTMOTION_ENEMY, false, true, true, false, nIdx);
 		}
 	}
 }
@@ -699,4 +700,34 @@ void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, b
 			pEnemy[nIdxEnemy].bPlayMotion = false;
 		}
 	}
+}
+
+// モーションをテキストで読み込み
+void MotionText(const char * cXFileName)
+{
+	MOTION_INFO MotionInfo;				// モーション情報保存用
+
+	FILE * pFile = fopen(cXFileName, "r");	// ファイルへのポインタ
+
+	char *str;				// 文字列読み込み用
+	int FileSize;			// ファイルのサイズ保存用
+
+	// ファイルの中の最後までの長さを取得
+	fseek(pFile, 0, SEEK_END);
+	FileSize = ftell(pFile);
+	fseek(pFile, 0, SEEK_SET);
+
+	// メモリの確保
+	str = (char*)malloc(sizeof(char) * FileSize);
+
+	// メモリの初期化
+	memset(str, NULL, sizeof(char) * FileSize);
+
+
+	while (strcmp(str, "MOTION_END") != 0)
+	{
+
+	}
+
+	free(str);
 }

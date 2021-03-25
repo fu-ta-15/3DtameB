@@ -13,6 +13,7 @@
 #include "result.h"
 #include "motion.h"
 
+
 #include <stdio.h>
 #include <time.h>
 
@@ -54,7 +55,7 @@ void InitPlayer(void)
 	g_player.nLifeMax = PLAYER_HEALTH;
 
 	//テキスト読み込み
-	ReadCharacterInfo(&g_ModelInfo, "model_character.txt");
+	ReadCharacterInfo(&g_ModelInfo, "data\\TXT\\model_character.txt");
 
 	//読み込んだ情報を使ってXファイル読み込み
 	for (int nCntModel = 0; nCntModel < g_ModelInfo.nModelNum; nCntModel++)
@@ -220,7 +221,7 @@ void DrawPlayer(void)
 		D3DXMATRIX mtxRotModel, mtxTransModel;	// 計算用マトリックス
 		D3DXMATRIX mtxParent;					// 親のマトリックス
 
-												//各パーツのワールドマトリックス初期化
+		//各パーツのワールドマトリックス初期化
 		D3DXMatrixIdentity(&g_player.aModel[nCntModel].mtxWorld);
 
 		//各パーツの向きを反映

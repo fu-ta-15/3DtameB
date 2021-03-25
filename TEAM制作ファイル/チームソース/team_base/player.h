@@ -22,6 +22,16 @@
 #define PLAYER_MODEL_AMOUNT (10)
 
 //-----------------------------------------------------------------------------
+// プレイヤーが持っている武器
+//-----------------------------------------------------------------------------
+typedef enum
+{
+	PWEAPON_KATANA,		// 刀
+	PWEAPON_NAGINATA,	// 薙刀
+	PWEAPON_MAX
+} PWEAPON;
+
+//-----------------------------------------------------------------------------
 // ファイルから読んでくるキャラクターのモデル情報の構造体
 //-----------------------------------------------------------------------------
 typedef struct
@@ -29,7 +39,7 @@ typedef struct
 	int nModelNum;						// モデルの数	
 	int nModelIdx[20];					// モデルの番号
 	int nModelParent[20];				// モデルの親
-	char cModelFileName[20][128];		// モデルのファイル名
+	char cModelFileName[20][256];		// モデルのファイル名
 	float fModelPos[20][3];				// モデルの位置(オフセット)
 	float fModelRot[20][3];				// モデルの向き
 
@@ -40,51 +50,51 @@ typedef struct
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	LPD3DXMESH pMeshModel;		// メッシュへのポインタ
-	LPD3DXBUFFER pBuffMatModel;	// マテリアルへのポインタ
-	DWORD nNumMatModel;			// マテリアルの数
-	D3DXVECTOR3 pos;			// 位置(オフセット)
-	D3DXVECTOR3 rot;			// 向き
-	D3DXMATRIX mtxWorld;		// ワールドマトリックス
-	int nIdxModelParent;		// 親モデルのインデックス
+	LPD3DXMESH pMeshModel;				// メッシュへのポインタ
+	LPD3DXBUFFER pBuffMatModel;			// マテリアルへのポインタ
+	DWORD nNumMatModel;					// マテリアルの数
+	D3DXVECTOR3 pos;					// 位置(オフセット)
+	D3DXVECTOR3 rot;					// 向き
+	D3DXMATRIX mtxWorld;				// ワールドマトリックス
+	int nIdxModelParent;				// 親モデルのインデックス
 	LPDIRECT3DTEXTURE9 pTexture[10];	// texture
 	int nNumModel;
-} PlayerModel;
+} Model;
 
 //-----------------------------------------------------------------------------
 // プレイヤーの構造体
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	D3DXVECTOR3 pos;				// 位置
-	D3DXVECTOR3 posOld;				// 前回の位置
-	D3DXVECTOR3 move;				// 移動値
-	D3DXVECTOR3 rot;				// 向き
-	D3DXVECTOR3 rotDest;			// 目標の向き
-	D3DXMATRIX mtxWorld;			// ワールドマトリックス
-	PlayerModel aModel[PLAYER_MODEL_AMOUNT];	// モデル(パーツ)
-	int nNumModel;					// モデル(パーツ)数
+	D3DXVECTOR3 pos;						// 位置
+	D3DXVECTOR3 posOld;						// 前回の位置
+	D3DXVECTOR3 move;						// 移動値
+	D3DXVECTOR3 rot;						// 向き
+	D3DXVECTOR3 rotDest;					// 目標の向き
+	D3DXMATRIX mtxWorld;					// ワールドマトリックス
+	Model aModel[PLAYER_MODEL_AMOUNT];		// モデル(パーツ)
+	int nNumModel;							// モデル(パーツ)数
 
-	bool bPlayMotion;				// モーション再生状態
+	bool bPlayMotion;						// モーション再生状態
 	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)
-	MOTIONTYPE motionType;			// モーションタイプ
-	bool bLoopMotion;				// ループの有無
-	int nCurrentMotion;				// 現在のモーション
-	int nNumMotion;					// モーション数
-	int nNumKey;					// キー数
-	int nKey;						// キーナンバー
-	int nCounterMotion;				// モーションカウンター
-
-	bool bBlendMotion;				// ブレンドするかどうか
-	MOTIONTYPE motionTypeBlend;		// 次のモーション情報
-	bool bLoopMotionBlend;			// 
-	int nNumKeyBlend;				//
-	int nKeyBlend;					//
-	int nCounterMotionBlend;		//
+	MOTIONTYPE motionType;					// モーションタイプ
+	bool bLoopMotion;						// ループの有無
+	int nCurrentMotion;						// 現在のモーション
+	int nNumMotion;							// モーション数
+	int nNumKey;							// キー数
+	int nKey;								// キーナンバー
+	int nCounterMotion;						// モーションカウンター
+		
+	bool bBlendMotion;						// ブレンドするかどうか
+	MOTIONTYPE motionTypeBlend;				// 次のモーション情報
+	bool bLoopMotionBlend;					// 
+	int nNumKeyBlend;						//
+	int nKeyBlend;							//
+	int nCounterMotionBlend;				//
 	int nCounterBlend;
 	int nFrameBlend;
 
-
+	PWEAPON weapon;
 	int nLifeMax;					// 最大体力
 	int nLife;						// 体力
 	bool bHit;						// 攻撃されている状態

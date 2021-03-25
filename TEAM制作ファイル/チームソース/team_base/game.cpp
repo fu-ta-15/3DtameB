@@ -16,11 +16,14 @@
 #include "portal.h"
 #include "collision.h"
 #include "skybox.h"
+#include "object.h"
+#include "commandaction.h"
 
 //=============================================================================
 // グローバル変数
 //=============================================================================
 Stage g_stage;
+int g_nCntFrame;
 
 //=============================================================================
 // ゲーム画面の初期化処理
@@ -38,14 +41,17 @@ HRESULT InitGame(void)
 
 	//ポータルの初期化処理
 	InitPortal();
-
-	//コリジョン処理の初期化
-	InitCollision();
 	
-	//---ステージに依るもの---
+	//コマンドアクション初期化処理
+	InitCommand();
+
+	//---ステージに依るもの----
 
 	//敵の初期化処理
 	InitEnemy();
+
+	//オブジェクトの初期化処理
+	InitObject();
 
 	//メッシュフィールドの初期化処理
 	InitMeshfield(g_stage.nStageNum);
@@ -58,6 +64,11 @@ HRESULT InitGame(void)
 	
 	//スカイボックスの処理
 	InitSky();
+	
+	//-----------------------
+
+	//コリジョン処理の初期化
+	InitCollision();
 
 	//モーションの初期化処理
 	InitMotion();
@@ -79,8 +90,14 @@ void UninitGame(void)
 	//敵の終了処理
 	UninitEnemy();
 
+	//オブジェクトの終了処理
+	UninitObject();
+
 	//壁(メッシュ)の終了処理
 	UninitMeshwall();
+
+	//コマンドアクション終了処理
+	UninitCommand();
 
 	//モデルの終了処理
 	UninitPlayer();
@@ -103,40 +120,98 @@ void UninitGame(void)
 //=============================================================================
 void UpdateGame(void)
 {
-	//コリジョンの更新処理
-	UpdateCollision();
+	g_nCntFrame++;
+	CommandAction *pCmd = GetCAction();
 
-	//メッシュフィールドの更新処理
-	UpdateMeshfield();
-
-	//壁(メッシュ)の更新処理
-	UpdateMeshwall();
-
-	//モデルの更新処理
-	UpdatePlayer();
-
-	//敵の更新処理
-	UpdateEnemy();
-
-	//カメラの更新処理
-	UpdateCamera();
-
-	//モーションの更新処理
-	UpdateMotion();
-
-	//ライトの更新処理
-	UpdateLight();
-
-	//ポータルの更新処理
-	UpdatePortal();
-
-	//スカイボックスの更新処理
-	UpdateSky();
-
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
+	if (pCmd->bActive == true)
 	{
-		g_stage.nStageNum += 1;
-		SetFade(FADE_OUT, MODE_GAME);
+		if (g_nCntFrame % 4 == 0)
+		{
+			//コリジョンの更新処理
+			UpdateCollision();
+
+			//メッシュフィールドの更新処理
+			UpdateMeshfield();
+
+			//壁(メッシュ)の更新処理
+			UpdateMeshwall();
+
+			//モーションの更新処理
+			UpdateMotion();
+
+			//モデルの更新処理
+			UpdatePlayer();
+
+			//敵の更新処理
+			UpdateEnemy();
+
+			//オブジェクトの更新処理
+			UpdateObject();
+
+			//カメラの更新処理
+			UpdateCamera();
+
+			//ライトの更新処理
+			UpdateLight();
+
+			//ポータルの更新処理
+			UpdatePortal();
+
+			//スカイボックスの更新処理
+			UpdateSky();
+
+			if (GetKeyboardTrigger(DIK_RETURN) == true)
+			{
+				g_stage.nStageNum += 1;
+				SetFade(FADE_OUT, MODE_GAME);
+			}
+		}
+		//コマンドアクションの更新処理
+		UpdateCommand();
+	}
+	else
+	{
+		//コリジョンの更新処理
+		UpdateCollision();
+
+		//メッシュフィールドの更新処理
+		UpdateMeshfield();
+
+		//壁(メッシュ)の更新処理
+		UpdateMeshwall();
+
+		//モデルの更新処理
+		UpdatePlayer();
+
+		//敵の更新処理
+		UpdateEnemy();
+
+		//オブジェクトの更新処理
+		UpdateObject();
+
+		//カメラの更新処理
+		UpdateCamera();
+
+		//モーションの更新処理
+		UpdateMotion();
+
+		//ライトの更新処理
+		UpdateLight();
+
+		//ポータルの更新処理
+		UpdatePortal();
+
+		//スカイボックスの更新処理
+		UpdateSky();
+
+		//コマンドアクションの更新処理
+		UpdateCommand();
+
+		if (GetKeyboardTrigger(DIK_RETURN) == true)
+		{
+			g_stage.nStageNum += 1;
+			SetFade(FADE_OUT, MODE_GAME);
+		}
 	}
 }
 
@@ -145,27 +220,32 @@ void UpdateGame(void)
 //=============================================================================
 void DrawGame(void)
 {
-	//コリジョンの描画処理
-	DrawCollision();
+		//コリジョンの描画処理
+		DrawCollision();
 
-	//メッシュフィールドの描画処理
-	DrawMeshfield();
+		//メッシュフィールドの描画処理
+		DrawMeshfield();
 
-	//壁(メッシュ)の描画処理
-	DrawMeshwall();
+		//壁(メッシュ)の描画処理
+		DrawMeshwall();
 
-	//モデルの描画処理
-	DrawPlayer();
+		//モデルの描画処理
+		DrawPlayer();
 
-	//敵の描画処理
-	DrawEnemy();
+		//敵の描画処理
+		DrawEnemy();
 
-	//スカイボックスの描画
-	DrawSky();
+		//オブジェクトの描画処理
+		DrawObject();
 
-	//ポータルの描画処理
-	DrawPortal();
+		//スカイボックスの描画
+		DrawSky();
 
+		//ポータルの描画処理
+		DrawPortal();
+
+		//コマンドアクション描画処理
+		DrawCommand();
 }
 
 //=============================================================================
