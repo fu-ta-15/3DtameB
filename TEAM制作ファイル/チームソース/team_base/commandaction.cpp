@@ -21,6 +21,8 @@ HRESULT InitCommandButton(void);	// コマンドボタン初期化
 void DrawCommandButton(void);		// ↑の描画
 HRESULT InitTimeRemain(void);		// 入力残り時間の初期化
 void DrawTimeRemain(void);			// ↑の描画
+HRESULT InitActionCircle(void);		// 範囲サークルの初期化
+void DrawActionCircle(void);		// ↑の描画
 
 void SetCommandActionState(bool bActive);
 void OnPlayerFinishAction(void);
@@ -62,6 +64,9 @@ HRESULT InitCommand(void)
 	//入力残り時間の初期化
 	InitTimeRemain();
 
+	//範囲サークル
+	InitActionCircle();
+
 	return S_OK;
 }
 
@@ -70,6 +75,7 @@ HRESULT InitCommand(void)
 //-----------------------------------------------------------------------------
 void UninitCommand(void)
 {
+	//ボタンの解放処理
 	for (int nCntBtn = 0; nCntBtn < CA_BUTTON_TYPE; nCntBtn++)
 	{
 		//テクスチャの開放
@@ -79,11 +85,37 @@ void UninitCommand(void)
 			g_commandAct.buttonInfo.pTexture[nCntBtn] = NULL;
 		}
 	}
-	//頂点バッファの開放
 	if (g_commandAct.buttonInfo.pVtxBuff != NULL)
 	{
 		g_commandAct.buttonInfo.pVtxBuff->Release();
 		g_commandAct.buttonInfo.pVtxBuff = NULL;
+	}
+
+	//残り時間ゲージの解放処理
+	for (int nCntOBJ = 0; nCntOBJ < CA_TIMEREMAIN_OBJ; nCntOBJ++)
+	{
+		if (g_commandAct.remainTimeInfo.pVtxBuff[nCntOBJ] != NULL)
+		{
+			g_commandAct.remainTimeInfo.pVtxBuff[nCntOBJ]->Release();
+			g_commandAct.remainTimeInfo.pVtxBuff[nCntOBJ] = NULL;
+		}
+		if (g_commandAct.remainTimeInfo.pTexture[nCntOBJ] != NULL)
+		{
+			g_commandAct.remainTimeInfo.pTexture[nCntOBJ]->Release();
+			g_commandAct.remainTimeInfo.pTexture[nCntOBJ] = NULL;
+		}
+	}
+
+	//範囲サークルの解放処理
+	if (g_commandAct.actionCircle.pVtxBuff != NULL)
+	{
+		g_commandAct.actionCircle.pVtxBuff->Release();
+		g_commandAct.actionCircle.pVtxBuff = NULL;
+	}
+	if (g_commandAct.actionCircle.pTexture != NULL)
+	{
+		g_commandAct.actionCircle.pTexture->Release();
+		g_commandAct.actionCircle.pTexture = NULL;
 	}
 }
 
@@ -92,6 +124,11 @@ void UninitCommand(void)
 //-----------------------------------------------------------------------------
 void UpdateCommand(void)
 {
+	Player *pPlayer = GetPlayer();
+
+	//範囲サークルの位置をプレイヤーの場所に
+	g_commandAct.actionCircle.pos = pPlayer->pos;
+
 	//プレイヤーの持ってる武器によってコマンドの数を変える
 	switch (playerWeaponTest)
 	{
@@ -236,6 +273,9 @@ void DrawCommand(void)
 		//入力残り時間の描画
 		DrawTimeRemain();
 	}
+	
+	//範囲サークル
+	DrawActionCircle();
 }
 
 //-----------------------------------------------------------------------------
@@ -376,6 +416,57 @@ HRESULT InitTimeRemain(void)
 	return S_OK;
 }
 
+/* 範囲サークルの初期化 */
+HRESULT InitActionCircle(void)
+{
+	LPDIRECT3DDEVICE9 pDevice;
+
+	//デバイスの取得
+	pDevice = GetDevice();
+
+	//ポータルの情報初期化
+	g_commandAct.actionCircle.pos = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	
+	//テクスチャ読み込み
+	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//circle.png", &g_commandAct.actionCircle.pTexture);
+
+	//頂点バッファ生成
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * VERTEX_AMOUNT,		//サイズ
+		D3DUSAGE_WRITEONLY,												//
+		FVF_VERTEX_3D,													//フォーマット
+		D3DPOOL_MANAGED,												//
+		&g_commandAct.actionCircle.pVtxBuff,							//頂点バッファへのポインタ
+		NULL);
+
+	VERTEX_3D *pVertex;
+
+	//頂点バッファをロックし頂点情報へのポインタを取得
+	g_commandAct.actionCircle.pVtxBuff->Lock(0, 0, (void**)&pVertex, 0);
+
+	//頂点座標設定
+	pVertex[0].pos = D3DXVECTOR3(-CA_CIRCLE_RADIUS, 0.0f, -CA_CIRCLE_RADIUS);
+	pVertex[1].pos = D3DXVECTOR3(-CA_CIRCLE_RADIUS, 0.0f, CA_CIRCLE_RADIUS);
+	pVertex[2].pos = D3DXVECTOR3(CA_CIRCLE_RADIUS, 0.0f, -CA_CIRCLE_RADIUS);
+	pVertex[3].pos = D3DXVECTOR3(CA_CIRCLE_RADIUS, 0.0f, CA_CIRCLE_RADIUS);
+
+	//法線ベクトルの設定
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertex[nCntVtx].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+
+	//頂点カラーの設定
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertex[nCntVtx].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+
+	//テクスチャ座標の設定
+	pVertex[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVertex[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVertex[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+	pVertex[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+
+	//頂点バッファをアンロックする
+	g_commandAct.actionCircle.pVtxBuff->Unlock();
+
+	return S_OK;
+}
+
 /* コマンドボタンの描画 */
 void DrawCommandButton(void)
 {
@@ -417,6 +508,57 @@ void DrawTimeRemain(void)
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 4);
 	}
 }
+
+/* 範囲サークルの描画 */
+void DrawActionCircle(void)
+{
+	LPDIRECT3DDEVICE9 pDevice;			// デバイスへのポインタ
+	D3DXMATRIX mtxTrans, mtxRot;		// 計算用マトリックス
+
+	//デバイス取得
+	pDevice = GetDevice();
+
+	//合成の設定
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース（描画元）の合成方法の設定
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);	//デスティネーション（描画先）の合成方法の設定
+
+	//カリングの設定
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
+	//ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&g_commandAct.actionCircle.mtxWorld);
+
+	//向きの反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, g_commandAct.actionCircle.rot.y, g_commandAct.actionCircle.rot.x, g_commandAct.actionCircle.rot.z);
+	D3DXMatrixMultiply(&g_commandAct.actionCircle.mtxWorld, &g_commandAct.actionCircle.mtxWorld, &mtxRot);
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, g_commandAct.actionCircle.pos.x, g_commandAct.actionCircle.pos.y, g_commandAct.actionCircle.pos.z);
+	D3DXMatrixMultiply(&g_commandAct.actionCircle.mtxWorld, &g_commandAct.actionCircle.mtxWorld, &mtxTrans);
+
+	//ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &g_commandAct.actionCircle.mtxWorld);
+
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, g_commandAct.actionCircle.pVtxBuff, 0, sizeof(VERTEX_3D));
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_3D);
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, g_commandAct.actionCircle.pTexture);
+
+	//ポリゴンの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+
+	//カリングの設定を戻す
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+	//通常合成に戻す
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース（描画元）の合成方法の設定
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//デスティネーション（描画先）の合成方法の設定
+}
+
 /* コマンドアクションの状態を設定する */
 void SetCommandActionState(bool bActive)
 {

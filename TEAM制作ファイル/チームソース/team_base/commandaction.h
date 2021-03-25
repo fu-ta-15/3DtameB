@@ -21,13 +21,15 @@
 #define CA_BUTTON_POS_X (SCREEN_WIDTH / 2)
 #define CA_BUTTON_POS_Y (SCREEN_WIDTH / 2)
 
-#define CA_ATTACK_RADIUS (500.0f)
+#define CA_ATTACK_RADIUS (150.0f)
 #define CA_ATTACK_KNOCKBACK (50.0f)
 
 #define CA_TIMEREMAIN_OBJ (2)			// 残り時間で使うオブジェクト数
 #define CA_TIMEREMAIN_WIDTH (600)		// 残り時間のバー幅
 #define CA_TIMEREMAIN_HEIGHT (15)		// 残り時間のバー高さ
 #define CA_TIMEREMAIN_TIMELIMIT (3000)	// 入力の制限時間(ミリ秒)
+
+#define CA_CIRCLE_RADIUS (150.0f)	// circle radius
 
 //-----------------------------------------------------------------------------
 // ボタン構造体
@@ -53,12 +55,25 @@ typedef struct
 } TimeRemain;
 
 //-----------------------------------------------------------------------------
+// 範囲サークルの構造体
+//-----------------------------------------------------------------------------
+typedef struct
+{
+	D3DXMATRIX	mtxWorld;				// worldmtx
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;	// 頂点バッファ
+	LPDIRECT3DTEXTURE9 pTexture;		// テクスチャ
+	D3DXVECTOR3 pos;					// 位置
+	D3DXVECTOR3 rot;					// rot
+} ActionCircle;
+
+//-----------------------------------------------------------------------------
 // コマンドアクション構造体
 //-----------------------------------------------------------------------------
 typedef struct
 {
 	CAButton buttonInfo;				// ボタンの情報
 	TimeRemain remainTimeInfo;			// 残り時間の情報
+	ActionCircle actionCircle;			// 範囲サークルの情報
 	int nActionOrder[CA_BUTTON_NUM];	// ボタンを押す順番
 	int nActionOrderOut[CA_BUTTON_NUM];	// 実際に押された順番
 	int nActionNum;						// ボタンを押す数
