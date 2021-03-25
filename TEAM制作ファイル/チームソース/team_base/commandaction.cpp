@@ -17,15 +17,19 @@
 //-----------------------------------------------------------------------------
 // ƒvƒƒgƒ^ƒCƒvéŒ¾
 //-----------------------------------------------------------------------------
+HRESULT InitCommandButton(void);	// ƒRƒ}ƒ“ƒhƒ{ƒ^ƒ“‰Šú‰»
+void DrawCommandButton(void);		// ª‚Ì•`‰æ
+HRESULT InitTimeRemain(void);		// “ü—Íc‚èŠÔ‚Ì‰Šú‰»
+void DrawTimeRemain(void);			// ª‚Ì•`‰æ
+
 void SetCommandActionState(bool bActive);
-void OnPlayerSccessAction(void);
+void OnPlayerFinishAction(void);
 
 //-----------------------------------------------------------------------------
 // ƒOƒ[ƒoƒ‹•Ï”
 //-----------------------------------------------------------------------------
 CommandAction g_commandAct;						// ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚Ìî•ñ
 PWEAPON playerWeaponTest = PWEAPON_NAGINATA;		// ƒvƒŒƒCƒ„[‚Ì‚Á‚Ä‚¢‚é•Ší (Œã‚Åplayer\‘¢‘Ì‚Ì•¨‚ğg‚¤j
-//D3DXVECTOR3 g_posButton[CA_BUTTON_NUM];			// ƒ{ƒ^ƒ“‚ğ”z’u‚·‚éˆÊ’u
 
 //-----------------------------------------------------------------------------
 // ‰Šú‰»ˆ—
@@ -33,7 +37,7 @@ PWEAPON playerWeaponTest = PWEAPON_NAGINATA;		// ƒvƒŒƒCƒ„[‚Ì‚Á‚Ä‚¢‚é•Ší (Œã‚
 HRESULT InitCommand(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// ƒfƒoƒCƒXæ“¾
-	srand((unsigned)time(0));
+	srand((unsigned)time(0));	// rand‰Šú‰»
 
 	//‰Šú‰»
 	g_commandAct.nActionNum = CA_BUTTON_NUM_NAGINATA;	// •\¦‚·‚éƒ{ƒ^ƒ“‚Ì”
@@ -52,45 +56,11 @@ HRESULT InitCommand(void)
 		g_commandAct.nActionOrderOut[nCntBtn] = 0;
 	}
 
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
-	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command A00.png", &g_commandAct.buttonInfo.pTexture[0]);
-	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command B00.png", &g_commandAct.buttonInfo.pTexture[1]);
-	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command X00.png", &g_commandAct.buttonInfo.pTexture[2]);
-	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command Y00.png", &g_commandAct.buttonInfo.pTexture[3]);
+	//ƒRƒ}ƒ“ƒhƒ{ƒ^ƒ“‚Ì‰Šú‰»
+	InitCommandButton();
 
-	//’¸“_ƒoƒbƒtƒ@‚Ì¶¬ ƒ{ƒ^ƒ“
-	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * VERTEX_AMOUNT * CA_BUTTON_NUM, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &g_commandAct.buttonInfo.pVtxBuff, NULL)))
-	{
-		return E_FAIL;
-	}
-
-	VERTEX_2D *pVertexButton;
-
-	//’¸“_ƒoƒbƒtƒ@‚ğƒƒbƒN‚µ’¸“_î•ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-	g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton, 0);
-
-	for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++, pVertexButton += 4)
-	{
-		//’¸“_À•W D3DXVECTOR3(X,Y, 0.0f);
-		pVertexButton[0].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);		 //TRIANGLESTRIP‚ÅlŠp
-		pVertexButton[1].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
-		pVertexButton[2].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);
-		pVertexButton[3].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
-
-		//rhw‚Ìİ’è
-		for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton[nCntVtx].rhw = 1.0f;
-
-		//’¸“_ƒJƒ‰[‚Ìİ’è
-		for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton[nCntVtx].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-		//’¸“_î•ñ‚Ìİ’è
-		pVertexButton[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVertexButton[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVertexButton[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVertexButton[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-	}
-	//’¸“_ƒoƒbƒtƒ@‚ğƒAƒ“ƒƒbƒN‚·‚é
-	g_commandAct.buttonInfo.pVtxBuff->Unlock();
+	//“ü—Íc‚èŠÔ‚Ì‰Šú‰»
+	InitTimeRemain();
 
 	return S_OK;
 }
@@ -210,7 +180,47 @@ void UpdateCommand(void)
 
 		//ƒAƒ“ƒƒbƒN
 		g_commandAct.buttonInfo.pVtxBuff->Unlock();
+
+
+		/* c‚èŠÔ‚Ìˆ— */
+		float fValueTime = 1.0f;	// c‚èŠÔ‚ÌŠ„‡
+
+		g_commandAct.remainTimeInfo.dwCurrentTime = timeGetTime();	// Œ»İŠÔ
+
+		//c‚èŠÔ‚ğŒvZ
+		g_commandAct.remainTimeInfo.dwRemainTime = (g_commandAct.remainTimeInfo.dwCurrentTime - g_commandAct.remainTimeInfo.dwStartTime) - CA_TIMEREMAIN_TIMELIMIT * 2;
+		g_commandAct.remainTimeInfo.dwRemainTime = g_commandAct.remainTimeInfo.dwRemainTime * -1;
+
+		//Š„‡‚ğŒvZ
+		fValueTime = (float)(g_commandAct.remainTimeInfo.dwRemainTime - CA_TIMEREMAIN_TIMELIMIT) / (float)CA_TIMEREMAIN_TIMELIMIT;
+
+		//’¸“_ƒoƒbƒtƒ@‚ÌƒƒbƒN
+		VERTEX_2D *pVertexFront;
+		g_commandAct.remainTimeInfo.pVtxBuff[1]->Lock(0, 0, (void**)&pVertexFront, 0);
+
+		//’¸“_À•WAƒeƒNƒXƒ`ƒƒÀ•W‚ÌXV
+		pVertexFront[0].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x - (CA_TIMEREMAIN_WIDTH * fValueTime), g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+		pVertexFront[1].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x - (CA_TIMEREMAIN_WIDTH * fValueTime), g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+		pVertexFront[2].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+		pVertexFront[3].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+
+		pVertexFront[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVertexFront[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVertexFront[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+		pVertexFront[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+
+		//’¸“_ƒoƒbƒtƒ@‚ÌƒAƒ“ƒƒbƒN
+		g_commandAct.remainTimeInfo.pVtxBuff[1]->Unlock();
+
+		//c‚èŠÔ‚ª0•b‚É‚È‚Á‚½‚ç
+		if (g_commandAct.remainTimeInfo.dwRemainTime <= CA_TIMEREMAIN_TIMELIMIT)
+		{
+			SetCommandActionState(false);
+		}
 	}
+
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -218,24 +228,13 @@ void UpdateCommand(void)
 //-----------------------------------------------------------------------------
 void DrawCommand(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// ƒfƒoƒCƒXæ“¾
-
 	if (g_commandAct.bActive == true)
 	{
-		for (int nCntBtn = 0; nCntBtn < g_commandAct.nActionNum; nCntBtn++)
-		{
-			//’¸“_ƒoƒbƒtƒ@‚ğƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Éİ’è
-			pDevice->SetStreamSource(0, g_commandAct.buttonInfo.pVtxBuff, 0, sizeof(VERTEX_2D));
+		//ƒRƒ}ƒ“ƒhƒ{ƒ^ƒ“‚Ì•`‰æ
+		DrawCommandButton();
 
-			//’¸“_ƒtƒH[ƒ}ƒbƒg‚Ìİ’è
-			pDevice->SetFVF(FVF_VERTEX_2D);
-
-			//ƒeƒNƒXƒ`ƒƒ‚Ìİ’è
-			pDevice->SetTexture(0, g_commandAct.buttonInfo.pTexture[g_commandAct.nActionOrder[nCntBtn]]);
-
-			//ƒ|ƒŠƒSƒ“‚Ì•`‰æ
-			pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nCntBtn * 4, 2);
-		}
+		//“ü—Íc‚èŠÔ‚Ì•`‰æ
+		DrawTimeRemain();
 	}
 }
 
@@ -247,6 +246,177 @@ CommandAction *GetCAction(void)
 	return &g_commandAct;
 }
 
+/* ƒRƒ}ƒ“ƒhƒ{ƒ^ƒ“‚Ì‰Šú‰» */
+HRESULT InitCommandButton(void)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// ƒfƒoƒCƒXæ“¾
+
+	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command A00.png", &g_commandAct.buttonInfo.pTexture[0]);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command B00.png", &g_commandAct.buttonInfo.pTexture[1]);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command X00.png", &g_commandAct.buttonInfo.pTexture[2]);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\command Y00.png", &g_commandAct.buttonInfo.pTexture[3]);
+
+	//’¸“_ƒoƒbƒtƒ@‚Ì¶¬ ƒ{ƒ^ƒ“
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * VERTEX_AMOUNT * CA_BUTTON_NUM, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &g_commandAct.buttonInfo.pVtxBuff, NULL)))
+	{
+		return E_FAIL;
+	}
+
+	VERTEX_2D *pVertexButton;
+
+	//’¸“_ƒoƒbƒtƒ@‚ğƒƒbƒN‚µ’¸“_î•ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
+	g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton, 0);
+
+	for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++, pVertexButton += 4)
+	{
+		//’¸“_À•W D3DXVECTOR3(X,Y, 0.0f);
+		pVertexButton[0].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);		 //TRIANGLESTRIP‚ÅlŠp
+		pVertexButton[1].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
+		pVertexButton[2].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);
+		pVertexButton[3].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
+
+		//rhw‚Ìİ’è
+		for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton[nCntVtx].rhw = 1.0f;
+
+		//’¸“_ƒJƒ‰[‚Ìİ’è
+		for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton[nCntVtx].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+		//’¸“_î•ñ‚Ìİ’è
+		pVertexButton[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVertexButton[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+		pVertexButton[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+		pVertexButton[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+	}
+	//’¸“_ƒoƒbƒtƒ@‚ğƒAƒ“ƒƒbƒN‚·‚é
+	g_commandAct.buttonInfo.pVtxBuff->Unlock();
+
+	return S_OK;
+}
+
+/* “ü—Íc‚èŠÔ‚Ì‰Šú‰» */
+HRESULT InitTimeRemain(void)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// ƒfƒoƒCƒXæ“¾
+
+	//‰Šú‰»
+	g_commandAct.remainTimeInfo.pos[0] = D3DXVECTOR3(SCREEN_WIDTH / 2 - CA_TIMEREMAIN_WIDTH / 2, 900, 0.0f);
+	g_commandAct.remainTimeInfo.pos[1] = D3DXVECTOR3(SCREEN_WIDTH / 2 + CA_TIMEREMAIN_WIDTH / 2, 900, 0.0f);
+
+	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	D3DXCreateTextureFromFile(pDevice, NULL, &g_commandAct.remainTimeInfo.pTexture[0]);
+	D3DXCreateTextureFromFile(pDevice, NULL, &g_commandAct.remainTimeInfo.pTexture[1]);
+
+	/* Œã‚ë‘¤‚Ìƒo[ */
+	//’¸“_ƒoƒbƒtƒ@‚Ì¶¬
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * VERTEX_AMOUNT, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &g_commandAct.remainTimeInfo.pVtxBuff[0], NULL)))
+	{
+		return E_FAIL;
+	}
+
+	VERTEX_2D *pVertexBack;
+
+	//’¸“_ƒoƒbƒtƒ@‚ğƒƒbƒN‚µ’¸“_î•ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
+	g_commandAct.remainTimeInfo.pVtxBuff[0]->Lock(0, 0, (void**)&pVertexBack, 0);
+
+	//’¸“_À•W D3DXVECTOR3(X,Y, 0.0f);
+	pVertexBack[0].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[0].x, g_commandAct.remainTimeInfo.pos[0].y + CA_TIMEREMAIN_HEIGHT, 0.0f);		 //TRIANGLESTRIP‚ÅlŠp
+	pVertexBack[1].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[0].x, g_commandAct.remainTimeInfo.pos[0].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+	pVertexBack[2].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[0].x + CA_TIMEREMAIN_WIDTH, g_commandAct.remainTimeInfo.pos[0].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+	pVertexBack[3].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[0].x + CA_TIMEREMAIN_WIDTH, g_commandAct.remainTimeInfo.pos[0].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+
+	//rhw‚Ìİ’è
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexBack[nCntVtx].rhw = 1.0f;
+
+	//’¸“_ƒJƒ‰[‚Ìİ’è
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexBack[nCntVtx].col = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
+
+	//’¸“_î•ñ‚Ìİ’è
+	pVertexBack[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVertexBack[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVertexBack[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+	pVertexBack[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+
+	//’¸“_ƒoƒbƒtƒ@‚ğƒAƒ“ƒƒbƒN‚·‚é
+	g_commandAct.remainTimeInfo.pVtxBuff[0]->Unlock();
+
+	/* è‘O‚Ìƒo[ */
+	//’¸“_ƒoƒbƒtƒ@‚Ì¶¬
+	if (FAILED(pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * VERTEX_AMOUNT, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &g_commandAct.remainTimeInfo.pVtxBuff[1], NULL)))
+	{
+		return E_FAIL;
+	}
+
+	VERTEX_2D *pVertexFront;
+
+	//’¸“_ƒoƒbƒtƒ@‚ğƒƒbƒN‚µ’¸“_î•ñ‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
+	g_commandAct.remainTimeInfo.pVtxBuff[1]->Lock(0, 0, (void**)&pVertexFront, 0);
+
+	//’¸“_À•W D3DXVECTOR3(X,Y, 0.0f);
+	pVertexFront[0].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+	pVertexFront[1].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+	pVertexFront[2].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x + CA_TIMEREMAIN_WIDTH, g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+	pVertexFront[3].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x + CA_TIMEREMAIN_WIDTH, g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+
+	//rhw‚Ìİ’è
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexFront[nCntVtx].rhw = 1.0f;
+
+	//’¸“_ƒJƒ‰[‚Ìİ’è
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexFront[nCntVtx].col = D3DXCOLOR(0.5f, 1.0f, 0.0, 1.0f);
+
+	//’¸“_î•ñ‚Ìİ’è
+	pVertexFront[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVertexFront[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVertexFront[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+	pVertexFront[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+
+	//’¸“_ƒoƒbƒtƒ@ƒAƒ“ƒƒbƒN
+	g_commandAct.remainTimeInfo.pVtxBuff[1]->Unlock();
+
+	return S_OK;
+}
+
+/* ƒRƒ}ƒ“ƒhƒ{ƒ^ƒ“‚Ì•`‰æ */
+void DrawCommandButton(void)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// ƒfƒoƒCƒXæ“¾
+
+	for (int nCntBtn = 0; nCntBtn < g_commandAct.nActionNum; nCntBtn++)
+	{
+		//’¸“_ƒoƒbƒtƒ@‚ğƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Éİ’è
+		pDevice->SetStreamSource(0, g_commandAct.buttonInfo.pVtxBuff, 0, sizeof(VERTEX_2D));
+
+		//’¸“_ƒtƒH[ƒ}ƒbƒg‚Ìİ’è
+		pDevice->SetFVF(FVF_VERTEX_2D);
+
+		//ƒeƒNƒXƒ`ƒƒ‚Ìİ’è
+		pDevice->SetTexture(0, g_commandAct.buttonInfo.pTexture[g_commandAct.nActionOrder[nCntBtn]]);
+
+		//ƒ|ƒŠƒSƒ“‚Ì•`‰æ
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, nCntBtn * 4, 2);
+	}
+}
+
+/* “ü—Íc‚èŠÔ‚Ì•`‰æ */
+void DrawTimeRemain(void)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// ƒfƒoƒCƒXæ“¾
+
+	for (int nCntOBJ = 0; nCntOBJ < CA_TIMEREMAIN_OBJ; nCntOBJ++)
+	{
+		//’¸“_ƒoƒbƒtƒ@‚ğƒf[ƒ^ƒXƒgƒŠ[ƒ€‚Éİ’è
+		pDevice->SetStreamSource(0, g_commandAct.remainTimeInfo.pVtxBuff[nCntOBJ], 0, sizeof(VERTEX_2D));
+
+		//’¸“_ƒtƒH[ƒ}ƒbƒg‚Ìİ’è
+		pDevice->SetFVF(FVF_VERTEX_2D);
+
+		//ƒeƒNƒXƒ`ƒƒ‚Ìİ’è
+		pDevice->SetTexture(0, g_commandAct.remainTimeInfo.pTexture[nCntOBJ]);
+
+		//ƒ|ƒŠƒSƒ“‚Ì•`‰æ
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 4);
+	}
+}
 /* ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“‚Ìó‘Ô‚ğİ’è‚·‚é */
 void SetCommandActionState(bool bActive)
 {
@@ -258,6 +428,7 @@ void SetCommandActionState(bool bActive)
 		g_commandAct.bPress = false;		// “ü—Íƒtƒ‰ƒOƒŠƒZƒbƒg
 		g_commandAct.nActionCounter = 0;	// ƒJƒEƒ“ƒ^[ƒŠƒZƒbƒg
 		g_commandAct.nActionNumCorrect = 0;	// ³“š”ƒŠƒZƒbƒg
+		g_commandAct.remainTimeInfo.dwStartTime = timeGetTime();	// Œ»İ‚ÌŠÔ‚ğæ“¾
 
 		for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++)
 		{//	ƒ{ƒ^ƒ“‚Ì”‚¾‚¯
@@ -271,20 +442,20 @@ void SetCommandActionState(bool bActive)
 	}
 	else
 	{//	I—¹
-		OnPlayerSccessAction();
+		OnPlayerFinishAction();
 
 		g_commandAct.bActive = false;		// ”ñƒAƒNƒeƒBƒu‰»
 		g_commandAct.bPress = false;		// “ü—Íƒtƒ‰ƒOƒŠƒZƒbƒg
 		g_commandAct.nActionCounter = 0;	// ƒJƒEƒ“ƒ^[ƒŠƒZƒbƒg
 		g_commandAct.nActionNum = 0;		// ‰Ÿ‚·”ƒŠƒZƒbƒg
 		g_commandAct.nActionNumCorrect = 0;	// ³“š”ƒŠƒZƒbƒg
+		g_commandAct.remainTimeInfo.dwRemainTime = 0;	// c‚èŠÔƒŠƒZƒbƒg
 
 		for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++)
 		{//	ƒ{ƒ^ƒ“‚Ì”‚¾‚¯
 			g_commandAct.nActionOrder[nCntBtn] = 0;		// ‰Ÿ‚·‡”ÔƒŠƒZƒbƒg
 			g_commandAct.nActionOrderOut[nCntBtn] = 0;	// ‰Ÿ‚µ‚½‡”ÔƒŠƒZƒbƒg
 		}
-
 
 		//’¸“_ƒoƒbƒtƒ@ƒƒbƒN
 		VERTEX_2D *pVertexButton;
@@ -300,8 +471,8 @@ void SetCommandActionState(bool bActive)
 	}
 }
 
-/* ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“¬Œ÷Œã‚ÉŒÄ‚Î‚ê‚é */
-void OnPlayerSccessAction(void)
+/* ƒRƒ}ƒ“ƒhƒAƒNƒVƒ‡ƒ“I—¹Œã‚ÉŒÄ‚Î‚ê‚é */
+void OnPlayerFinishAction(void)
 {
 	Player *pPlayer = GetPlayer();
 	Enemy *pEnemy = GetEnemy();

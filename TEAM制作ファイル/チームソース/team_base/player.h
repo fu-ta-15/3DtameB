@@ -20,6 +20,7 @@
 #define PLAYER_INVINCIBLE_TIME (500)	// 攻撃された時の無敵時間
 #define PLAYER_HEALTH (10)				// プレイヤーの体力
 #define PLAYER_MODEL_AMOUNT (10)
+#define PLAYER_WEAPON_TYPE (2)			// プレイヤーの武器の種類
 
 //-----------------------------------------------------------------------------
 // プレイヤーが持っている武器
@@ -73,6 +74,7 @@ typedef struct
 	D3DXVECTOR3 rotDest;					// 目標の向き
 	D3DXMATRIX mtxWorld;					// ワールドマトリックス
 	Model aModel[PLAYER_MODEL_AMOUNT];		// モデル(パーツ)
+	Model aWeapon[PLAYER_WEAPON_TYPE];		// 武器（パーツ）
 	int nNumModel;							// モデル(パーツ)数
 
 	bool bPlayMotion;						// モーション再生状態
@@ -94,7 +96,7 @@ typedef struct
 	int nCounterBlend;
 	int nFrameBlend;
 
-	PWEAPON weapon;
+	PWEAPON weapon;					// 現在持っている武器
 	int nLifeMax;					// 最大体力
 	int nLife;						// 体力
 	bool bHit;						// 攻撃されている状態

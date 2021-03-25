@@ -16,6 +16,7 @@
 #include "game.h"
 #include "fade.h"
 #include "result.h"
+#include "commandaction.h"
 
 #include <stdio.h>
 
@@ -425,10 +426,9 @@ void DrawFPS(void)
 //=============================================================================
 void DrawPoint(void)
 {
-	Camera *pCamera;
-	Player *pPlayer;
-	pCamera = GetCamera();
-	pPlayer = GetPlayer();
+	Camera *pCamera = GetCamera();
+	Player *pPlayer = GetPlayer();
+	CommandAction *pCAction = GetCAction();
 
 	RECT rect = { 0,0,SCREEN_WIDTH, SCREEN_HEIGHT };
 	char aStr[512];
@@ -438,7 +438,7 @@ void DrawPoint(void)
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの位置]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->pos.x, pPlayer->pos.y, pPlayer->pos.z);
 	nNum += sprintf(&aStr[nNum], "[プレイヤーの移動値]: x [ %.2f ] y [ %.2f ] z [ %.2f ]\n", pPlayer->move.x, pPlayer->move.y, pPlayer->move.z);
 	nNum += sprintf(&aStr[nNum], "コマンドアクション実行 [ B ]\n");
-
+	nNum += sprintf(&aStr[nNum], "コマンド制限時間: %.4f秒\n", (float)(pCAction->remainTimeInfo.dwRemainTime - CA_TIMEREMAIN_TIMELIMIT) / 1000.0f);
 
 	//テキストの描画
 	g_pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 255, 255, 255));
