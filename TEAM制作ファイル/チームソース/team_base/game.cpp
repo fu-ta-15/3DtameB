@@ -148,9 +148,6 @@ void UpdateGame(void)
 			//オブジェクトの更新処理
 			UpdateObject();
 
-			//カメラの更新処理
-			UpdateCamera();
-
 			//ライトの更新処理
 			UpdateLight();
 
@@ -166,6 +163,9 @@ void UpdateGame(void)
 				SetFade(FADE_OUT, MODE_GAME);
 			}
 		}
+		//カメラの更新処理
+		UpdateCamera();
+
 		//コマンドアクションの更新処理
 		UpdateCommand();
 	}

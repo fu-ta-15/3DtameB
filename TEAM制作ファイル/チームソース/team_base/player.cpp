@@ -27,7 +27,7 @@
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
 void MovePlayer(float fMoveAngleDegree, float fMoveSpeed);
-HRESULT LoadXFile(const char* cXFileName, int nCountModel);
+HRESULT LoadXFile(const char* cXFileName, Model *modelInfo);
 void PlayerSmoothTurn(void);
 
 //-----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ void InitPlayer(void)
 	//読み込んだ情報を使ってXファイル読み込み
 	for (int nCntModel = 0; nCntModel < g_ModelInfo.nModelNum; nCntModel++)
 	{
-		LoadXFile(&g_ModelInfo.cModelFileName[nCntModel][0], nCntModel);
+		LoadXFile(&g_ModelInfo.cModelFileName[nCntModel][0], &g_player.aModel[nCntModel]);
 	}
 
 	//モデルのパーツ数
@@ -79,6 +79,14 @@ void InitPlayer(void)
 	{
 		g_playerDefaultKey[nCnt] = KeyPosRot(g_player.aModel[nCnt].pos.x, g_player.aModel[nCnt].pos.y, g_player.aModel[nCnt].pos.z, 0, 0, 0);
 	}
+
+	//武器読み込み
+	LoadXFile("data//MODEL//weapon.x", &g_player.aWeapon[0]);
+	
+	//武器の各種設定
+	g_player.aWeapon[0].nIdxModelParent = 3;
+	g_player.aWeapon[0].pos = D3DXVECTOR3(-2.0f, 0.0f, 0.0f);
+	g_player.aWeapon[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -216,6 +224,7 @@ void DrawPlayer(void)
 	//現在のマテリアル取得
 	pDevice->GetMaterial(&matDef);
 
+	//モデルパーツ
 	for (int nCntModel = 0; nCntModel < g_player.nNumModel; nCntModel++)
 	{
 		D3DXMATRIX mtxRotModel, mtxTransModel;	// 計算用マトリックス
@@ -285,6 +294,46 @@ void DrawPlayer(void)
 		}
 	}
 
+	//武器パーツ
+	D3DXMATRIX mtxRotWpn, mtxTransWpn;	// 計算用
+	D3DXMATRIX mtxParentWpn;			// 親のマトリクス
+
+	//各パーツのワールドマトリックス初期化
+	D3DXMatrixIdentity(&g_player.aWeapon[0].mtxWorld);
+
+	//各パーツの向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRotWpn, g_player.aWeapon[0].rot.y, g_player.aWeapon[0].rot.x, g_player.aWeapon[0].rot.z);
+	D3DXMatrixMultiply(&g_player.aWeapon[0].mtxWorld, &g_player.aWeapon[0].mtxWorld, &mtxRotWpn);
+
+	//各パーツの位置を反映
+	D3DXMatrixTranslation(&mtxTransWpn, g_player.aWeapon[0].pos.x, g_player.aWeapon[0].pos.y, g_player.aWeapon[0].pos.z);
+	D3DXMatrixMultiply(&g_player.aWeapon[0].mtxWorld, &g_player.aWeapon[0].mtxWorld, &mtxTransWpn);
+
+	//親マトリクス設定
+	mtxParentWpn = g_player.aModel[g_player.aWeapon[0].nIdxModelParent].mtxWorld;
+
+	//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
+	D3DXMatrixMultiply(&g_player.aWeapon[0].mtxWorld, &g_player.aWeapon[0].mtxWorld, &mtxParentWpn);
+
+	//各パーツのワールドマトリックス設定
+	pDevice->SetTransform(D3DTS_WORLD, &g_player.aWeapon[0].mtxWorld);
+
+	//マテリアルデータへのポインタを取得
+	pMat = (D3DXMATERIAL*)g_player.aWeapon[0].pBuffMatModel->GetBufferPointer();
+
+	//マテリアル設定と描画
+	for (int nCntMat = 0; nCntMat < (int)g_player.aWeapon[0].nNumMatModel; nCntMat++)
+	{
+		//マテリアル設定
+		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+		//テクスチャの設定
+		pDevice->SetTexture(0, NULL);
+
+		//モデルパーツの描画
+		g_player.aWeapon[0].pMeshModel->DrawSubset(nCntMat);
+	}
+
 	//保存していたマテリアルを戻す
 	pDevice->SetMaterial(&matDef);
 
@@ -316,7 +365,7 @@ void MovePlayer(float fMoveAngleDegree, float fMoveSpeed)
 }
 
 /* Xファイルからモデルを読み込む関数*/
-HRESULT LoadXFile(const char* cXFileName, int nCountModel)
+HRESULT LoadXFile(const char* cXFileName, Model *modelInfo)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();	// デバイス取得
 	HRESULT hres;
@@ -327,10 +376,10 @@ HRESULT LoadXFile(const char* cXFileName, int nCountModel)
 		D3DXMESH_SYSTEMMEM,								// 固定
 		pDevice,										// デバイス
 		NULL,											// NULL固定
-		&g_player.aModel[nCountModel].pBuffMatModel,		// マテリアル
+		&modelInfo->pBuffMatModel,						// マテリアル
 		NULL,											// NULL固定
-		&g_player.aModel[nCountModel].nNumMatModel,		// マテリアル数
-		&g_player.aModel[nCountModel].pMeshModel);		// メッシュ
+		&modelInfo->nNumMatModel,						// マテリアル数
+		&modelInfo->pMeshModel);						// メッシュ
 
 	return hres;
 }

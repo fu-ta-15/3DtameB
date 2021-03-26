@@ -38,7 +38,7 @@ HRESULT InitPortal(void)
 	g_portal.bDraw = false;
 
 	//テクスチャ読み込み
-	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//portal.png", &g_pTexturePortal);
+	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//circle.png", &g_pTexturePortal);
 
 	//頂点バッファ生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * VERTEX_AMOUNT,					//サイズ
@@ -150,6 +150,11 @@ void DrawPortal(void)
 		//デバイス取得
 		pDevice = GetDevice();
 
+		//減算合成の設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
 		//カリングの設定
 		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
@@ -184,6 +189,11 @@ void DrawPortal(void)
 
 		//カリングの設定を戻す
 		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+		//通常合成に戻す
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	}
 }
 
