@@ -8,7 +8,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------------------------
 # モデル数
 #------------------------------------------------------------------------------
-NUM_MODEL = 10
+NUM_MODEL = 11
 
 #------------------------------------------------------------------------------
 # モデルファイル名
@@ -23,6 +23,7 @@ MODEL_FILENAME = data/MODEL/robot/06_robot_legR.x			# [6]右腿
 MODEL_FILENAME = data/MODEL/robot/07_robot_footR.x			# [7]右足
 MODEL_FILENAME = data/MODEL/robot/08_robot_legL.x			# [8]左腿
 MODEL_FILENAME = data/MODEL/robot/09_robot_footL.x			# [9]左足
+MODEL_FILENAME = data/MODEL/weapon.x
 
 #------------------------------------------------------------------------------
 # キャラクター情報
@@ -102,6 +103,13 @@ CHARACTERSET
 		POS = 0.0 -10.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
+	
+	PARTSSET
+	INDEX = 10					# 武器
+	PARENT = 3					# (親)右手
+	POS = -2.0 0.0 0.0
+	ROT = 0.0 0.0 0.0
+	
 END_CHARACTERSET
 
 #------------------------------------------------------------------------------
@@ -165,6 +173,12 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
 		END_KEY
+		
+		KEY	# ----- [ 10 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.00 0.00 0.00
+		END_KEY
+				
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 2 >> ---
@@ -218,6 +232,12 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = -0.18 0.00 0.00
 		END_KEY
+		
+		KEY	# ----- [ 9 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.00 0.00 0.00
+		END_KEY
+		
 	END_KEYSET
 END_MOTIONSET
 

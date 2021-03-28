@@ -19,6 +19,10 @@
 void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy);
 void PlayerMotion(bool bPlayMotion);
 void EnemyMotion(bool bPlayMotion, int nIdx);
+void InitMotionPlayer000(void);
+void InitMotionAKR(void);
+void InitMotionRobot000(void);
+void InitMotionRobot001(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -29,278 +33,10 @@ void EnemyMotion(bool bPlayMotion, int nIdx);
 //-----------------------------------------------------------------------------
 void InitMotion(void)
 {
-	Player *pPlayer = GetPlayer();
-	Enemy *pEnemy = GetEnemy();
-
-	//モーションの設定
-	pPlayer->nNumMotion = 3;
-
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].nNumKey = 2;
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].bLoop = true;
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].nFrame = 65;
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].nFrame = 65;
-
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.75f, 1.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.75f, -1.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.09f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.09f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.22f, 0.79f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.22f, -0.79f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, -0.09f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.18f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.09f);
-	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].nNumKey = 4;
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].bLoop = false;
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].nFrame = 10;
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].nFrame = 10;
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].nFrame = 10;
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].nFrame = 30;
-
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -2.80f, 0.0f, 0.48f, 0.25f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.44f, -0.31f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.97f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.07f, -1.17f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.50f, 0.0f, -0.85f, -0.35f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.4f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.5f, -0.35f, 0.13f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.59f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(-0.00f, -5.40f, -3.20f, 0.41f, 0.35f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.66f, -0.31f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.45f, -0.82f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 1.07f, -1.16f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.19f, -0.41f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.41f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.5f, -0.41f, 0.13f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.60f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.00f, -6.10f, -26.60f, -0.41f, -0.44f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -1.23f, -0.41f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.62f, 0.06f, -1.16f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.38f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.41f, 0.72f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.28f, 0.31f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(0.00f, -6.40f, -27.00f, -0.44f, -0.44f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -1.23f, -0.41f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.13f, 0.47f, -1.16f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.38f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.41f, 0.72f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.28f, 0.31f);
-	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].nNumKey = 4;
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].bLoop = true;
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].nFrame = 9;
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].nFrame = 6;
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].nFrame = 9;
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].nFrame = 6;
-
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -1.6f, 0.0f, -0.19f, 0.00f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, 0.00f, 1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, -1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.0, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, -0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -4.2f, 0.0f, -0.35f, 0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.50f, -0.00f, 1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, -1.00f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.04f, -0.41f, -1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.41f, 0.16f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.82f, -0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.00f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.01f, -0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.00f, 0.00f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, -1.6f, 0.0f, -0.19f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, 0.00f, 1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, -0.00f, -1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -4.2f, 0.0f, -0.35f, -0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.41f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.07f, 0.41f, 1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.41f, 0.16f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.50f, 0.00f, -1.60f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.97f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.01f, 0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.85f, 0.0f, 0.0f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.82f, 0.41f, 0.00f);
-	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
-
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		if (pEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT)
-		{
-			//モーションの設定
-			pEnemy[nCntEnemy].nNumMotion = 3;
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].nNumKey = 2;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].bLoop = true;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].nFrame = 65;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].nFrame = 65;
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.75f, 1.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.75f, -1.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.09f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.09f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.22f, 0.79f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.22f, -0.79f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, -0.09f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.18f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.09f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].nNumKey = 4;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].bLoop = false;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].nFrame = 10;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].nFrame = 10;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].nFrame = 10;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].nFrame = 30;
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -2.80f, 0.0f, 0.48f, 0.25f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.44f, -0.31f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.97f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.07f, -1.17f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.50f, 0.0f, -0.85f, -0.35f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.4f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.5f, -0.35f, 0.13f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.59f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(-0.00f, -5.40f, -3.20f, 0.41f, 0.35f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.66f, -0.31f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.45f, -0.82f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 1.07f, -1.16f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.19f, -0.41f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.41f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.5f, -0.41f, 0.13f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.60f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.00f, -6.10f, -26.60f, -0.41f, -0.44f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -1.23f, -0.41f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.62f, 0.06f, -1.16f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.38f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.41f, 0.72f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.28f, 0.31f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(0.00f, -6.40f, -27.00f, -0.44f, -0.44f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -1.23f, -0.41f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.13f, 0.47f, -1.16f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.38f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.41f, 0.72f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.28f, 0.31f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].nNumKey = 4;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].bLoop = true;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].nFrame = 9;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].nFrame = 6;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].nFrame = 9;
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].nFrame = 6;
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -1.6f, 0.0f, -0.19f, 0.00f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, 0.00f, 1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, -1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.0, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, -0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -4.2f, 0.0f, -0.35f, 0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.50f, -0.00f, 1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, -1.00f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.04f, -0.41f, -1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.41f, 0.16f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.82f, -0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.00f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.01f, -0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.00f, 0.00f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, -1.6f, 0.0f, -0.19f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, 0.00f, 1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, -0.00f, -1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -4.2f, 0.0f, -0.35f, -0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.41f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.07f, 0.41f, 1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.41f, 0.16f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.50f, 0.00f, -1.60f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.97f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.01f, 0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.85f, 0.0f, 0.0f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.82f, 0.41f, 0.00f);
-			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
-		}
-	}
+	//InitMotionPlayer000();
+	InitMotionAKR();
+	InitMotionRobot000();
+	InitMotionRobot001();
 }
 
 //-----------------------------------------------------------------------------
@@ -417,7 +153,6 @@ void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy
 	default:
 		break;
 	}
-
 }
 
 
@@ -428,8 +163,8 @@ void PlayerMotion(bool bPlayMotion)
 
 	if (bPlayMotion == true)
 	{
-		D3DXVECTOR3 rot[10];
-		D3DXVECTOR3 pos[10];
+		D3DXVECTOR3 rot[11];
+		D3DXVECTOR3 pos[11];
 
 		//ループ
 		pPlayer->bLoopMotion = pPlayer->aMotionInfo[pPlayer->motionType].bLoop;
@@ -443,7 +178,7 @@ void PlayerMotion(bool bPlayMotion)
 		//モデル数分回す
 		for (int nCntModel = 0; nCntModel < pPlayer->nNumModel; nCntModel++)
 		{
-			KEY keyDiff[20];
+			KEY keyDiff[11];
 
 			//現在のキーと次のキーとの差分を計算
 			if (pPlayer->nKey >= pPlayer->aMotionInfo[pPlayer->motionType].nNumKey - 1 && pPlayer->bLoopMotion == true)
@@ -528,8 +263,8 @@ void EnemyMotion(bool bPlayMotion, int nIdx)
 
 	if (bPlayMotion == true)
 	{
-		D3DXVECTOR3 rot[10];
-		D3DXVECTOR3 pos[10];
+		D3DXVECTOR3 rot[20];
+		D3DXVECTOR3 pos[20];
 
 		if (pEnemy[nIdx].bUse == true)
 		{
@@ -540,7 +275,7 @@ void EnemyMotion(bool bPlayMotion, int nIdx)
 			pEnemy[nIdx].nCounterMotion++;
 
 			//プレイヤーの初期状態
-			KEY *pKeyDef = GetDefKey();
+			KEY *pKeyDef = pEnemy[nIdx].DefKey;
 
 			//モデル数分回す
 			for (int nCntModel = 0; nCntModel < pEnemy[nIdx].aModel[0].nNumModel; nCntModel++)
@@ -591,7 +326,6 @@ void EnemyMotion(bool bPlayMotion, int nIdx)
 				if (pEnemy[nIdx].aModel[nCntModel].rot.y < -D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.y += D3DX_PI * 2.0f;
 				if (pEnemy[nIdx].aModel[nCntModel].rot.z > D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.z -= D3DX_PI * 2.0f;
 				if (pEnemy[nIdx].aModel[nCntModel].rot.z < -D3DX_PI) pEnemy[nIdx].aModel[nCntModel].rot.z += D3DX_PI * 2.0f;
-
 			}
 
 			//現在キーの再生フレーム数に到達したら
@@ -705,7 +439,7 @@ void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, b
 // モーションをテキストで読み込み
 void MotionText(const char * cXFileName)
 {
-	MOTION_INFO MotionInfo;				// モーション情報保存用
+	//MOTION_INFO MotionInfo;				// モーション情報保存用
 
 	FILE * pFile = fopen(cXFileName, "r");	// ファイルへのポインタ
 
@@ -730,4 +464,686 @@ void MotionText(const char * cXFileName)
 	}
 
 	free(str);
+}
+
+// モーション読み込み プレイヤー(仮）
+void InitMotionPlayer000(void)
+{
+	Player *pPlayer = GetPlayer();
+
+	//モーションの設定
+	pPlayer->nNumMotion = 4;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].nNumKey = 2;
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].bLoop = true;
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].nFrame = 65;
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].nFrame = 65;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.75f, 1.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.75f, -1.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.22f, 0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.22f, -0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, -0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.18f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	//pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].nNumKey = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].bLoop = false;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].nFrame = 30;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -2.80f, 0.0f, 0.48f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.44f, -0.31f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.97f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.07f, -1.17f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.50f, 0.0f, -0.85f, -0.35f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.4f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.5f, -0.35f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.59f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(-0.00f, -5.40f, -3.20f, 0.41f, 0.35f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.66f, -0.31f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.45f, -0.82f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 1.07f, -1.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.72f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.19f, -0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.5f, -0.41f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.60f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.00f, -6.10f, -26.60f, -0.41f, -0.44f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -1.23f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.62f, 0.06f, -1.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.38f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.41f, 0.72f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.28f, 0.31f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(0.00f, -6.40f, -27.00f, -0.44f, -0.44f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -1.23f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.13f, 0.47f, -1.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.38f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.41f, 0.72f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.28f, 0.31f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].nNumKey = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].bLoop = true;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].nFrame = 9;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].nFrame = 6;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].nFrame = 9;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].nFrame = 6;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -1.6f, 0.0f, -0.19f, 0.00f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, 0.00f, 1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, -1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.0, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, -0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -4.2f, 0.0f, -0.35f, 0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.50f, -0.00f, 1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, -1.00f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.04f, -0.41f, -1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.41f, 0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.82f, -0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.00f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.01f, -0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.00f, 0.00f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, -1.6f, 0.0f, -0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.01f, 0.00f, 1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.01f, -0.00f, -1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -4.2f, 0.0f, -0.35f, -0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.07f, 0.41f, 1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.41f, 0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.50f, 0.00f, -1.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.97f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.01f, 0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.85f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.82f, 0.41f, 0.00f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].nNumKey = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].bLoop = false;
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].nFrame = 30;
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].nFrame = 30;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.25f, 0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.25f, -0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.18f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.18f, 0.0f, 0.0f);
+	//pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	//pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 1.48f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, -2.30f, 9.10f, 0.0f, 1.01f, 0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.91f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.35f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.51f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.57f, -1.07f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, -0.13f, 0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	//pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[2].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 1.48f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[0] = KeyPosRot(8.10f, -2.30f, -16.60f, 0.0f, -1.70f, 0.03f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.91f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.57f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.09f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.03f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.57f, -0.85f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, -0.13f, 0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	//pPlayer->aMotionInfo[MOTIONTYPE_SLASH].aKeyInfo[3].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 1.48f);
+
+}
+
+// test
+void InitMotionAKR(void)
+{
+	Player *pPlayer = GetPlayer();
+
+	//モーションの設定
+	pPlayer->nNumMotion = 3;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].nNumKey = 2;
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].bLoop = true;
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].nFrame = 50;
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].nFrame = 50;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.10f, 0, 0);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.28f, 0.69f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.25, 0);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.28f, -0.69f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 0.06f, -0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, -0.06f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[0].aKey[10] =KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, -0.09f, -0.19f);
+
+
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -1.00f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.25f, 0.95f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.25f, -0.95f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.53f , 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.12f, 0.06f, 0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.18f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.12f, -0.06f, 0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.18f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_NEUTRAL].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.00f, -0.25f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].nNumKey = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].bLoop = false;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].nFrame = 30;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.25f, 0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.25f, -0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.18f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.50f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.18f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -2.30f, 9.10f, 0.0f, 1.01f, 0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.91f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.35f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.51f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.57f, -1.07f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, -0.13f, 0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 1.48f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(8.10f, -2.30f, -16.60f, 0.0f, -1.70f, 0.03f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.91f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.57f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.09f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.03f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.57f, -0.85f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, -0.13f, 0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[2].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 1.48f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(8.10f, -2.30f, -16.60f, 0.0f, -1.70f, 0.03f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.91f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.57f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.09f, -0.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.03f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.57f, -0.85f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, -0.13f, 0.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_ATTACK].aKeyInfo[3].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 1.48f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].nNumKey = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].bLoop = true;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].nFrame = 8;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].nFrame = 8;
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].nFrame = 10;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 1.0f, 0.0f, -0.37f, -0.16f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.12f, -0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.51f, 0.00f, 1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.09f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.32f, 0.00f, -1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.09f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.97f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.51f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.45f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -2.30f, 0.0f, -0.53f, -0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, -0.16f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.42f, 0.00f, 1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.90f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.45f, 0.0f, -1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.81f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.75f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.16f, 0.09f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.45f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 1.00f, 0.0f, -0.37f, 0.14f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.14f, 0.00f, 1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.09f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.52f, 0.00f, -1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.09f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.51f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.05f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.07f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.92f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[2].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.50f, 0.00f, -0.97f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -2.30f, 0.0f, -0.53f, 0.23f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.16f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.27f, 0.00f, 1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.84f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.33f, 0.00f, -1.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.59f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.16f, -0.09f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.43f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.76f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_WALK].aKeyInfo[3].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.50f, 0.00f, -0.97f);
+}
+
+// モーション読み込み ロボット000
+void InitMotionRobot000(void)
+{
+	Enemy *pEnemy = GetEnemy();
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+	{
+		if (pEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT000)
+		{
+			//モーションの設定
+			pEnemy[nCntEnemy].nNumMotion = 3;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].nNumKey = 2;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].bLoop = true;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].nFrame = 50;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].nFrame = 50;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.00f, -0.64f, 0.00f, -0.08f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.00f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00, 0.00f, -0.33f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.33f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.08f, 0.00f, -0.11f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.08f, 0.00f, 0.10f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_NEUTRAL].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].nNumKey = 7;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].bLoop = false;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].nFrame = 8;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].nFrame = 7;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].nFrame = 6;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].nFrame = 4;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].nFrame = 40;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, 0.00f, 0.06f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.00f, -0.13f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.00f, 0.13f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.00f, -0.06f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.00f, 0.00f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -1.20f, 0.0f, -0.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.01f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.91f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, -4.10f, 0.0f, -0.82f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.50f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.82f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, 0.0f, -20.00f, -1.35f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[0] = KeyPosRot(0.0f, -11.20f, -26.70f, -1.57f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.53f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.57f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[4].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[0] = KeyPosRot(0.0f, -4.40f, -26.40f, -0.75f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.82f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.82f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.75f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[5].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[0] = KeyPosRot(0.0f, 0.0f, -26.00f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_ATTACK].aKeyInfo[6].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].nNumKey = 4;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].bLoop = true;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].nFrame = 20;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].nFrame = 20;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].nFrame = 20;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].nFrame = 20;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.f, 0.0f, 0.13f, 0.00f, -0.19f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.00f, -0.16f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 0.00f, 0.19f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.28f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.22f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.00f, 0.19f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 0.00f, -0.22f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.00f, -0.30f, 0.00f, 0, 0.47f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.03f, -0.19f, -0.06f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT000_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0, -0.25f, 0.0f);
+		}
+	}
+}
+
+// モーション読み込み ロボット001
+void InitMotionRobot001(void)
+{
+	Enemy *pEnemy = GetEnemy();
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+	{
+		if (pEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT001)
+		{
+			//モーションの設定
+			pEnemy[nCntEnemy].nNumMotion = 3;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].nNumKey = 4;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].bLoop = true;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].nFrame = 50;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].nFrame = 30;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].nFrame = 30;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].nFrame = 50;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -8.00f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.57f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.70f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.70f, 0.00f, 0.00f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.63f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, -0.63f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -8.00f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.00f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.57f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.70f, 0.00f, 0.00f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_NEUTRAL].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.70f, 0.00f, 0.00f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].nNumKey = 5;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].bLoop = false;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].nFrame = 20;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].nFrame = 20;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -1.10f, 4.10f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -1.10f, 7.10f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.09f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.09f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -1.10f, 10.00f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.28f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.19f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.25f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_ATTACK].aKeyInfo[4].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].nNumKey = 4;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].bLoop = true;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].nFrame = 10;
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].nFrame = 10;
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 1.60f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.47f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, -2.40f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 1.40f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.57f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, 0.0f, 0.0f);
+
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, 0.0f, -1.90f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.13f, 0.0f, 0.0f);
+			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+		}
+	}
 }
