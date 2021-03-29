@@ -78,6 +78,7 @@ typedef struct
 	Model aModel[PLAYER_MODEL_AMOUNT];		// モデル(パーツ)
 	Model AltWeapon;						// 武器（パーツ）
 	int nNumModel;							// モデル(パーツ)数
+	D3DXMATERIAL *pMatDef[PLAYER_MODEL_AMOUNT];
 
 	bool bPlayMotion;						// モーション再生状態
 	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)

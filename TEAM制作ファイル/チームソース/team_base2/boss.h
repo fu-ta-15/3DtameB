@@ -20,6 +20,8 @@
 #define BOSS_COL_HEIGHT (50)	// ボスの高さ (判定用)
 #define BOSS_COL_WIDTH (35)		// 幅
 
+#define BOSS_ATTACK_MINTIME (120)
+#define BOSS_ATTACK_MAXTIME (360)
 //-----------------------------------------------------------------------------
 // 敵の構造体
 //-----------------------------------------------------------------------------
@@ -50,12 +52,13 @@ typedef struct
 
 	int nLifeMax;								// 最大体力
 	int nLife;									// 体力
+	int nAttackFrame;
+	int nAttackRand;
 	bool bUse;									// 使用中か
 	bool bHit;									// 攻撃判定中か
 	bool bInvincible;							// 無敵状態
 	bool bAttack;								// 攻撃した
 	DWORD dwTimeInv;							// 無敵時間計算用
-	DWORD dwTimeAtk;							// 攻撃時間計算用
 } Boss;
 
 //-----------------------------------------------------------------------------

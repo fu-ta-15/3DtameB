@@ -34,6 +34,8 @@ int g_nCntFrame;
 //=============================================================================
 HRESULT InitGame(void)
 {
+	g_stage.nStageNum = 0;
+
 	//モデルの初期化処理
 	InitPlayer();
 
@@ -95,46 +97,46 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	UninitMotion();
 
-	//敵の終了処理
-	UninitEnemy();
+	//コリジョン終了処理	
+	UninitCollision();
 
 	//スカイボックスの終了処理
 	UninitSky();
 
+	//壁(メッシュ)の終了処理
+	UninitMeshwall();
+
 	//メッシュフィールドの終了処理
 	UninitMeshfield();
 
+	//オブジェクトの終了処理
+	UninitObject();
+
 	UninitBossATK();
+
 	UninitBoss();
+
+	//敵の終了処理
+	UninitEnemy();
 
 	UninitBullet();
 
 	UninitEffect();
 
-	//オブジェクトの終了処理
-	UninitObject();
-
-	//壁(メッシュ)の終了処理
-	UninitMeshwall();
-
 	//コマンドアクション終了処理
 	UninitCommand();
 
-	//モデルの終了処理
-	UninitPlayer();
-
-	//カメラの終了処理
-	UninitCamera();
+	UninitPortal();
 
 	//ライトの終了処理
 	UninitLight();
 
-	//コリジョン終了処理	
-	UninitCollision();
+	//カメラの終了処理
+	UninitCamera();
 
-	//ポータルの終了処理
-	UninitPortal();
+	UninitPlayer();
 }
 
 //=============================================================================
