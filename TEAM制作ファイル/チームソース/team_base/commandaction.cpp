@@ -453,7 +453,7 @@ HRESULT InitActionCircle(void)
 	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertex[nCntVtx].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 	//頂点カラーの設定
-	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertex[nCntVtx].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+	for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertex[nCntVtx].col = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f);
 
 	//テクスチャ座標の設定
 	pVertex[0].tex = D3DXVECTOR2(0.0f, 1.0f);

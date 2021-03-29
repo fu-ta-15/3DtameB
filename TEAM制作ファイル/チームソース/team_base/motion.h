@@ -38,6 +38,11 @@ typedef enum
 	MOTIONTYPE_BOSS_WALK,
 	MOTIONTYPE_BOSS_ATTACK,
 
+	MOTIONTYPE_CYBORG_NEUTRAL,
+	MOTIONTYPE_CYBORG_WALK,
+	MOTIONTYPE_CYBORG_KATANA_ATTACK,
+	MOTIONTYPE_CYBORG_NAGINATA_ATTACK,
+
 	MOTIONTYPE_MAX
 } MOTIONTYPE;
 
@@ -72,7 +77,7 @@ typedef struct
 typedef struct
 {
 	int nFrame;			// 再生フレーム
-	KEY aKey[15];		// キー (パーツ最大数分)
+	KEY aKey[20];		// キー (パーツ最大数分)
 } KEY_INFO;
 
 //-----------------------------------------------------------------------------
@@ -82,7 +87,7 @@ typedef struct
 {
 	bool bLoop;					// ループの有無
 	int nNumKey;				// キーの総数
-	KEY_INFO aKeyInfo[15];		// キー情報	(キーの最大数)
+	KEY_INFO aKeyInfo[20];		// キー情報	(キーの最大数)
 } MOTION_INFO;
 
 //-----------------------------------------------------------------------------
@@ -95,6 +100,7 @@ void DrawMotion(void);
 KEY KeyPosRot(float posX, float posY, float posZ, float rotX, float rotY, float rotZ);
 void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy);
 void MotionText(const char* cXFileName);
-
+void InitMotionRobot000(void);
+void InitMotionRobot001(void);
 
 #endif

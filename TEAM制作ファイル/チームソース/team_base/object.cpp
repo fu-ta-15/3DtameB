@@ -5,6 +5,7 @@
 //
 //-----------------------------------------------------------------------------
 #include "object.h"
+#include "collision.h"
 #include <stdio.h>
 
 
@@ -52,7 +53,7 @@ typedef struct
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
 void LoadXFileObj(const char* cXFileName, int nCountModel);
-
+void GetMinMaxVtx(int nIdx);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -68,7 +69,7 @@ pObjectInfo  * g_pObjInfo;
 //-----------------------------------------------------------------------------
 // 初期化処理
 //-----------------------------------------------------------------------------
-void InitObject(void)
+void InitObject(int nStageNum)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();		// デバイスの取得
 
@@ -89,9 +90,9 @@ void InitObject(void)
 	//g_pObj->Type = OBJECT_TYPE_NULL;
 	//g_pObj->nIdx = NULL;
 
-
+	
 	// 外部ファイルからの設定
-	SetTextObject();
+	SetTextObject(nStageNum);
 }
 
 
@@ -126,6 +127,13 @@ void UninitObject(void)
 //-----------------------------------------------------------------------------
 void UpdateObject(void)
 {
+	for (int nCntObj = 0; nCntObj < MAX_OBJ; nCntObj++)
+	{
+		if (g_Obj[nCntObj].bUse)
+		{
+			ColPlayerBoxThing(g_Obj[nCntObj].pos, g_Obj[nCntObj].vtxMax.x, g_Obj[nCntObj].vtxMax.z);
+		}
+	}
 }
 
 
@@ -216,6 +224,9 @@ void SetObject(D3DXVECTOR3 pos, D3DXVECTOR3 rot, OBJECT_TYPE type)
 			//Xファイルの読み込み
 			LoadXFileObj(&g_ObjInfo.cObjectFileName[type][0], g_Obj[nCntObj].nIdx);
 
+			//頂点の最大最小値を探す
+			GetMinMaxVtx(nCntObj);
+
 			//使用中に移行
 			g_Obj[nCntObj].bUse = true;
 			break;
@@ -228,10 +239,15 @@ void SetObject(D3DXVECTOR3 pos, D3DXVECTOR3 rot, OBJECT_TYPE type)
 //-----------------------------------------------------------------------------
 // テキストでのオブジェクト配置
 //-----------------------------------------------------------------------------
-void SetTextObject(void)
+void SetTextObject(int nStageNum)
 {
+	char *aStr[128];
+	
+	if (nStageNum == 0) aStr[0] = "data\\TXT\\obj_wave1.txt";
+	else if (nStageNum == 1) aStr[0] = "data\\TXT\\obj_wave2.txt";
+
 	// 外部ファイルへのポインタ
-	FILE *pFile = fopen("data\\TXT\\obj.txt", "r");	// ファイルオープン
+	FILE *pFile = fopen(aStr[0], "r");	// ファイルオープン
 
 	char *str;				// 文字列読み込み用
 	int FileSize;			// ファイルのサイズ保存用
@@ -335,4 +351,38 @@ void LoadXFileObj(const char * cXFileName, int nCountModel)
 		{
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntMat].pTextureFilename, &g_Obj[nCountModel].pTexture[nCntMat]);
 		}
+}
+
+void GetMinMaxVtx(int nIdx)
+{
+	int nNumVtx;	// 頂点数
+	DWORD sizeFVF;	// 頂点フォーマットのサイズ
+	BYTE *pVtxBuff;	// 頂点バッファへのポインタ
+
+	//頂点数を取得
+	nNumVtx = g_Obj[nIdx].pMesh->GetNumVertices();
+
+	//頂点フォーマットのサイズを取得
+	sizeFVF = D3DXGetFVFVertexSize(g_Obj[nIdx].pMesh->GetFVF());
+
+	//頂点バッファをロック
+	g_Obj[nIdx].pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
+
+	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+	{
+		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;	//頂点座標代入
+
+		//最大値最小値を抜き出す
+		if (vtx.x < g_Obj[nIdx].vtxMin.x) g_Obj[nIdx].vtxMin.x = vtx.x;	// X最小値
+		if (vtx.y > g_Obj[nIdx].vtxMax.y) g_Obj[nIdx].vtxMax.y = vtx.y;	// Y最大値
+		if (vtx.y < g_Obj[nIdx].vtxMin.y) g_Obj[nIdx].vtxMin.y = vtx.y;	// Y最小値
+		if (vtx.z > g_Obj[nIdx].vtxMax.z) g_Obj[nIdx].vtxMax.z = vtx.z;	// Z最大値
+		if (vtx.z < g_Obj[nIdx].vtxMin.z) g_Obj[nIdx].vtxMin.z = vtx.z;	// Z最小値
+		if (vtx.x > g_Obj[nIdx].vtxMax.x) g_Obj[nIdx].vtxMax.x = vtx.x;	// X最大値
+
+		pVtxBuff += sizeFVF;		// 頂点フォーマットのサイズ分だけポインタを進める
+	}
+
+	//頂点バッファをアンロック
+	g_Obj[nIdx].pMesh->UnlockVertexBuffer();
 }

@@ -11,6 +11,7 @@
 #include "fade.h"
 #include "portal.h"
 #include "meshfield.h"
+#include "collision.h"
 
 #include <stdio.h>
 
@@ -128,7 +129,10 @@ void UninitBoss(void)
 //-----------------------------------------------------------------------------
 void UpdateBoss(void)
 {
-	StartMotion(SELECTMOTION_BOSS, MOTIONTYPE_BOSS_NEUTRAL, NULL);
+	StartMotion(SELECTMOTION_BOSS, MOTIONTYPE_BOSS_NEUTRAL, NULL);	// とりあえずニュートラルさせとく
+
+	//ボスとプレイヤーの移動当たり判定
+	ColPlayerBoxThing(g_Boss.pos, g_Boss.fWidth, g_Boss.fDepth);
 }
 
 //-----------------------------------------------------------------------------
@@ -268,9 +272,9 @@ void SetBoss(D3DXVECTOR3 pos, ENEMYTYPE type)
 				g_Boss.DefKey[nCnt] = KeyPosRot(g_modelBoss[nCnt].pos.x, g_modelBoss[nCnt].pos.y, g_modelBoss[nCnt].pos.z, 0, 0, 0);
 				g_Boss.aModel[nCnt].nNumModel = g_modelBoss[nCnt].nNumModel;
 			}
-			g_Boss.fWidth = ENEMY_ROBOT_COL_WIDTH;
-			g_Boss.fDepth = ENEMY_ROBOT_COL_WIDTH;
-			g_Boss.fHeight = ENEMY_ROBOT_COL_HEIGHT;
+			g_Boss.fWidth = BOSS_COL_WIDTH;
+			g_Boss.fDepth = BOSS_COL_WIDTH;
+			g_Boss.fHeight = BOSS_COL_HEIGHT;
 			//初期キー
 
 			break;

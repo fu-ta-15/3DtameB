@@ -19,6 +19,7 @@
 #include "object.h"
 #include "commandaction.h"
 #include "boss.h"
+#include "boss_attack.h"
 
 //=============================================================================
 // グローバル変数
@@ -52,9 +53,10 @@ HRESULT InitGame(void)
 	InitEnemy();
 
 	InitBoss();
+	InitBossATK();
 
 	//オブジェクトの初期化処理
-	InitObject();
+	InitObject(g_stage.nStageNum);
 
 	//メッシュフィールドの初期化処理
 	InitMeshfield(g_stage.nStageNum);
@@ -63,7 +65,7 @@ HRESULT InitGame(void)
 	InitMeshwall();
 
 	//壁の配置
-	SetWall();
+	if (g_stage.nStageNum == 1) SetWall();
 	
 	//スカイボックスの処理
 	InitSky();
@@ -84,16 +86,20 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+
+	//敵の終了処理
+	UninitEnemy();
+
 	//スカイボックスの終了処理
 	UninitSky();
 
 	//メッシュフィールドの終了処理
 	UninitMeshfield();
 
+	UninitBossATK();
 	UninitBoss();
 
-	//敵の終了処理
-	UninitEnemy();
+
 
 	//オブジェクトの終了処理
 	UninitObject();
@@ -151,6 +157,7 @@ void UpdateGame(void)
 			UpdateEnemy();
 
 			UpdateBoss();
+			UpdateBossATK();
 
 			//オブジェクトの更新処理
 			UpdateObject();
@@ -194,6 +201,7 @@ void UpdateGame(void)
 		UpdateEnemy();
 
 		UpdateBoss();
+		UpdateBossATK();
 
 		//オブジェクトの更新処理
 		UpdateObject();
@@ -244,6 +252,7 @@ void DrawGame(void)
 		DrawEnemy();
 
 		DrawBoss();
+		DrawBossATK();
 
 		//オブジェクトの描画処理
 		DrawObject();

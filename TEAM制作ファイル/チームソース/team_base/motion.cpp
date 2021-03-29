@@ -23,9 +23,8 @@ void EnemyMotion(bool bPlayMotion, int nIdx);
 void BossMotion(bool bPlayMotion);
 void InitMotionPlayer000(void);
 void InitMotionAKR(void);
-void InitMotionRobot000(void);
-void InitMotionRobot001(void);
 void InitMotionBoss(void);
+void InitMotionCyborg(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -37,10 +36,12 @@ void InitMotionBoss(void);
 void InitMotion(void)
 {
 	//InitMotionPlayer000();
-	InitMotionAKR();
+	//InitMotionAKR();
+	InitMotionCyborg();
 	InitMotionRobot000();
 	InitMotionRobot001();
 	InitMotionBoss();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -195,8 +196,8 @@ void PlayerMotion(bool bPlayMotion)
 
 	if (bPlayMotion == true)
 	{
-		D3DXVECTOR3 rot[11];
-		D3DXVECTOR3 pos[11];
+		D3DXVECTOR3 rot[20];
+		D3DXVECTOR3 pos[20];
 
 		//ループ
 		pPlayer->bLoopMotion = pPlayer->aMotionInfo[pPlayer->motionType].bLoop;
@@ -210,7 +211,7 @@ void PlayerMotion(bool bPlayMotion)
 		//モデル数分回す
 		for (int nCntModel = 0; nCntModel < pPlayer->nNumModel; nCntModel++)
 		{
-			KEY keyDiff[11];
+			KEY keyDiff[20];
 
 			//現在のキーと次のキーとの差分を計算
 			if (pPlayer->nKey >= pPlayer->aMotionInfo[pPlayer->motionType].nNumKey - 1 && pPlayer->bLoopMotion == true)
@@ -1437,4 +1438,469 @@ void InitMotionBoss(void)
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.06f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+}
+
+// モーション読み込み サイボーグ忍者
+void InitMotionCyborg(void)
+{
+	Player *pPlayer = GetPlayer();
+
+	//モーションの設定
+	pPlayer->nNumMotion = 4;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].nNumKey = 2;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].bLoop = true;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].nFrame = 50;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].nFrame = 50;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -0.50f, 0.0f, 0.03f, 0.66f, 0.03f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, -0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.47f, 1.35f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, -0.22f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.00f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.00f, 0.19f, -0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, -0.60f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -1.10f, -0.80f, -0.03f, 0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.03f, -0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, -0.16f, 1.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, -0.22f, -0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.03f, 0.00f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.16f, -0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, -0.60f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NEUTRAL].aKeyInfo[1].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].nNumKey = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].bLoop = true;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].nFrame = 5;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].nFrame = 5;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].nFrame = 5;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].nFrame = 5;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, -21.00f, 0.0f, -0.91f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, 0.0f, 1.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.63f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.13f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, -0.03f, -1.29f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.51f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.63f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.88f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.58f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.63f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[0].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.38f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, -22.40f, 0.0f, -0.91f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, 0.00f, 1.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.60f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.16f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, -0.03f, -1.29f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.51f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.32f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.50f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.42f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.28f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.48f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.35f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.45f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.10f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[1].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.35f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, -21.00f, 0.0f, -0.91f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.00f, 1.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.63f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.13f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.53f, -0.03f, -1.29f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.51f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.57f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.86f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.63f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.01f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[2].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.28f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -22.40f, 0.0f, -0.91f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.00f, 1.41f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.60f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.16f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, -0.03f, -1.29f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.51f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.38f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.54f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.16f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.23f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.35f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.45f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.10f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_WALK].aKeyInfo[3].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.31f, 0.0f);
+
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].nNumKey = 8;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].bLoop = false;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].nFrame = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].nFrame = 6;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].nFrame = 2;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].nFrame = 15;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].nFrame = 4;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].nFrame = 6;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].nFrame = 8;
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(-32.80f, -25.50f, -29.30f, -0.57f, 0.66f, 0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, -0.66f, -0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.00f, -0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, 1.10f, 1.07f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.41f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.60f, -0.60f, -1.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.95f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, -0.16f, 0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.53f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.69f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[0].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(-32.80f, -25.50f, -29.30f, -0.57f, 0.19f, -0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, -0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.94f, 0.25f, 1.63f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.67f, -0.41f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.60f, -0.60f, -1.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.79f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.95f, 0.66f, 0.72f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.19f, 0.63f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, -0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.75f, 0.00f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[1].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(-32.80f, -25.50f, -29.30f, -0.57f, -0.69f, -0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.22f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.94f, -0.72f, 1.63f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.67f, -0.41f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.09f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.82f, -0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.67f, 0.31f, -0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.47f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.12f, 0.69f, 1.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, -0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.75f, 0.00f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[2].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, -0.38f, -1.85f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(-32.80f, -25.50f, -29.30f, -0.57f, -0.06f, -0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, -0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.94f, -0.53f, 1.63f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.23f, -0.41f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.45f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.53f, -0.66f, -1.70f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.75f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.95f, 0.79f, 0.72f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.31f, 0.81f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, -0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.75f, 0.00f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[3].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.95f, 1.19f, 0.47f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[0] = KeyPosRot(-32.80f, -10.60f, -24.10f, -0.41f, -0.06f, -0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, -0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -1.92f, -0.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.63f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.92f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.53f, -0.66f, -1.70f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.75f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.10f, 0.22f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, 0.85f, 0.81f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.44f, -0.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.75f, 0.00f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[4].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 1.57f, 0.28f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[0] = KeyPosRot(-32.80f, -2.10f, -40.10f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, -0.22f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.69f, -2.45f, -0.44f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.82f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.54f, 2.26f, 0.66f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.85f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.28f, 0.00f, -0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.25f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.00f, 0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.35f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[5].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.47f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[0] = KeyPosRot(-29.40f, -14.20f, -12.60f, -0.38f, 0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, -0.50f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.53f, 0.00f, 1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.63f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, -0.38f, -1.45f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.29f, -1.29f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.47f, 0.28f, 0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.00f, 0.09f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.26f, 0.60f, 0.60f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.38f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.94f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[6].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 1.04f, 0.0f);
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[0] = KeyPosRot(0.0f, -0.50f, 0.0f, -0.16f, 0.66f, 0.03f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, -0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.47f, 0.47f, 1.63f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.57f, -0.22f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.00f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.19f, -0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.15f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.31f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.97f, -0.25f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.10f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_KATANA_ATTACK].aKeyInfo[7].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].nNumKey = 8;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].bLoop = false;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].nFrame = 6;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].nFrame = 15;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].nFrame = 7;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].nFrame = 7;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].nFrame = 7;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].nFrame = 10;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].nFrame = 20;
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].nFrame = 20;
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(-33.00f, -20.00f, -21.40f, -0.66f, -0.50f, 0.31f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.83f, -1.10f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, 0.00f, 0.66f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, -0.28f, 0.44f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 1.89f, 0.44f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.34f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.36f, 0.13f, -0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.63f, 0.00f, -0.35f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.82f, -0.28f, 0.10f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.10f, 0.09f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.69f, 0.00f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.79f, 0.19f, -0.47f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[0].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, 0.72f, 0.03f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(-33.00f, -23.60f, -21.40f, -0.88f, -0.50f, 0.47f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.83f, -1.10f, -0.28f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, 0.00f, 0.66f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, -0.28f, 0.44f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 1.89f, 0.44f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.35f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.36f, 0.13f, -0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.03f, 0.00f, -0.35f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.82f, -0.47f, -0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.00f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[1].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, 0.72f, 0.03f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(-33.00f, -23.60f, -21.40f, -0.88f, -0.50f, 0.47f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -2.83f, -1.10f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, 0.00f, 0.66f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 1.70f, 0.50f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.53f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.36f, 0.13f, -0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.03f, 0.00f, -0.35f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.82f, -0.47f, -0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.13f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.00f, 0.25f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.01f, 0.19f, -0.47f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[2].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, 0.72f, -0.13f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(-33.00f, -21.70f, -21.40f, -0.63f, -1.32f, 0.47f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.92f, -1.60f, 0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 0.00f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.88f, - 0.06f, - 0.98f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.79f, 1.41f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.35f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.13f, -1.51f, -2.23f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.50f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.79f, -0.38f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.45f, -0.53f, -0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.35f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.50f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.41f, -0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[3].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 0.44f, 0.0f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[0] = KeyPosRot(-12.30f, -14.40f, -21.40f, -0.38f, -1.92f, 0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, -0.44f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.44f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.98f, -1.98f, -0.22f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 0.00f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.09f, -1.13f, -1.01f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 1.95f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.13f, 0.22f, -0.53f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.22f, -0.79f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.47f, -0.19f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, -0.25f, 0.53f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.20f, -0.53f, -0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.35f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.50f, -0.38f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.44f, -0.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[4].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.16f, 0.57f, 0.0f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[0] = KeyPosRot(11.80f, -6.30f, 0.0f, -0.19f, 2.32f, 0.12f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.44f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, -3.11f, -1.98f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 0.00f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.25f, -1.38f, -0.44f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 1.95f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, 1.26f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, -0.31f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.79f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[5].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, 0.69f, 0.0f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[0] = KeyPosRot(4.40f, -3.80f, 10.70f, 0.0f, 0.63f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.44f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.28f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 2.36f, -1.98f, -0.57f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 0.00f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, -0.75f, -1.19f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.88f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, 1.26f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.28f, -0.31f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.66f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.41f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.79f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[6].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.07f, 0.25f, 0.0f);
+	
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[0] = KeyPosRot(0.0f, -0.50f, 0.0f, 0.03f, 0.66f, 0.03f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, - 0.66f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.69f, -0.50f, 1.32f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.03f, 0.00f, 0.13f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.00f, -1.38f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.72f, 0.25f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[8] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[9] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.19f, -0.16f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[10] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[11] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[12] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.19f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[13] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, -0.60f, 0.06f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[14] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[15] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.09f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[16] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.06f, 0.0f, 0.0f);
+	pPlayer->aMotionInfo[MOTIONTYPE_CYBORG_NAGINATA_ATTACK].aKeyInfo[7].aKey[17] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.06f, 0.25f, 0.0f);
+
 }

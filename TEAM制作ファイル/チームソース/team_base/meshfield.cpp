@@ -15,7 +15,7 @@
 // グローバル変数
 //=============================================================================
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffMeshfield = NULL;	//頂点バッファへのポインタ
-LPDIRECT3DINDEXBUFFER9 g_pIdxBuffMeshfield = NULL;	//インデックスバッファへのポインタ
+LPDIRECT3DINDEXBUFFER9 g_pIdxBuffMeshfield = NULL;	//インデックスバッファへのポインタx
 LPDIRECT3DTEXTURE9	g_pTextureMeshfield = NULL;		//テクスチャへのポインタ
 D3DXVECTOR3 g_posMeshfield;							//位置
 D3DXVECTOR3 g_rotMeshfield;							//向き
@@ -37,7 +37,7 @@ HRESULT InitMeshfield(int nStageNum)
 	switch (nStageNum)
 	{
 	case 0:
-		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block_stage1.jpg", &g_pTextureMeshfield);
+		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/_1203-2093.jpg", &g_pTextureMeshfield);
 		break;
 
 	case 1:

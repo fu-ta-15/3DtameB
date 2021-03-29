@@ -12,7 +12,7 @@
 // マクロ定義
 //=============================================================================
 #define MOVE_CAMERA (4.0f)				// 移動量
-#define CAMERA_DISTANCE (600.0f)		// 距離
+#define CAMERA_DISTANCE (350.0f)		// 距離
 #define CAMERA_MOUSE_SENSITIVITY (550)	// マウスの感度
 #define CAMERA_ROT_LIMIT_UPPER
 #define CAMERA_ROT_LIMIT_LOWER
