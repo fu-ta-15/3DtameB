@@ -14,25 +14,25 @@ NUM_MODEL = 19
 #------------------------------------------------------------------------------
 # ÉÇÉfÉãÉtÉ@ÉCÉãñº
 #------------------------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/body_01.x		# [0]ëÃ
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/neck_01.x		# [1]éÒ
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/head.x			# [2]ì™
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/armR_T_01.x		# [3]âEòr(ïIè„)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/elbowR_01.x		# [4]âEïI
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/armR_U_01.x		# [5]âEòr(ïIâ∫)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/armL_T_01.x		# [6]ç∂òr(ïIè„)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/elbowL_01.x		# [7]ç∂ïI
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/armL_U_01.x		# [8]ç∂òr(ïIâ∫)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/legR_T_01.x		# [9]âEë⁄(ïGè„)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/kneeR_01.x		# [10]âEïG
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/legR_U_01.x		# [11]âEë⁄(ïGâ∫)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/footR.x			# [12]âEë´
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/legL_T_01.x		# [13]ç∂ë⁄(ïGè„)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/kneeR_01.x		# [14]ç∂ïG
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/legL_U_01.x		# [15]ç∂ë⁄(ïGâ∫)
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/footL.x			# [16]ç∂ë´
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/katana001.x					# [17]ìÅ
-MODEL_FILENAME = data/MODEL/team_player_model/ver.1.0/long_item.x					# [18]ì„ìÅ
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/body_01.x		# [0]ëÃ
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/neck_01.x		# [1]éÒ
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/head.x			# [2]ì™
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/armR_T_01.x		# [3]âEòr(ïIè„)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/elbowR_01.x		# [4]âEïI
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/armR_U_01.x		# [5]âEòr(ïIâ∫)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/armL_T_01.x		# [6]ç∂òr(ïIè„)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/elbowL_01.x		# [7]ç∂ïI
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/armL_U_01.x		# [8]ç∂òr(ïIâ∫)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/legR_T_01.x		# [9]âEë⁄(ïGè„)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/kneeR_01.x		# [10]âEïG
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/legR_U_01.x		# [11]âEë⁄(ïGâ∫)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/footR.x			# [12]âEë´
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/legL_T_01.x		# [13]ç∂ë⁄(ïGè„)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/kneeR_01.x		# [14]ç∂ïG
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/legL_U_01.x		# [15]ç∂ë⁄(ïGâ∫)
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/footL.x			# [16]ç∂ë´
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/katana001.x					# [17]ìÅ
+MODEL_FILENAME = data/MODEL/team_player_model/ver.1.1/long_item.x					# [18]ì„ìÅ
 
 #------------------------------------------------------------------------------
 # ÉLÉÉÉâÉNÉ^Å[èÓïÒ
@@ -47,14 +47,14 @@ CHARACTERSET
 	PARTSSET						# [0]ëÃ
 		INDEX = 0
 		PARENT = -1					# (êe)NULL
-		POS = 0.0 65.5 0.0
+		POS = 0.0 50.5 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [1]éÒ
 		INDEX = 1
 		PARENT = 0					# (êe)ëÃ
-		POS = 0.0 38.2 0.0
+		POS = 0.0 28.2 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
@@ -68,112 +68,112 @@ CHARACTERSET
 	PARTSSET						# [3]âEòr(ïIè„)
 		INDEX = 3
 		PARENT = 0					# (êe)ëÃ
-		POS = -10.0 33.5 1.0
+		POS = -8.0 28.5 1.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [4]âEïI
 		INDEX = 4
 		PARENT = 3					# (êe)âEòr(ïIè„)
-		POS = -22.0 0.0 0.0
+		POS = -17.0 0.0 0.2
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [5]âEòr(ïIâ∫)
 		INDEX = 5
 		PARENT = 4					# (êe)âEïI
-		POS = 0.0 0.0 0.0
+		POS = 0.0 0.0 -0.2
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [6]ç∂òr(ïIè„)
 		INDEX = 6
 		PARENT = 0					# (êe)ëÃ
-		POS = 10.0 33.5 1.0
+		POS = 8.0 28.5 1.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [7]ç∂ïI
 		INDEX = 7
 		PARENT = 6					# (êe)ç∂òr(ïIè„)
-		POS = 22.0 0.0 0.0
+		POS = 17.0 0.0 0.2
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [8]ç∂òr(ïIâ∫)
 		INDEX = 8
 		PARENT = 7					# (êe)ç∂ïI
-		POS = 0.0 0.0 0.0
+		POS = 0.0 0.0 -0.2
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [9]âEë⁄(ïGè„)
 		INDEX = 9
 		PARENT = 0					# (êe)ëÃ
-		POS = -6.0 0.0 1.0
+		POS = -4.0 0.0 1.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [10]âEïG
 		INDEX = 10
 		PARENT = 9					# (êe)âEë⁄(ïGè„)
-		POS = -0.5 -26.0 0.0
+		POS = -0.5 -20.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 
 	PARTSSET						# [11]âEë⁄(ïGâ∫)
 		INDEX = 11
 		PARENT = 10					# (êe)âEïG
-		POS = 0.0 -3.5 -0.5
+		POS = 0.0 -2.5 -0.5
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [12]âEë´
 		INDEX = 12
 		PARENT = 11					# (êe)âEë⁄(ïGâ∫)
-		POS = 0.0 -28.0 0.0
+		POS = 0.0 -22.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [13]ç∂ë⁄(ïGè„)
 		INDEX = 13
 		PARENT = 0					# (êe)ëÃ
-		POS = 6.0 0.0 1.0
+		POS = 4.0 0.0 1.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [14]ç∂ïG
 		INDEX = 14
 		PARENT = 13					# (êe)ç∂ë⁄(ïGè„)
-		POS = 0.5 -26.0.0 0.0
+		POS = 0.5 -20.0.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [15]ç∂ë⁄(ïGâ∫)
 		INDEX = 15
 		PARENT = 14					# (êe)ç∂ïG
-		POS = 0.0 -3.5 -0.5
+		POS = 0.0 -2.5 -0.5
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [16]ç∂ë´
 		INDEX = 16
 		PARENT = 15					# (êe)ç∂ë⁄(ïGâ∫)
-		POS = 0.0 -28.0 0.0
+		POS = 0.0 -22.0 0.0
 		ROT = 0.0 0.0 0.0
 	END_PARTSSET
 	
 	PARTSSET						# [17]ìÅ
 		INDEX = 17
 		PARENT = 5					# (êe)âEòr(ïIâ∫)
-		POS = -20.0 -0.5 0.0
+		POS = -15.0 -0.5 0.0
 		ROT = 1.5 1.5 -1.6
 	END_PARTSSET
 	
 	PARTSSET						# [18]ìÅ
 		INDEX = 18
 		PARENT = 5					# (êe)âEòr(ïIâ∫)
-		POS = -20.0 -0.5 0.0
+		POS = -1.0 -0.5 0.0
 		ROT = 0.0 1.5 -1.6
 	END_PARTSSET
 END_CHARACTERSET
@@ -392,11 +392,11 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 1		# ÉãÅ[ÉvÇ∑ÇÈÇ©Ç«Ç§Ç©[0:ÉãÅ[ÉvÇµÇ»Ç¢ / 1:ÉãÅ[ÉvÇ∑ÇÈ]
 	NUM_KEY = 4		# ÉLÅ[êî
-
+	
 	KEYSET			# --- << KEY : 0 / 4 >> ---
 		FRAME = 5
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -21.00 0.00
+			POS = 0.00 -18.30 0.00
 			ROT = -0.91 0.00 0.00
 		END_KEY
 
@@ -482,19 +482,19 @@ MOTIONSET
 
 		KEY	# ----- [ 17 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.00 0.38 0.00
+			ROT = 0.00 0.32 0.00
 		END_KEY
 
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.00 0.38 0.00
+			ROT = 0.00 0.29 0.00
 		END_KEY
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 4 >> ---
 		FRAME = 5
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -22.40 0.00
+			POS = 0.00 -17.60 0.00
 			ROT = -0.91 0.00 0.00
 		END_KEY
 
@@ -580,19 +580,19 @@ MOTIONSET
 
 		KEY	# ----- [ 17 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.00 0.35 0.00
+			ROT = 0.00 0.32 0.00
 		END_KEY
 
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.00 0.35 0.00
+			ROT = 0.00 0.29 0.00
 		END_KEY
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 2 / 4 >> ---
 		FRAME = 5
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -21.00 0.00
+			POS = 0.00 -18.30 0.00
 			ROT = -0.91 0.00 0.00
 		END_KEY
 
@@ -683,14 +683,14 @@ MOTIONSET
 
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.00 0.28 0.00
+			ROT = 0.00 0.25 0.00
 		END_KEY
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 3 / 4 >> ---
 		FRAME = 5
 		KEY	# ----- [ 0 ] -----
-			POS = 0.00 -22.40 0.00
+			POS = 0.00 -17.60 0.00
 			ROT = -0.91 0.00 0.00
 		END_KEY
 
@@ -781,7 +781,7 @@ MOTIONSET
 
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
-			ROT = 0.00 0.31 0.00
+			ROT = 0.00 0.25 0.00
 		END_KEY
 	END_KEYSET
 END_MOTIONSET
@@ -800,7 +800,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 0 / 8 >> ---
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = -32.80 -25.50 -29.30
+			POS = -32.80 -19.70 -29.30
 			ROT = -0.57 0.66 0.19
 		END_KEY
 
@@ -888,7 +888,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -898,7 +898,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 1 / 8 >> ---
 		FRAME = 4
 		KEY	# ----- [ 0 ] -----
-			POS = -32.80 -25.50 -29.30
+			POS = -32.80 -20.00 -29.30
 			ROT = -0.57 0.19 -0.13
 		END_KEY
 
@@ -986,7 +986,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -996,7 +996,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 2 / 8 >> ---
 		FRAME = 6
 		KEY	# ----- [ 0 ] -----
-			POS = -32.80 -25.50 -29.30
+			POS = -32.80 -19.10 -29.30
 			ROT = -0.57 -0.69 -0.13
 		END_KEY
 
@@ -1084,7 +1084,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = -0.47 -0.38 -1.85
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = -0.47 -0.38 -1.85
@@ -1094,7 +1094,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 3 / 8 >> ---
 		FRAME = 2
 		KEY	# ----- [ 0 ] -----
-			POS = -32.80 -25.50 -29.30
+			POS = -32.80 -20.90 -29.30
 			ROT = -0.57 -0.06 -0.13
 		END_KEY
 
@@ -1182,7 +1182,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 1.95 1.19 0.47
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 1.95 1.19 0.47
@@ -1192,7 +1192,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 4 / 8 >> ---
 		FRAME = 15
 		KEY	# ----- [ 0 ] -----
-			POS = -32.80 -10.60 -24.10
+			POS = -32.80 -8.30 -24.10
 			ROT = -0.41 -0.06 -0.13
 		END_KEY
 
@@ -1280,7 +1280,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = -0.13 1.57 0.28
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = -0.13 1.57 0.28
@@ -1290,7 +1290,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 5 / 8 >> ---
 		FRAME = 4
 		KEY	# ----- [ 0 ] -----
-			POS = -32.80 -2.10 -40.10
+			POS = -32.80 -1.10 -40.10
 			ROT = 0.00 0.00 0.00
 		END_KEY
 
@@ -1378,7 +1378,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.47 0.00
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.47 0.00
@@ -1388,7 +1388,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 6 / 8 >> ---
 		FRAME = 6
 		KEY	# ----- [ 0 ] -----
-			POS = -29.40 -14.20 -12.60
+			POS = -29.40 -10.50 -12.60
 			ROT = -0.38 0.53 0.00
 		END_KEY
 
@@ -1476,7 +1476,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 0.38 1.04 0.00
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.38 1.04 0.00
@@ -1574,7 +1574,7 @@ MOTIONSET
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
 		END_KEY
-		
+
 		KEY	# ----- [ 18 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -2392,7 +2392,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 0 / 8 >> ---
 		FRAME = 6
 		KEY	# ----- [ 0 ] -----
-			POS = -33.00 -20.00 -21.40
+			POS = -33.00 -15.00 -21.40
 			ROT = -0.66 -0.50 0.31
 		END_KEY
 
@@ -2490,7 +2490,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 1 / 8 >> ---
 		FRAME = 15
 		KEY	# ----- [ 0 ] -----
-			POS = -33.00 -23.60 -21.40
+			POS = -33.00 -17.50 -21.40
 			ROT = -0.88 -0.50 0.47
 		END_KEY
 
@@ -2588,7 +2588,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 2 / 8 >> ---
 		FRAME = 7
 		KEY	# ----- [ 0 ] -----
-			POS = -33.00 -23.60 -21.40
+			POS = -33.00 -17.90 -21.40
 			ROT = -0.88 -0.50 0.47
 		END_KEY
 
@@ -2686,7 +2686,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 3 / 8 >> ---
 		FRAME = 7
 		KEY	# ----- [ 0 ] -----
-			POS = -33.00 -21.70 -21.40
+			POS = -33.00 -16.70 -21.40
 			ROT = -0.63 -1.32 0.47
 		END_KEY
 
@@ -2784,7 +2784,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 4 / 8 >> ---
 		FRAME = 7
 		KEY	# ----- [ 0 ] -----
-			POS = -12.30 -14.40 -21.40
+			POS = -12.30 -10.60 -21.40
 			ROT = -0.38 -1.92 0.22
 		END_KEY
 
@@ -2882,7 +2882,7 @@ MOTIONSET
 	KEYSET			# --- << KEY : 5 / 8 >> ---
 		FRAME = 10
 		KEY	# ----- [ 0 ] -----
-			POS = 11.80 -6.30 0.00
+			POS = 11.80 -5.90 0.00
 			ROT = -0.19 2.32 0.12
 		END_KEY
 
