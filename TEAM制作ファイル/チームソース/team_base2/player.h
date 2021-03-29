@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 #define PLAYER_MOVESPEED (0.65f)													// プレイヤーの移動速度
 #define PLAYER_MODEL_AMOUNT (18)
-#define PLAYER_ATTACK_RADIUS (12.0f)											// プレイヤーの攻撃範囲
+#define PLAYER_ATTACK_RADIUS (15.0f)											// プレイヤーの攻撃範囲
 #define PlAYER_WIDTH (7.5f)
 #define PLAYER_HEIGHT (50.0f)
 #define PLAYER_INVINCIBLE_TIME (500)	// 攻撃された時の無敵時間
@@ -76,9 +76,10 @@ typedef struct
 	D3DXVECTOR3 rotDest;					// 目標の向き
 	D3DXMATRIX mtxWorld;					// ワールドマトリックス
 	Model aModel[PLAYER_MODEL_AMOUNT];		// モデル(パーツ)
-	Model AltWeapon;						// 武器（パーツ）
 	int nNumModel;							// モデル(パーツ)数
-	D3DXMATERIAL *pMatDef[PLAYER_MODEL_AMOUNT];
+
+	Model AltWeapon;						// 武器（パーツ）
+	D3DXVECTOR3 weaponPos, weaponRot;
 
 	bool bPlayMotion;						// モーション再生状態
 	MOTION_INFO aMotionInfo[MOTION_MAX];	// モーション情報	 (モーションの最大数)

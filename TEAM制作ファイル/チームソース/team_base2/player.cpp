@@ -83,15 +83,11 @@ void InitPlayer(void)
 		g_playerDefaultKey[nCnt] = KeyPosRot(g_player.aModel[nCnt].pos.x, g_player.aModel[nCnt].pos.y, g_player.aModel[nCnt].pos.z, 0, 0, 0);
 	}
 
-	LoadXFile("data//MODEL//katana001.x", &g_player.AltWeapon);
+	LoadXFile("data//MODEL//naginata_fix.x", &g_player.AltWeapon);
 
-	////武器読み込み
-	//LoadXFile("data//MODEL//weapon.x", &g_player.aWeapon[0]);
-	//
-	////武器の各種設定
-	//g_player.aWeapon[0].nIdxModelParent = 3;
-	//g_player.aWeapon[0].pos = D3DXVECTOR3(-2.0f, 0.0f, 0.0f);
-	//g_player.aWeapon[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	g_player.weaponPos = D3DXVECTOR3(-1.0f, -0.5f, 0.0f);
+	g_player.weaponRot = D3DXVECTOR3(0.0f, 1.5f, -1.6f);
+
 	g_player.posWeaponCol[0] = D3DXVECTOR3(0.0f, 15.0f, 0.0f);
 	g_player.posWeaponCol[1] = D3DXVECTOR3(0.0f, 30.0f, 0.0f);
 	g_player.posWeaponCol[2] = D3DXVECTOR3(0.0f, 45.0f, 0.0f);
@@ -173,7 +169,8 @@ void UpdatePlayer(void)
 	//行動にモーションつける
 	if (GetKeyboardTrigger(DIK_SPACE) == true)
 	{
-		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+		if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+		else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
 	}
 	else if (GetKeyboardPress(DIK_W) ||
 		GetKeyboardPress(DIK_S) ||
@@ -189,7 +186,8 @@ void UpdatePlayer(void)
 	//StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
 
 	//攻撃中は移動０にする
-	if (g_player.motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK)
+	if (g_player.motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
+		g_player.motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
 	{
 		g_player.move = D3DXVECTOR3(0, 0, 0);
 	}
@@ -674,37 +672,6 @@ void ReadCharacterInfo(CharacterPartsInfo *characterInfo, char* fileName)
 				}
 				break;
 			}
-		}
-	}
-}
-
-/* コマンドアクション終了後に呼ばれる */
-void OnPlayerFinishAction(void)
-{
-	Player *pPlayer = GetPlayer();
-	Enemy *pEnemy = GetEnemy();
-
-	ResetMotion(SELECTMOTION_PLAYER, false, true, true, true, NULL);
-
-	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
-
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		//敵との距離 高さを考えない
-		float fDistanceToEnemy = sqrtf((pPlayer->pos.x - pEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - pEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z));
-
-		//距離が検知範囲以内だったら
-		if (fDistanceToEnemy <= CA_ATTACK_RADIUS)
-		{
-			//プレイヤーから敵への単位ベクトル
-			D3DXVECTOR3 vecPtoE = pEnemy[nCntEnemy].pos - pPlayer->pos;
-			D3DXVec3Normalize(&vecPtoE, &vecPtoE);
-
-			//敵ノックバック
-			pEnemy[nCntEnemy].move.x += vecPtoE.x * CA_ATTACK_KNOCKBACK;
-			pEnemy[nCntEnemy].move.y += 10.0f;
-			pEnemy[nCntEnemy].move.z += vecPtoE.z * CA_ATTACK_KNOCKBACK;
-
 		}
 	}
 }

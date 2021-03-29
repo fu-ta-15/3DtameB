@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------------------------
 # モデル数
 #------------------------------------------------------------------------------
-NUM_MODEL = 19
+NUM_MODEL = 18
 
 #------------------------------------------------------------------------------
 # モデルファイル名
@@ -32,7 +32,6 @@ MODEL_FILENAME = data/MODEL/Cyborg_NINJA/ver.1.1/kneeR_01.x		# [14]左膝
 MODEL_FILENAME = data/MODEL/Cyborg_NINJA/ver.1.1/legL_U_01.x		# [15]左腿(膝下)
 MODEL_FILENAME = data/MODEL/Cyborg_NINJA/ver.1.1/footL.x			# [16]左足
 MODEL_FILENAME = data/MODEL/Cyborg_NINJA/ver.1.1/katana001.x					# [17]刀
-MODEL_FILENAME = data/MODEL/Cyborg_NINJA/ver.1.1/long_item.x					# [18]薙刀
 
 #------------------------------------------------------------------------------
 # キャラクター情報
@@ -170,12 +169,6 @@ CHARACTERSET
 		ROT = 1.5 1.5 -1.6
 	END_PARTSSET
 	
-	PARTSSET						# [18]刀
-		INDEX = 18
-		PARENT = 5					# (親)右腕(肘下)
-		POS = -1.0 -0.5 0.0
-		ROT = 0.0 1.5 -1.6
-	END_PARTSSET
 END_CHARACTERSET
 
 #------------------------------------------------------------------------------

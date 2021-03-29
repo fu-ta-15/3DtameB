@@ -34,8 +34,6 @@ int g_nCntFrame;
 //=============================================================================
 HRESULT InitGame(void)
 {
-	g_stage.nStageNum = 0;
-
 	//モデルの初期化処理
 	InitPlayer();
 
@@ -216,6 +214,9 @@ void UpdateGame(void)
 		//壁(メッシュ)の更新処理
 		UpdateMeshwall();
 
+		//モーションの更新処理
+		UpdateMotion();
+
 		//モデルの更新処理
 		UpdatePlayer();
 
@@ -234,9 +235,6 @@ void UpdateGame(void)
 
 		//カメラの更新処理
 		UpdateCamera();
-
-		//モーションの更新処理
-		UpdateMotion();
 
 		//ライトの更新処理
 		UpdateLight();

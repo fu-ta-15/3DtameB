@@ -103,7 +103,8 @@ void UpdateCollision(void)
 			if (pEnemy[nCntEnemy].bHit == true)
 			{
 				//プレイヤーが攻撃状態の場合
-				if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK)
+				if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
+					pPlayer->motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
 				{
 					//プレイヤーが無敵状態じゃない場合
 					if (pEnemy[nCntEnemy].bInvincible != true)
@@ -139,46 +140,50 @@ void UpdateCollision(void)
 	}
 
 	//ボスに対する攻撃判定
-	//敵位置
-	D3DXVECTOR3 BossPos = D3DXVECTOR3(pBoss->pos.x, pBoss->pos.y + pBoss->fHeight, pBoss->pos.z);
-
-	//判定
-	pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol3, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
-	pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol1, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
-	pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol2, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
-
-	//判定がtrueの場合
-	if (pBoss->bHit == true)
+	if (pBoss->bUse)
 	{
-		//プレイヤーが攻撃状態の場合
-		if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK)
+		//敵位置
+		D3DXVECTOR3 BossPos = D3DXVECTOR3(pBoss->pos.x, pBoss->pos.y + pBoss->fHeight, pBoss->pos.z);
+
+		//判定
+		pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol3, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
+		pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol1, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
+		pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol2, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
+
+		//判定がtrueの場合
+		if (pBoss->bHit == true)
 		{
-			//プレイヤーが無敵状態じゃない場合
-			if (pBoss->bInvincible != true)
+			//プレイヤーが攻撃状態の場合
+			if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
+				pPlayer->motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
 			{
-				//現在時間取得
-				pBoss->dwTimeInv = timeGetTime();
+				//プレイヤーが無敵状態じゃない場合
+				if (pBoss->bInvincible != true)
+				{
+					//現在時間取得
+					pBoss->dwTimeInv = timeGetTime();
 
-				//体力減少
-				pBoss->nLife--;
+					//体力減少
+					pBoss->nLife--;
 
-				//プレイヤーから敵へのベクトル
-				D3DXVECTOR3 vecPtoE = pBoss->pos - pPlayer->pos;
-				vecPtoE = D3DXVECTOR3(vecPtoE.x, 10.0f, vecPtoE.z);
-				D3DXVec3Normalize(&vecPtoE, &vecPtoE);
+					//プレイヤーから敵へのベクトル
+					D3DXVECTOR3 vecPtoE = pBoss->pos - pPlayer->pos;
+					vecPtoE = D3DXVECTOR3(vecPtoE.x, 10.0f, vecPtoE.z);
+					D3DXVec3Normalize(&vecPtoE, &vecPtoE);
 
-				//ノックバック
-				pBoss->move += vecPtoE * ENEMY_KNOCKBACK;
+					//ノックバック
+					pBoss->move += vecPtoE * ENEMY_KNOCKBACK;
 
-				//無敵時間に
-				pBoss->bInvincible = true;
+					//無敵時間に
+					pBoss->bInvincible = true;
+				}
 			}
 		}
-	}
-	//攻撃された時から時間経過したら無敵解除
-	if (currentTime - pBoss->dwTimeInv >= ENEMY_INVINCIBLE_TIME)
-	{
-		pBoss->bInvincible = false;
+		//攻撃された時から時間経過したら無敵解除
+		if (currentTime - pBoss->dwTimeInv >= ENEMY_INVINCIBLE_TIME)
+		{
+			pBoss->bInvincible = false;
+		}
 	}
 
 	//可視コリジョンの移動

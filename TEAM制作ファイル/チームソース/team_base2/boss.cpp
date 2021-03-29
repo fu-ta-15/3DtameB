@@ -56,20 +56,17 @@ void InitBoss(void)
 		g_modelBoss[nCntModel].rot = D3DXVECTOR3(g_partsBoss.fModelRot[nCntModel][0], g_partsBoss.fModelRot[nCntModel][1], g_partsBoss.fModelRot[nCntModel][2]);
 	}
 
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		//初期設定
-		g_Boss.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置の初期設定
-		g_Boss.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向きの初期設定
-		g_Boss.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値の初期設定
-		g_Boss.bUse = false;
-		g_Boss.bInvincible = false;
-		g_Boss.nLife = ENEMY_HP_MAX;
-		g_Boss.nLifeMax = ENEMY_HP_MAX;
-		g_Boss.bHit = false;
-		g_Boss.bAttack = false;
-		g_Boss.dwTimeInv = NULL;
-	}
+	//初期設定
+	g_Boss.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置の初期設定
+	g_Boss.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向きの初期設定
+	g_Boss.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値の初期設定
+	g_Boss.bUse = false;
+	g_Boss.bInvincible = false;
+	g_Boss.nLife = BOSS_HP_MAX;
+	g_Boss.nLifeMax = BOSS_HP_MAX;
+	g_Boss.bHit = false;
+	g_Boss.bAttack = false;
+	g_Boss.dwTimeInv = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -143,6 +140,12 @@ void UpdateBoss(void)
 
 		//ランダム時間でボスが攻撃を開始する
 		SetRandomAttack();
+
+		//ボスのHPが尽きた時
+		if (g_Boss.nLife <= 0)
+		{
+			g_Boss.bUse = false;
+		}
 	}
 
 }
@@ -295,6 +298,9 @@ void SetBoss(D3DXVECTOR3 pos, ENEMYTYPE type)
 
 			break;
 		}
+
+		g_Boss.nLife = BOSS_HP_MAX;
+		g_Boss.nLifeMax = BOSS_HP_MAX;
 
 		//使用中に移行
 		g_Boss.bUse = true;
