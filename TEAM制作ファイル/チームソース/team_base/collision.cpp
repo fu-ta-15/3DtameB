@@ -23,6 +23,9 @@ void ColPlayerEnemy(void);
 // ÉOÉçÅ[ÉoÉãïœêî
 //-----------------------------------------------------------------------------
 VCollision g_aVCollision[MAX_VISIBLE_COLLISION];								// â¬éãâªÉRÉäÉWÉáÉìÇÃèÓïÒ
+D3DXVECTOR3 g_WeaponCol1;
+D3DXVECTOR3 g_WeaponCol2;
+D3DXVECTOR3 g_WeaponCol3;
 
 //-----------------------------------------------------------------------------
 // èâä˙âªèàóù
@@ -30,7 +33,24 @@ VCollision g_aVCollision[MAX_VISIBLE_COLLISION];								// â¬éãâªÉRÉäÉWÉáÉìÇÃèÓï
 void InitCollision(void)
 {
 #ifdef _DEBUG
+	Player *pPlayer = GetPlayer();
 
+	//èâä˙âª
+	for (int nCntVCol = 0; nCntVCol < MAX_VISIBLE_COLLISION; nCntVCol++)
+	{
+		g_aVCollision[nCntVCol].bUse = false;
+		g_aVCollision[nCntVCol].nIdx = 0;
+		g_aVCollision[nCntVCol].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		g_aVCollision[nCntVCol].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	}
+	D3DXCOLOR tred = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f);
+
+	g_WeaponCol1 = D3DXVECTOR3(pPlayer->mtxWeaponCol[0]._41, pPlayer->mtxWeaponCol[0]._42, pPlayer->mtxWeaponCol[0]._43);
+	g_WeaponCol2 = D3DXVECTOR3(pPlayer->mtxWeaponCol[1]._41, pPlayer->mtxWeaponCol[1]._42, pPlayer->mtxWeaponCol[1]._43);
+	g_WeaponCol3 = D3DXVECTOR3(pPlayer->mtxWeaponCol[2]._41, pPlayer->mtxWeaponCol[2]._42, pPlayer->mtxWeaponCol[2]._43);
+	SetSphere(g_WeaponCol1, D3DXVECTOR3(0.0f, 0.0f, 0.0f), tred, PLAYER_ATTACK_RADIUS, 10, 0);
+	SetSphere(g_WeaponCol2, D3DXVECTOR3(0.0f, 0.0f, 0.0f), tred, PLAYER_ATTACK_RADIUS, 10, 1);
+	SetSphere(g_WeaponCol3, D3DXVECTOR3(0, 0, 0), tred, PLAYER_ATTACK_RADIUS, 10, 2);
 #endif // !_DEBUG
 }
 
@@ -58,7 +78,7 @@ void UpdateCollision(void)
 	Player *pPlayer = GetPlayer();
 	Enemy *pEnemy = GetEnemy();
 	
-	DWORD currentTime = timeGetTime();	// åªç›ÇÃéûä‘
+	DWORD currentTime = timeGetTime();	// åªç›ÇÃéûä‘	
 
 	//ìGÇ∆ÉvÉåÉCÉÑÅ[ÇÃçUåÇîªíË
 	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
@@ -72,7 +92,9 @@ void UpdateCollision(void)
 			D3DXVECTOR3 enemyPosFix = D3DXVECTOR3(pEnemy[nCntEnemy].pos.x, pEnemy[nCntEnemy].pos.y + (pEnemy[nCntEnemy].fHeight / 2), pEnemy[nCntEnemy].pos.z);
 
 			//îªíË
-			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &spherePos, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
+			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol3, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
+			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol1, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
+			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol2, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
 
 			//îªíËÇ™trueÇÃèÍçá
 			if (pEnemy[nCntEnemy].bHit == true)
@@ -110,7 +132,17 @@ void UpdateCollision(void)
 		}
 	}
 
+	//ÉvÉåÉCÉÑÅ[Ç∆ìGÇÃè’ìÀîªíË
 	ColPlayerEnemy();
+
+	//â¬éãÉRÉäÉWÉáÉìÇÃà⁄ìÆ
+	g_WeaponCol1 = D3DXVECTOR3(pPlayer->mtxWeaponCol[0]._41, pPlayer->mtxWeaponCol[0]._42, pPlayer->mtxWeaponCol[0]._43);
+	g_WeaponCol2 = D3DXVECTOR3(pPlayer->mtxWeaponCol[1]._41, pPlayer->mtxWeaponCol[1]._42, pPlayer->mtxWeaponCol[1]._43);
+	g_WeaponCol3 = D3DXVECTOR3(pPlayer->mtxWeaponCol[2]._41, pPlayer->mtxWeaponCol[2]._42, pPlayer->mtxWeaponCol[2]._43);
+
+	MoveVCollision(&g_WeaponCol1, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
+	MoveVCollision(&g_WeaponCol2, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1);
+	MoveVCollision(&g_WeaponCol3, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 2);
 }
 
 //-----------------------------------------------------------------------------
@@ -310,35 +342,35 @@ bool CollisionBoxSphere(D3DXVECTOR3 *pBoxPos, D3DXVECTOR3 *pSpherePos, float fBo
 	}
 
 	//í∑ï˚å`óÃàÊÇ…ì¸Ç¡ÇƒÇ¢ÇΩÇÁ
-	if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) + fSphereRadius &&
-		pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) - fSphereRadius &&
-		pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
-		pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
-		pSpherePos->y < pBoxPos->y + fBoxHeight &&
-		pSpherePos->y > pBoxPos->y - fBoxHeight)
-	{
-		return true;
-	}
-	if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
-		pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
-		pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) + fSphereRadius &&
-		pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) - fSphereRadius &&
-		pSpherePos->y < pBoxPos->y + fBoxHeight &&
-		pSpherePos->y > pBoxPos->y - fBoxHeight)
-	{
-		return true;
-	}
-	if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
-		pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
-		pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
-		pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
-		pSpherePos->y < pBoxPos->y + fBoxHeight + fSphereRadius &&
-		pSpherePos->y > pBoxPos->y - fBoxHeight - fSphereRadius)
-	{
-		return true;
-	}
+if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) + fSphereRadius &&
+	pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) - fSphereRadius &&
+	pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
+	pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
+	pSpherePos->y < pBoxPos->y + fBoxHeight &&
+	pSpherePos->y > pBoxPos->y - fBoxHeight)
+{
+	return true;
+}
+if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
+	pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
+	pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) + fSphereRadius &&
+	pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) - fSphereRadius &&
+	pSpherePos->y < pBoxPos->y + fBoxHeight &&
+	pSpherePos->y > pBoxPos->y - fBoxHeight)
+{
+	return true;
+}
+if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
+	pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
+	pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
+	pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
+	pSpherePos->y < pBoxPos->y + fBoxHeight + fSphereRadius &&
+	pSpherePos->y > pBoxPos->y - fBoxHeight - fSphereRadius)
+{
+	return true;
+}
 
-	return false;
+return false;
 }
 
 /* ÉvÉåÉCÉÑÅ[Ç∆ìGÇÃè’ìÀ */
@@ -351,48 +383,58 @@ void ColPlayerEnemy(void)
 	{
 		if (pEnemy[nCntEnemy].bUse == true)
 		{
-			// ê≥ï˚å` ëŒ ãÈå` ìñÇΩÇËîªíË 2d îªíËå„ÇﬂÇËçûÇ›ñﬂÇ∑
-			//âúÇ©ÇÁ
-			if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth && pPlayer->pos.z - PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
-				pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth && pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+			// ìñÇΩÇËîªíË 2d îªíËå„ÇﬂÇËçûÇ›ñﬂÇ∑
+			//âú
+			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth)
 			{
-				if (pPlayer->posOld.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
-					pPlayer->posOld.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth && pPlayer->posOld.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				if (pPlayer->posOld.z - PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+					pPlayer->posOld.x - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
 				{
 					pPlayer->pos.z = pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth + PlAYER_WIDTH;
 				}
 			}
-			//éËëOÇ©ÇÁ
-			if (pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth && pPlayer->pos.z + PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
-				pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth && pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fDepth)
+
+			//éËëO
+			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
 			{
-				if (pPlayer->posOld.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
-					pPlayer->posOld.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth && pPlayer->posOld.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				if (pPlayer->posOld.z + PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+					pPlayer->posOld.x - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
 				{
 					pPlayer->pos.z = pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth - PlAYER_WIDTH;
 				}
-			}
-			//ç∂Ç©ÇÁ
-			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth && pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
-				pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth && pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
-			{
-				if (pPlayer->posOld.x <= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
-					pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth && pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+
+				//ç∂
+				if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth)
 				{
-					pPlayer->pos.x = pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth - PlAYER_WIDTH;
+					if (pPlayer->posOld.x + PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+						pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+						pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+					{
+						pPlayer->pos.x = pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth - PlAYER_WIDTH;
+					}
 				}
-			}
-			//âEÇ©ÇÁ
-			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth && pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
-				pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth && pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
-			{
-				if (pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
-					pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth && pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+
+				//âE
+				if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
 				{
-					pPlayer->pos.x = pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth + PlAYER_WIDTH;
+					if (pPlayer->posOld.x - PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+						pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+						pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+					{
+						pPlayer->pos.x = pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth + PlAYER_WIDTH;
+					}
 				}
 			}
 		}
 	}
-
 }

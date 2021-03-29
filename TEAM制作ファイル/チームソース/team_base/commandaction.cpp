@@ -505,7 +505,7 @@ void DrawTimeRemain(void)
 		pDevice->SetTexture(0, g_commandAct.remainTimeInfo.pTexture[nCntOBJ]);
 
 		//ポリゴンの描画
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 4);
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 	}
 }
 
@@ -555,8 +555,10 @@ void DrawActionCircle(void)
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 	//通常合成に戻す
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース（描画元）の合成方法の設定
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//デスティネーション（描画先）の合成方法の設定
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				//カリングの設定
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				//αブレンド(α値の合成)の設定
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース(描画元)の合成方法の設定
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//デスティネーション(描画先)の合成方法の設定
 }
 
 /* コマンドアクションの状態を設定する */

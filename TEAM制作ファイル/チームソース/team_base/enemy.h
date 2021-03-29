@@ -20,6 +20,7 @@
 #define ENEMY_AMOUNT_MAX (ENENY_AMOUNT_SNAKE + ENEMY_AMOUNT_ROBOT)			// 用意している敵の最大数
 #define ENEMY_MODEL_PARTS_MAX (10)	// 使用できる最大パーツ数
 #define ENEMY_ROBOT_MODELPARTS (10)	// amount of parts of robot model
+#define ENEMY_ROBOT001_MODELPARTS (8)	
 
 #define ENEMY_ROBOT_COL_HEIGHT (20)				// ロボット型の敵の高さ (判定用)
 #define ENEMY_ROBOT_COL_WIDTH (20)				// 幅
@@ -38,7 +39,8 @@
 //-----------------------------------------------------------------------------
 typedef enum
 {
-	ENEMYTYPE_ROBOT,	// robot
+	ENEMYTYPE_ROBOT000,	// robot
+	ENEMYTYPE_ROBOT001,
 	ENEMYTYPE_BOSS,
 	ENEMYTYPE_MAX
 } ENEMYTYPE;
@@ -69,6 +71,7 @@ typedef struct
 	int nNumKey;								// キー数
 	int nKey;									// キーナンバー
 	int nCounterMotion;							// モーションカウンター
+	KEY DefKey[ENEMY_MODEL_PARTS_MAX];	// 初期配置
 
 	int nLifeMax;								// 最大体力
 	int nLife;									// 体力
