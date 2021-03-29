@@ -315,8 +315,13 @@ void UpdateEnemy(void)
 			//敵が全滅したら
 			if (g_nEnemyAlive <= 0)
 			{
-				//ポータルを起動
-				ActivatePortal(true, true);
+				Stage *pStage = GetStage();
+
+				if (pStage->nStageNum != 2)
+				{
+					//ポータルを起動
+					ActivatePortal(true, true);
+				}
 			}
 		}
 	}

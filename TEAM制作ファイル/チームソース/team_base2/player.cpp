@@ -14,6 +14,7 @@
 #include "motion.h"
 #include "enemy.h"
 #include "commandaction.h"
+#include "bullet.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -206,6 +207,8 @@ void UpdatePlayer(void)
 		if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
 		else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
 	}
+
+	if (GetKeyboardTrigger(DIK_Z)) SetBullet(g_player.pos, D3DXVECTOR3(sinf(g_player.rot.y + D3DX_PI), 0.0f, cosf(g_player.rot.y + D3DX_PI)), 10, 10);
 
 
 }

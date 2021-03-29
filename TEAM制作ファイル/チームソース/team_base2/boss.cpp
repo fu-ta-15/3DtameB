@@ -69,8 +69,6 @@ void InitBoss(void)
 		g_Boss.dwTimeAtk = NULL;
 		g_Boss.dwTimeInv = NULL;
 	}
-
-	SetBoss(D3DXVECTOR3(0.0f, 0.0f, 100.0f), ENEMYTYPE_BOSS);
 }
 
 //-----------------------------------------------------------------------------
