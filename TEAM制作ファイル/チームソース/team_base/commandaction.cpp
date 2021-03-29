@@ -428,7 +428,7 @@ HRESULT InitActionCircle(void)
 	g_commandAct.actionCircle.pos = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	
 	//テクスチャ読み込み
-	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//circle.png", &g_commandAct.actionCircle.pTexture);
+	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//Particle04_clear_hard.png", &g_commandAct.actionCircle.pTexture);
 
 	//頂点バッファ生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * VERTEX_AMOUNT,		//サイズ
@@ -518,9 +518,10 @@ void DrawActionCircle(void)
 	//デバイス取得
 	pDevice = GetDevice();
 
-	//合成の設定
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース（描画元）の合成方法の設定
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);	//デスティネーション（描画先）の合成方法の設定
+	//減算合成の設定
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 	//カリングの設定
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);

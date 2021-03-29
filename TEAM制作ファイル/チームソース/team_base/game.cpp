@@ -19,6 +19,7 @@
 #include "object.h"
 #include "commandaction.h"
 #include "boss.h"
+#include "effect.h"
 
 //=============================================================================
 // グローバル変数
@@ -50,6 +51,8 @@ HRESULT InitGame(void)
 
 	//敵の初期化処理
 	InitEnemy();
+
+	InitEffect();
 
 	InitBoss();
 
@@ -91,6 +94,8 @@ void UninitGame(void)
 	UninitMeshfield();
 
 	UninitBoss();
+
+	UninitEffect();
 
 	//敵の終了処理
 	UninitEnemy();
@@ -147,6 +152,8 @@ void UpdateGame(void)
 			//モデルの更新処理
 			UpdatePlayer();
 
+			UpdateEffect();
+
 			//敵の更新処理
 			UpdateEnemy();
 
@@ -186,6 +193,8 @@ void UpdateGame(void)
 
 		//壁(メッシュ)の更新処理
 		UpdateMeshwall();
+
+		UpdateEffect();
 
 		//モデルの更新処理
 		UpdatePlayer();
@@ -254,8 +263,13 @@ void DrawGame(void)
 		//ポータルの描画処理
 		DrawPortal();
 
+
+		DrawEffect();
+
 		//コマンドアクション描画処理
 		DrawCommand();
+
+
 
 		//コリジョンの描画処理
 		DrawCollision();
