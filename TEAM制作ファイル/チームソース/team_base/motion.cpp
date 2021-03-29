@@ -8,6 +8,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "input.h"
+#include "boss.h"
 
 //-----------------------------------------------------------------------------
 // マクロ定義
@@ -19,10 +20,12 @@
 void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy);
 void PlayerMotion(bool bPlayMotion);
 void EnemyMotion(bool bPlayMotion, int nIdx);
+void BossMotion(bool bPlayMotion);
 void InitMotionPlayer000(void);
 void InitMotionAKR(void);
 void InitMotionRobot000(void);
 void InitMotionRobot001(void);
+void InitMotionBoss(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -37,6 +40,7 @@ void InitMotion(void)
 	InitMotionAKR();
 	InitMotionRobot000();
 	InitMotionRobot001();
+	InitMotionBoss();
 }
 
 //-----------------------------------------------------------------------------
@@ -53,6 +57,7 @@ void UpdateMotion(void)
 {
 	Player *pPlayer = GetPlayer();
 	Enemy *pEnemy = GetEnemy();
+	Boss *pBoss = GetBoss();
 
 	//プレイヤーのモーション更新
 	PlayerMotion(pPlayer->bPlayMotion);
@@ -65,6 +70,9 @@ void UpdateMotion(void)
 			EnemyMotion(pEnemy[nCntEnemy].bPlayMotion, nCntEnemy);
 		}
 	}
+
+	//bossmotion
+	BossMotion(pBoss->bPlayMotion);
 }
 
 //-----------------------------------------------------------------------------
@@ -99,6 +107,7 @@ void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy
 {
 	Player *pPlayer = GetPlayer();
 	Enemy *pEnemy = GetEnemy();
+	Boss *pBoss = GetBoss();
 
 	switch (motionSelect)
 	{
@@ -150,6 +159,29 @@ void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy
 		}
 		break;
 
+	case SELECTMOTION_BOSS:
+		//モーションタイプが変更されようとしていたら
+		if (motionType != pBoss->motionType)
+		{
+			if (pBoss->bPlayMotion == true && pBoss->bLoopMotion == false)
+			{
+
+			}
+			else
+			{
+				//モーション変更
+				pBoss->motionType = motionType;								// モーションタイプ変更
+				ResetMotion(SELECTMOTION_BOSS, false, true, true, false, nIdxEnemy);			// モーションリセット
+			}
+
+		}
+
+		//モーション開始
+		if (pBoss->bPlayMotion == false)
+		{
+			pBoss->bPlayMotion = true;
+		}
+		break;
 	default:
 		break;
 	}
@@ -358,6 +390,107 @@ void EnemyMotion(bool bPlayMotion, int nIdx)
 	}
 }
 
+void BossMotion(bool bPlayMotion)
+{
+	Boss *pBoss = GetBoss();
+
+	if (bPlayMotion == true)
+	{
+		D3DXVECTOR3 rot[20];
+		D3DXVECTOR3 pos[20];
+
+		if (pBoss->bUse == true)
+		{
+			//ループ
+			pBoss->bLoopMotion = pBoss->aMotionInfo[pBoss->motionType].bLoop;
+
+			//モーションカウントアップ
+			pBoss->nCounterMotion++;
+
+			//プレイヤーの初期状態
+			KEY *pKeyDef = pBoss->DefKey;
+
+			//モデル数分回す
+			for (int nCntModel = 0; nCntModel < pBoss->aModel[0].nNumModel; nCntModel++)
+			{
+				KEY keyDiff[20];
+
+				//現在のキーと次のキーとの差分を計算
+				if (pBoss->nKey >= pBoss->aMotionInfo[pBoss->motionType].nNumKey - 1 && pBoss->bLoopMotion == true)
+				{	// ループの場合
+					keyDiff[nCntModel].fPosX = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[0].aKey[nCntModel].fPosX - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosX;
+					keyDiff[nCntModel].fPosY = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[0].aKey[nCntModel].fPosY - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosY;
+					keyDiff[nCntModel].fPosZ = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[0].aKey[nCntModel].fPosZ - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosZ;
+					keyDiff[nCntModel].fRotX = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[0].aKey[nCntModel].fRotX - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotX;
+					keyDiff[nCntModel].fRotY = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[0].aKey[nCntModel].fRotY - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotY;
+					keyDiff[nCntModel].fRotZ = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[0].aKey[nCntModel].fRotZ - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotZ;
+				}
+				else
+				{	// それ以外
+					keyDiff[nCntModel].fPosX = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey + 1].aKey[nCntModel].fPosX - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosX;
+					keyDiff[nCntModel].fPosY = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey + 1].aKey[nCntModel].fPosY - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosY;
+					keyDiff[nCntModel].fPosZ = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey + 1].aKey[nCntModel].fPosZ - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosZ;
+					keyDiff[nCntModel].fRotX = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey + 1].aKey[nCntModel].fRotX - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotX;
+					keyDiff[nCntModel].fRotY = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey + 1].aKey[nCntModel].fRotY - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotY;
+					keyDiff[nCntModel].fRotZ = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey + 1].aKey[nCntModel].fRotZ - pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotZ;
+				}
+
+				//pos
+				pos[nCntModel].x = (pKeyDef[nCntModel].fPosX + pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosX) + keyDiff[nCntModel].fPosX * ((float)pBoss->nCounterMotion / (float)pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame);
+				pos[nCntModel].y = (pKeyDef[nCntModel].fPosY + pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosY) + keyDiff[nCntModel].fPosY * ((float)pBoss->nCounterMotion / (float)pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame);
+				pos[nCntModel].z = (pKeyDef[nCntModel].fPosZ + pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fPosZ) + keyDiff[nCntModel].fPosZ * ((float)pBoss->nCounterMotion / (float)pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame);
+
+				//現在モーションの差分を再生フレームで割ったもの rot
+				rot[nCntModel].x = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotX + keyDiff[nCntModel].fRotX * ((float)pBoss->nCounterMotion / (float)pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame);
+				rot[nCntModel].y = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotY + keyDiff[nCntModel].fRotY * ((float)pBoss->nCounterMotion / (float)pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame);
+				rot[nCntModel].z = pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].aKey[nCntModel].fRotZ + keyDiff[nCntModel].fRotZ * ((float)pBoss->nCounterMotion / (float)pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame);
+
+				pBoss->aModel[nCntModel].pos.x = pos[nCntModel].x;
+				pBoss->aModel[nCntModel].pos.y = pos[nCntModel].y;
+				pBoss->aModel[nCntModel].pos.z = pos[nCntModel].z;
+
+				pBoss->aModel[nCntModel].rot.x = rot[nCntModel].x;
+				pBoss->aModel[nCntModel].rot.y = rot[nCntModel].y;
+				pBoss->aModel[nCntModel].rot.z = rot[nCntModel].z;
+
+				if (pBoss->aModel[nCntModel].rot.x > D3DX_PI) pBoss->aModel[nCntModel].rot.x -= D3DX_PI * 2.0f;
+				if (pBoss->aModel[nCntModel].rot.x < -D3DX_PI) pBoss->aModel[nCntModel].rot.x += D3DX_PI * 2.0f;
+				if (pBoss->aModel[nCntModel].rot.y > D3DX_PI) pBoss->aModel[nCntModel].rot.y -= D3DX_PI * 2.0f;
+				if (pBoss->aModel[nCntModel].rot.y < -D3DX_PI) pBoss->aModel[nCntModel].rot.y += D3DX_PI * 2.0f;
+				if (pBoss->aModel[nCntModel].rot.z > D3DX_PI) pBoss->aModel[nCntModel].rot.z -= D3DX_PI * 2.0f;
+				if (pBoss->aModel[nCntModel].rot.z < -D3DX_PI) pBoss->aModel[nCntModel].rot.z += D3DX_PI * 2.0f;
+			}
+
+			//現在キーの再生フレーム数に到達したら
+			if (pBoss->nCounterMotion >= pBoss->aMotionInfo[pBoss->motionType].aKeyInfo[pBoss->nKey].nFrame)
+			{
+				//次のキーに
+				pBoss->nKey++;
+
+				//モーションカウンタリセット
+				ResetMotion(SELECTMOTION_BOSS, false, true, false, false, NULL);
+			}
+
+			//現在キーがモーションのキー数に到達したら
+			if (pBoss->nKey >= pBoss->aMotionInfo[pBoss->motionType].nNumKey - 1 && pBoss->bLoopMotion == false)
+			{//ループしない場合
+			 //モーションリセット
+				ResetMotion(SELECTMOTION_BOSS, false, true, true, true, NULL);
+			}
+			else if (pBoss->nKey >= pBoss->aMotionInfo[pBoss->motionType].nNumKey && pBoss->bLoopMotion == true)
+			{//ループの場合
+			 //カウンタとキーをリセット
+				ResetMotion(SELECTMOTION_BOSS, false, true, true, false, NULL);
+			}
+		}
+		else if (pBoss->bPlayMotion == false)
+		{
+			//モーションリセット
+			ResetMotion(SELECTMOTION_BOSS, false, true, true, false, NULL);
+		}
+	}
+}
+
 /* モーションリセット関数 */
 void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy)
 {
@@ -399,6 +532,13 @@ void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, b
 			//モーションカウンタ初期化
 			pEnemy[nIdxEnemy].nCounterMotion = 0;
 		}
+		else if (resetType == SELECTMOTION_BOSS)
+		{
+			Boss *pBoss = GetBoss();
+
+			//
+			pBoss->nCounterMotion = 0;
+		}
 	}
 
 	if (bKeyReset == true)
@@ -417,6 +557,13 @@ void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, b
 			//現在キーを初期化
 			pEnemy[nIdxEnemy].nKey = 0;
 		}
+		else if (resetType == SELECTMOTION_BOSS)
+		{
+			Boss *pBoss = GetBoss();
+
+			//
+			pBoss->nKey = 0;
+		}
 	}
 
 	if (bMotionTrig == true)
@@ -432,6 +579,12 @@ void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, b
 			Enemy *pEnemy = GetEnemy();
 
 			pEnemy[nIdxEnemy].bPlayMotion = false;
+		}
+		else if (resetType == SELECTMOTION_BOSS)
+		{
+			Boss *pBoss = GetBoss();
+
+			pBoss->bPlayMotion = false;
 		}
 	}
 }
@@ -1146,4 +1299,142 @@ void InitMotionRobot001(void)
 			pEnemy[nCntEnemy].aMotionInfo[MOTIONTYPE_ROBOT001_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, -1.16f, 0.0f, 0.0f);
 		}
 	}
+}
+
+// BOSS MOTION
+void InitMotionBoss(void)
+{
+	Boss *pBoss = GetBoss();
+
+	//モーションの設定
+	pBoss->nNumMotion = 3;
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].nNumKey = 4;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].bLoop = true;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].nFrame = 50;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].nFrame = 30;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].nFrame = 30;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].nFrame = 30;
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 3.10f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.28f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.22f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.25f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.47f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 2.00f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.19f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.19f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.16f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.25f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 1.00f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.13f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.03f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.19f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.09f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.13f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_NEUTRAL].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].nNumKey = 4;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].bLoop = false;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].nFrame = 30;
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].nNumKey = 4;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].bLoop = true;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].nFrame = 10;
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.53f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.88f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.16f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 3.10f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.53f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.88f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.16f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.53f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.88f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.16f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[2].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[0] = KeyPosRot(0.0f, -3.10f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, -0.53f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.88f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.16f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.38f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.06f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_WALK].aKeyInfo[3].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 }

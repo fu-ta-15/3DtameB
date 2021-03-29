@@ -18,6 +18,7 @@
 #include "skybox.h"
 #include "object.h"
 #include "commandaction.h"
+#include "boss.h"
 
 //=============================================================================
 // グローバル変数
@@ -49,6 +50,8 @@ HRESULT InitGame(void)
 
 	//敵の初期化処理
 	InitEnemy();
+
+	InitBoss();
 
 	//オブジェクトの初期化処理
 	InitObject();
@@ -86,6 +89,8 @@ void UninitGame(void)
 
 	//メッシュフィールドの終了処理
 	UninitMeshfield();
+
+	UninitBoss();
 
 	//敵の終了処理
 	UninitEnemy();
@@ -145,6 +150,8 @@ void UpdateGame(void)
 			//敵の更新処理
 			UpdateEnemy();
 
+			UpdateBoss();
+
 			//オブジェクトの更新処理
 			UpdateObject();
 
@@ -185,6 +192,8 @@ void UpdateGame(void)
 
 		//敵の更新処理
 		UpdateEnemy();
+
+		UpdateBoss();
 
 		//オブジェクトの更新処理
 		UpdateObject();
@@ -233,6 +242,8 @@ void DrawGame(void)
 
 		//敵の描画処理
 		DrawEnemy();
+
+		DrawBoss();
 
 		//オブジェクトの描画処理
 		DrawObject();

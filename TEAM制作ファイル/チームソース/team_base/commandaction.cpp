@@ -505,7 +505,7 @@ void DrawTimeRemain(void)
 		pDevice->SetTexture(0, g_commandAct.remainTimeInfo.pTexture[nCntOBJ]);
 
 		//ƒ|ƒŠƒSƒ“‚Ì•`‰æ
-		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 4);
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 	}
 }
 
