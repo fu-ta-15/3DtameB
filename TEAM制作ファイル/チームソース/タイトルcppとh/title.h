@@ -31,7 +31,7 @@ typedef enum
 //=================================================================================================================
 HRESULT InitTitle(void);
 void UninitTitle(void);
-void UpdataTitle(void);
+void UpdateTitle(void);
 void DrawTitle(void);
 
 #endif

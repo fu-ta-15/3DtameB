@@ -8,6 +8,7 @@
 #include "input.h"
 #include "player.h"
 #include "fade.h"
+#include "meshfield.h"
 //#include "sound.h"
 
 //=================================================================================================================
@@ -64,9 +65,12 @@ HRESULT InitTitle(void)
 	}
 
 	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, "date\\TEXTURE\\BG31.jpeg", &g_apTexResult[TITLE_BG]);
-	D3DXCreateTextureFromFile(pDevice, "date\\TEXTURE\\Titil logo00.png", &g_apTexResult[TITLE_LOGO]);
-	D3DXCreateTextureFromFile(pDevice, "date\\TEXTURE\\ENTER05.png", &g_apTexResult[TITLE_PUSH]);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\BG031.jpg", &g_apTexResult[TITLE_BG]);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\Titil logo02.png", &g_apTexResult[TITLE_LOGO]);
+	D3DXCreateTextureFromFile(pDevice, "data\\TEXTURE\\PRESS ENTER01.png", &g_apTexResult[TITLE_PUSH]);
+
+	////メッシュフィールドの初期化処理
+	//InitMeshfield(g_stage.nStageNum);
 
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得
@@ -108,10 +112,10 @@ HRESULT InitTitle(void)
 		else if (nCntTitle == TITLE_PUSH)
 		{
 			//頂点座標の設定 (XYZ)
-			pVtx[0].pos = D3DXVECTOR3(325, 700, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(325, 550, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(925, 700, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(925, 550, 0.0f);
+			pVtx[0].pos = D3DXVECTOR3(625, 1000, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(625, 850, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(1325, 1000, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(1325, 850, 0.0f);
 
 			//頂点カラー
 			pVtx[0].col = D3DCOLOR_RGBA(255, 255, 255, 255);
@@ -169,7 +173,7 @@ void UninitTitle(void)
 //*****************************************************************************************************************
 //　タイトルの更新処理
 //*****************************************************************************************************************
-void UpdataTitle(void)
+void UpdateTitle(void)
 {
 	//変数宣言
 	VERTEX_2D *pVtx;
@@ -195,12 +199,12 @@ void UpdataTitle(void)
 		if (nCntTitle == TITLE_LOGO)
 		{
 			//頂点情報の設定
-			pVtx[0].pos = D3DXVECTOR3(50.0f, 0.0f + g_TitleMove * g_CntMove, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(50.0f, -370.0f + g_TitleMove * g_CntMove, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(800.0f, 0.0f + g_TitleMove * g_CntMove, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(800.0f, -370.0f + g_TitleMove * g_CntMove, 0.0f);
+			pVtx[0].pos = D3DXVECTOR3(300.0f, 0.0f + g_TitleMove * g_CntMove, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(300.0f, -270.0f + g_TitleMove * g_CntMove, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(1500.0f, 0.0f + g_TitleMove * g_CntMove, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(1500.0f, -270.0f + g_TitleMove * g_CntMove, 0.0f);
 
-			if (g_TitleMove * g_CntMove <= 400)
+			if (g_TitleMove * g_CntMove <= 530)
 			{
 				g_CntMove++;
 			}
