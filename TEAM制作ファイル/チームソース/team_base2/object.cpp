@@ -242,91 +242,94 @@ void SetObject(D3DXVECTOR3 pos, D3DXVECTOR3 rot, OBJECT_TYPE type)
 void SetTextObject(int nStageNum)
 {
 	char *aStr[128];
-	
+
 	if (nStageNum == 0) aStr[0] = "data\\TXT\\obj_wave1.txt";
 	else if (nStageNum == 1) aStr[0] = "data\\TXT\\obj_wave2.txt";
 
-	// 外部ファイルへのポインタ
-	FILE *pFile = fopen(aStr[0], "r");	// ファイルオープン
+	if (nStageNum != 2)
+	{
+		// 外部ファイルへのポインタ
+		FILE *pFile = fopen(aStr[0], "r");	// ファイルオープン
 
-	char *str;				// 文字列読み込み用
-	int FileSize;			// ファイルのサイズ保存用
-	bool ObjSet = false;	// 設置開始合図用
-	int nModelType = 1;		// モデルのタイプを存用
+		char *str;				// 文字列読み込み用
+		int FileSize;			// ファイルのサイズ保存用
+		bool ObjSet = false;	// 設置開始合図用
+		int nModelType = 1;		// モデルのタイプを存用
 
-	// ファイルの中の最後までの長さを取得
-	fseek(pFile, 0, SEEK_END);
-	FileSize = ftell(pFile);
-	fseek(pFile, 0, SEEK_SET);
+		// ファイルの中の最後までの長さを取得
+		fseek(pFile, 0, SEEK_END);
+		FileSize = ftell(pFile);
+		fseek(pFile, 0, SEEK_SET);
 
-	// メモリの確保
-	str = (char*)malloc(sizeof(char) * FileSize);
+		// メモリの確保
+		str = (char*)malloc(sizeof(char) * FileSize);
 
-	// メモリの初期化
-	memset(str, NULL, sizeof(char) * FileSize);
+		// メモリの初期化
+		memset(str, NULL, sizeof(char) * FileSize);
 
-	// オープンしたのか確認
-	if (pFile == NULL)
-	{// 開けなかったら
-		printf("ファイルが開きませんでした。");
-	}
-	else
-	{// 開けたら
-		// 読み込み終了の文字列を読み込むまで
-		while (strcmp(str, "END_SCRIPT") != 0)
-		{
-			// テキストファイルの読み込み
-			fscanf(pFile, "%s", str);
-
-			if (strcmp(str, "MODEL_NAME") == 0)
-			{// モデル情報をタイプごとに保存
-				// テキストファイルの読み込み
-				fscanf(pFile, "%s %s", str, &g_ObjInfo.cObjectFileName[nModelType][0]);
-				// モデルのタイプを進める
-				nModelType++;
-			}
-			// モデルの配置開始の合図
-			if (strcmp(str, "MODEL_SET") == 0)
-			{
-				ObjSet = true;
-			}
-
-			while (ObjSet == true)
+		// オープンしたのか確認
+		if (pFile == NULL)
+		{// 開けなかったら
+			printf("ファイルが開きませんでした。");
+		}
+		else
+		{// 開けたら
+			// 読み込み終了の文字列を読み込むまで
+			while (strcmp(str, "END_SCRIPT") != 0)
 			{
 				// テキストファイルの読み込み
 				fscanf(pFile, "%s", str);
-				// モデル情報をタイプごとに保存
-				if (strcmp(str, "TYPE") == 0) fscanf(pFile, "%s %d", str, &g_ObjInfo.nType);
 
-				// 向きと位置を取得
-				if (strcmp(str, "POS") == 0)
-				{
-					// "＝"を読み込む
-					fscanf(pFile, "%s", str);
-					// 数値を読み込む
-					fscanf(pFile, "%f %f %f", &g_ObjInfo.pos.x, &g_ObjInfo.pos.y, &g_ObjInfo.pos.z);
+				if (strcmp(str, "MODEL_NAME") == 0)
+				{// モデル情報をタイプごとに保存
+					// テキストファイルの読み込み
+					fscanf(pFile, "%s %s", str, &g_ObjInfo.cObjectFileName[nModelType][0]);
+					// モデルのタイプを進める
+					nModelType++;
 				}
-				if (strcmp(str, "ROT") == 0)
+				// モデルの配置開始の合図
+				if (strcmp(str, "MODEL_SET") == 0)
 				{
-					// "＝"を読み込む
-					fscanf(pFile, "%s", str);
-					// 数値を読み込む
-					fscanf(pFile, "%f %f %f", &g_ObjInfo.rot.x, &g_ObjInfo.rot.y, &g_ObjInfo.rot.z);
+					ObjSet = true;
+				}
 
-				}
-				if (strcmp(str, "SET") == 0)
-				{// オブジェクトの設置
-					SetObject(g_ObjInfo.pos, g_ObjInfo.rot, (OBJECT_TYPE)g_ObjInfo.nType);
-				}
-				if (strcmp(str, "END_MODEL_SET") == 0)
-				{// オブジェクト配置終了
-					ObjSet = false;
+				while (ObjSet == true)
+				{
+					// テキストファイルの読み込み
+					fscanf(pFile, "%s", str);
+					// モデル情報をタイプごとに保存
+					if (strcmp(str, "TYPE") == 0) fscanf(pFile, "%s %d", str, &g_ObjInfo.nType);
+
+					// 向きと位置を取得
+					if (strcmp(str, "POS") == 0)
+					{
+						// "＝"を読み込む
+						fscanf(pFile, "%s", str);
+						// 数値を読み込む
+						fscanf(pFile, "%f %f %f", &g_ObjInfo.pos.x, &g_ObjInfo.pos.y, &g_ObjInfo.pos.z);
+					}
+					if (strcmp(str, "ROT") == 0)
+					{
+						// "＝"を読み込む
+						fscanf(pFile, "%s", str);
+						// 数値を読み込む
+						fscanf(pFile, "%f %f %f", &g_ObjInfo.rot.x, &g_ObjInfo.rot.y, &g_ObjInfo.rot.z);
+
+					}
+					if (strcmp(str, "SET") == 0)
+					{// オブジェクトの設置
+						SetObject(g_ObjInfo.pos, g_ObjInfo.rot, (OBJECT_TYPE)g_ObjInfo.nType);
+					}
+					if (strcmp(str, "END_MODEL_SET") == 0)
+					{// オブジェクト配置終了
+						ObjSet = false;
+					}
 				}
 			}
 		}
+		// メモリの開放
+		free(str);
 	}
-	// メモリの開放
-	free(str);
 }
 
 void LoadXFileObj(const char * cXFileName, int nCountModel)

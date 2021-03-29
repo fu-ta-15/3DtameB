@@ -21,6 +21,7 @@
 #include "boss.h"
 #include "boss_attack.h"
 #include "effect.h"
+#include "bullet.h"
 
 //=============================================================================
 // グローバル変数
@@ -49,6 +50,8 @@ HRESULT InitGame(void)
 	InitCommand();
 	
 	InitEffect();
+
+	InitBullet();
 
 	//---ステージに依るもの----
 
@@ -81,6 +84,9 @@ HRESULT InitGame(void)
 	//モーションの初期化処理
 	InitMotion();
 
+	//
+	if (g_stage.nStageNum == 2) SetBoss(D3DXVECTOR3(0.0f, 0.0f, 100.0f), ENEMYTYPE_BOSS);
+
 	return S_OK;
 }
 
@@ -101,6 +107,8 @@ void UninitGame(void)
 
 	UninitBossATK();
 	UninitBoss();
+
+	UninitBullet();
 
 	UninitEffect();
 
@@ -167,6 +175,8 @@ void UpdateGame(void)
 
 			UpdateEffect();
 
+			UpdateBullet();
+
 			//オブジェクトの更新処理
 			UpdateObject();
 
@@ -214,6 +224,8 @@ void UpdateGame(void)
 		UpdateBossATK();
 
 		UpdateEffect();
+
+		UpdateBullet();
 
 		//オブジェクトの更新処理
 		UpdateObject();
@@ -264,6 +276,8 @@ void DrawGame(void)
 		DrawBossATK();
 
 		DrawEffect();
+
+		DrawBullet();
 
 		//オブジェクトの描画処理
 		DrawObject();
