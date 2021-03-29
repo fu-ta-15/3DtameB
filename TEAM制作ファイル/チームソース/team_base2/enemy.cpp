@@ -111,7 +111,7 @@ void InitEnemy(void)
 	g_nEnemyAlive = 0;
 	g_bEliminated = false;
 
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
 	//SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
 	//SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);

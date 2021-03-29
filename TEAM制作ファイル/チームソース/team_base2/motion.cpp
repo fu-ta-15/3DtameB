@@ -17,7 +17,6 @@
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
-void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy);
 void PlayerMotion(bool bPlayMotion);
 void EnemyMotion(bool bPlayMotion, int nIdx);
 void BossMotion(bool bPlayMotion);

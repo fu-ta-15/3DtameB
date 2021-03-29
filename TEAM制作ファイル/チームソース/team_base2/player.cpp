@@ -12,7 +12,8 @@
 #include "fade.h"
 #include "result.h"
 #include "motion.h"
-
+#include "enemy.h"
+#include "commandaction.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -662,6 +663,37 @@ void ReadCharacterInfo(CharacterPartsInfo *characterInfo, char* fileName)
 				}
 				break;
 			}
+		}
+	}
+}
+
+/* コマンドアクション終了後に呼ばれる */
+void OnPlayerFinishAction(void)
+{
+	Player *pPlayer = GetPlayer();
+	Enemy *pEnemy = GetEnemy();
+
+	ResetMotion(SELECTMOTION_PLAYER, false, true, true, true, NULL);
+
+	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+	{
+		//敵との距離 高さを考えない
+		float fDistanceToEnemy = sqrtf((pPlayer->pos.x - pEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - pEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z));
+
+		//距離が検知範囲以内だったら
+		if (fDistanceToEnemy <= CA_ATTACK_RADIUS)
+		{
+			//プレイヤーから敵への単位ベクトル
+			D3DXVECTOR3 vecPtoE = pEnemy[nCntEnemy].pos - pPlayer->pos;
+			D3DXVec3Normalize(&vecPtoE, &vecPtoE);
+
+			//敵ノックバック
+			pEnemy[nCntEnemy].move.x += vecPtoE.x * CA_ATTACK_KNOCKBACK;
+			pEnemy[nCntEnemy].move.y += 10.0f;
+			pEnemy[nCntEnemy].move.z += vecPtoE.z * CA_ATTACK_KNOCKBACK;
+
 		}
 	}
 }

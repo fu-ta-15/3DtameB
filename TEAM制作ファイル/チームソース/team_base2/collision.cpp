@@ -101,7 +101,7 @@ void UpdateCollision(void)
 			if (pEnemy[nCntEnemy].bHit == true)
 			{
 				//プレイヤーが攻撃状態の場合
-				if (pPlayer->motionType == MOTIONTYPE_ATTACK)
+				if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK)
 				{
 					//プレイヤーが無敵状態じゃない場合
 					if (pEnemy[nCntEnemy].bInvincible != true)

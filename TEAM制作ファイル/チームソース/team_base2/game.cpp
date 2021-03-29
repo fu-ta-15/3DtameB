@@ -20,6 +20,7 @@
 #include "commandaction.h"
 #include "boss.h"
 #include "boss_attack.h"
+#include "effect.h"
 
 //=============================================================================
 // グローバル変数
@@ -46,6 +47,8 @@ HRESULT InitGame(void)
 	
 	//コマンドアクション初期化処理
 	InitCommand();
+	
+	InitEffect();
 
 	//---ステージに依るもの----
 
@@ -65,7 +68,7 @@ HRESULT InitGame(void)
 	InitMeshwall();
 
 	//壁の配置
-	if (g_stage.nStageNum == 1) SetWall();
+	//if (g_stage.nStageNum == 1) SetWall();
 	
 	//スカイボックスの処理
 	InitSky();
@@ -99,7 +102,7 @@ void UninitGame(void)
 	UninitBossATK();
 	UninitBoss();
 
-
+	UninitEffect();
 
 	//オブジェクトの終了処理
 	UninitObject();
@@ -136,6 +139,9 @@ void UpdateGame(void)
 
 	if (pCmd->bActive == true)
 	{
+		//コマンドアクションの更新処理
+		UpdateCommand();
+
 		if (g_nCntFrame % 4 == 0)
 		{
 			//コリジョンの更新処理
@@ -159,6 +165,8 @@ void UpdateGame(void)
 			UpdateBoss();
 			UpdateBossATK();
 
+			UpdateEffect();
+
 			//オブジェクトの更新処理
 			UpdateObject();
 
@@ -180,11 +188,13 @@ void UpdateGame(void)
 		//カメラの更新処理
 		UpdateCamera();
 
-		//コマンドアクションの更新処理
-		UpdateCommand();
+
 	}
 	else
 	{
+		//コマンドアクションの更新処理
+		UpdateCommand();
+
 		//コリジョンの更新処理
 		UpdateCollision();
 
@@ -203,6 +213,8 @@ void UpdateGame(void)
 		UpdateBoss();
 		UpdateBossATK();
 
+		UpdateEffect();
+
 		//オブジェクトの更新処理
 		UpdateObject();
 
@@ -220,9 +232,6 @@ void UpdateGame(void)
 
 		//スカイボックスの更新処理
 		UpdateSky();
-
-		//コマンドアクションの更新処理
-		UpdateCommand();
 
 		if (GetKeyboardTrigger(DIK_RETURN) == true)
 		{
@@ -253,6 +262,8 @@ void DrawGame(void)
 
 		DrawBoss();
 		DrawBossATK();
+
+		DrawEffect();
 
 		//オブジェクトの描画処理
 		DrawObject();
