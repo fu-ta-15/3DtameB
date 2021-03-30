@@ -41,7 +41,7 @@ HRESULT InitMeshfield(int nStageNum)
 		break;
 
 	case 1:
-		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/block_stage2.jpg", &g_pTextureMeshfield);
+		D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/OIP.jfif", &g_pTextureMeshfield);
 		break;
 
 	case 2:

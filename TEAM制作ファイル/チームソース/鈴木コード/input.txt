@@ -1,0 +1,12 @@
+	DIJOYSTATE2 *pController = pGetPadCont();					// コントローラー情報のポインタ
+
+	if (pController->lX != 0 || pController->lY != 0)
+	{// スティックが傾いたら
+		// スティックの傾けている位置
+		float fAngle = atan2f((float)pController->lX, -(float)pController->lY);
+
+		g_Player.move.x += sinf((D3DX_PI + fAngle) - pCamera->rot.y) * 0.5f;			// X軸移動量の決定
+		g_Player.move.z += cosf((D3DX_PI + fAngle) - pCamera->rot.y) * 0.5f;			// Z軸移動量の決定
+
+		g_Player.rotDest.y = fAngle - pCamera->rot.y;
+	}

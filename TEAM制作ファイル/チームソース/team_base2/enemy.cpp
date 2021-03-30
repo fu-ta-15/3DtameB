@@ -11,6 +11,8 @@
 #include "fade.h"
 #include "portal.h"
 #include "meshfield.h"
+#include "bullet.h"
+#include "collision.h"
 
 #include <stdio.h>
 
@@ -43,6 +45,7 @@ typedef struct
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
 void LoadXFileEnemy(const char* cXFileName, Model *model);
+void SearchPlayer(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -111,10 +114,10 @@ void InitEnemy(void)
 	g_nEnemyAlive = 0;
 	g_bEliminated = false;
 
-	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
+	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
 	//SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
-	//SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
@@ -242,6 +245,7 @@ void UpdateEnemy(void)
 				g_nEnemyAlive--;
 			}
 
+			
 			//モーション管理
 			if (g_aEnemy[nCntEnemy].move.x != 0.0f || g_aEnemy[nCntEnemy].move.z != 0.0f)
 			{
@@ -265,13 +269,43 @@ void UpdateEnemy(void)
 					StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT001_NEUTRAL, nCntEnemy);
 				}
 			}
-			//StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT001_WALK, nCntEnemy);
 
 			//プレイヤーとの距離
 			float fDistanceToPlayer = sqrtf((pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - g_aEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z));
 
+			//距離が検知範囲以内だったら
+			if (fDistanceToPlayer <= ENEMY_DETECT_RADIUS && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT000)
+			{// robot000
+				//プレイヤーに向かう単位ベクトル
+				D3DXVECTOR3 vecToPlayer = pPlayer->pos - g_aEnemy[nCntEnemy].pos;
+				D3DXVec3Normalize(&vecToPlayer, &vecToPlayer);
+
+				//移動を加算
+				g_aEnemy[nCntEnemy].move += vecToPlayer * ENEMY_MOVESPEED;
+
+				//プレイヤーへのラジアン角
+				float fRadianToPlayer = atan2f(g_aEnemy[nCntEnemy].pos.x - pPlayer->pos.x, g_aEnemy[nCntEnemy].pos.z - pPlayer->pos.z);
+				g_aEnemy[nCntEnemy].rot.y = fRadianToPlayer;
+			}
+			else if (fDistanceToPlayer <= ENEMY_DETECT_RADIUS_RANGED && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT001)
+			{// robot001
+				if (fDistanceToPlayer >= ENEMY_ATTACK_RADIUS_RANGED)
+				{
+					//プレイヤーに向かう単位ベクトル
+					D3DXVECTOR3 vecToPlayer = pPlayer->pos - g_aEnemy[nCntEnemy].pos;
+					D3DXVec3Normalize(&vecToPlayer, &vecToPlayer);
+
+					//移動を加算
+					g_aEnemy[nCntEnemy].move += vecToPlayer * ENEMY_MOVESPEED;
+				}
+
+				//プレイヤーへのラジアン角
+				float fRadianToPlayer = atan2f(g_aEnemy[nCntEnemy].pos.x - pPlayer->pos.x, g_aEnemy[nCntEnemy].pos.z - pPlayer->pos.z);
+				g_aEnemy[nCntEnemy].rot.y = fRadianToPlayer;
+			}
+
 			//距離が攻撃範囲内だったら
-			if (fDistanceToPlayer <= ENEMY_ATTACK_RADIUS)
+			if (fDistanceToPlayer <= ENEMY_ATTACK_RADIUS && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT000)
 			{
 				//すでに攻撃していない場合
 				if (g_aEnemy[nCntEnemy].bAttack != true)
@@ -301,14 +335,50 @@ void UpdateEnemy(void)
 
 						//敵が攻撃クールタイムに入る
 						g_aEnemy[nCntEnemy].bAttack = true;
+
+						StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT000_ATTACK, nCntEnemy);
+					}
+				}
+			}
+			else if (fDistanceToPlayer <= ENEMY_ATTACK_RADIUS_RANGED && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT001)
+			{
+				//すでに攻撃していない場合
+				if (g_aEnemy[nCntEnemy].bAttack != true)
+				{
+					//プレイヤーの無敵時間じゃない場合
+					if (pPlayer->bInvincible != true)
+					{
+						D3DXVECTOR3 muzzlePos1, muzzlePos2;	// 銃口の位置
+						D3DXVECTOR3 vecBullet;
+
+						//現在時間取得（無敵時間計算）
+						g_aEnemy[nCntEnemy].dwTimeAtk = timeGetTime();
+
+						//現在時間取得（攻撃CT計算）
+						pPlayer->dwTime = timeGetTime();
+
+						muzzlePos1 = D3DXVECTOR3(g_aEnemy[nCntEnemy].aModel[2].mtxWorld._41, g_aEnemy[nCntEnemy].aModel[2].mtxWorld._42, g_aEnemy[nCntEnemy].aModel[2].mtxWorld._43);
+						muzzlePos2 = D3DXVECTOR3(g_aEnemy[nCntEnemy].aModel[3].mtxWorld._41, g_aEnemy[nCntEnemy].aModel[3].mtxWorld._42, g_aEnemy[nCntEnemy].aModel[3].mtxWorld._43);
+						vecBullet = D3DXVECTOR3(sinf(atan2f(pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x, pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z)), 0.0f, cosf(atan2f(pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x, pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z)));
+
+						SetBullet(muzzlePos1, vecBullet * ENEMY_ATTACK_BULLETSPEED, 10, 10);
+
+						//敵が攻撃クールタイムに入る
+						g_aEnemy[nCntEnemy].bAttack = true;
+
+						StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT001_ATTACK, nCntEnemy);
 					}
 				}
 			}
 
 			//時間経過で攻撃CT解除
-			if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME)
+			if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT000)
 			{
 				//CT解除
+				g_aEnemy[nCntEnemy].bAttack = false;
+			}
+			else if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME_RANGED && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT001)
+			{
 				g_aEnemy[nCntEnemy].bAttack = false;
 			}
 			
@@ -497,6 +567,8 @@ void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type)
 				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT000_COL_HEIGHT;
 				//初期キー
 
+				InitMotionRobot000();
+
 				break;
 
 			case ENEMYTYPE_ROBOT001:
@@ -645,25 +717,4 @@ void LoadXFileEnemy(const char* cXFileName, Model *model)
 void SearchPlayer(void)
 {
 	Player *pPlayer = GetPlayer();
-
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		//プレイヤーとの距離
-		float fDistanceToPlayer = sqrtf((pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - g_aEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z));
-
-		//距離が検知範囲以内だったら
-		if (fDistanceToPlayer <= ENEMY_DETECT_RADIUS)
-		{
-			//プレイヤーに向かう単位ベクトル
-			D3DXVECTOR3 vecToPlayer = pPlayer->pos - g_aEnemy[nCntEnemy].pos;
-			D3DXVec3Normalize(&vecToPlayer, &vecToPlayer);
-
-			//移動を加算
-			g_aEnemy[nCntEnemy].move += vecToPlayer * ENEMY_MOVESPEED;
-
-			//プレイヤーへのラジアン角
-			float fRadianToPlayer = atan2f(g_aEnemy[nCntEnemy].pos.x - pPlayer->pos.x, g_aEnemy[nCntEnemy].pos.z - pPlayer->pos.z);
-			g_aEnemy[nCntEnemy].rot.y = fRadianToPlayer;
-		}
-	}
 }

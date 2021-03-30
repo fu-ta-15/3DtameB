@@ -31,6 +31,18 @@
     <Filter Include="ヘッダー ファイル\SYSTEM">
       <UniqueIdentifier>{a734cc45-3ab6-44b1-acb2-1c992451df66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\TITLE">
+      <UniqueIdentifier>{4d0d421d-e30c-4f00-99aa-65c999538090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\TITLE">
+      <UniqueIdentifier>{898c7f67-bb75-4274-85d2-b24c106f171f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\RANKING">
+      <UniqueIdentifier>{a5e27d3e-c276-4594-ba6a-2914d8209df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\RANKING">
+      <UniqueIdentifier>{507d7bdc-a85b-46f0-af02-78db19ac755a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -96,6 +108,15 @@
     <ClInclude Include="bullet.h">
       <Filter>ヘッダー ファイル\GAME</Filter>
     </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>ヘッダー ファイル\TITLE</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking.h">
+      <Filter>ヘッダー ファイル\RANKING</Filter>
+    </ClInclude>
+    <ClInclude Include="Dinput.h">
+      <Filter>ヘッダー ファイル\SYSTEM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -160,6 +181,15 @@
     </ClCompile>
     <ClCompile Include="bullet.cpp">
       <Filter>ソース ファイル\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>ソース ファイル\TITLE</Filter>
+    </ClCompile>
+    <ClCompile Include="ranking.cpp">
+      <Filter>ソース ファイル\RANKING</Filter>
+    </ClCompile>
+    <ClCompile Include="Dinput.cpp">
+      <Filter>ソース ファイル\SYSTEM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

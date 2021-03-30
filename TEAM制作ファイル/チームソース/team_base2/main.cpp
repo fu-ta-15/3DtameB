@@ -18,6 +18,9 @@
 #include "result.h"
 #include "commandaction.h"
 #include "collision.h"
+#include "title.h"
+#include "ranking.h"
+#include "Dinput.h"
 
 #include <stdio.h>
 
@@ -49,7 +52,7 @@ LPDIRECT3D9 g_pD3D = NULL;					//Direct3Dオブジェクトへのポインタ
 LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;		//Direct3Dデバイスへのポインタ
 LPD3DXFONT g_pFont = NULL;					//フォントへのポインタ
 int g_nCountFPS;							//FPSカウンタ
-MODE g_mode = MODE_GAME;					//モードの種類
+MODE g_mode = MODE_TITLE;					//モードの種類
 int g_nUpdateSpeed = 60;
 
 //=============================================================================
@@ -281,9 +284,10 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	//キーボードの初期化処理
 	InitKeyboard(hInstance, hWnd);
+	InitKeypad(hInstance, hWnd);
 
 	//フェードの初期化
-	InitFade(MODE_GAME);
+	InitFade(MODE_TITLE);
 
 	//モードの設定
 	SetMode(g_mode);
@@ -297,13 +301,14 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 void Uninit(void)
 {
 	//キーボードの終了処理
+	UninitKeypad();
 	UninitKeyboard();
 
 	//フェードの終了
 	UninitFade();
 
 	//ゲーム画面の終了処理
-	UninitGame();
+	//UninitGame();
 
 	//Direct3Dデバイスの開放
 	if (g_pD3DDevice != NULL)
@@ -334,10 +339,14 @@ void Update(void)
 {
 	//キーボードの更新処理
 	UpdateKeyboard();
+	UpdateKeypad();
 
 	//更新処理
 	switch (g_mode)
 	{
+	case MODE_TITLE:
+		UpdateTitle();
+		break;
 
 	case MODE_GAME:			//ゲーム画面
 		UpdateGame();
@@ -345,6 +354,10 @@ void Update(void)
 
 	case MODE_RESULT:		//リザルト画面
 		UpdateResult();
+		break;
+
+	case MODE_RANKING:
+		UpdateRanking();
 		break;
 	}
 
@@ -378,6 +391,9 @@ void Draw(void)
 
 		switch (g_mode)
 		{
+		case MODE_TITLE:
+			DrawTitle();
+			break;
 
 		case MODE_GAME:			//ゲーム画面
 			DrawGame();
@@ -385,6 +401,10 @@ void Draw(void)
 
 		case MODE_RESULT:		//リザルト画面
 			DrawResult();
+			break;
+
+		case MODE_RANKING:
+			DrawRanking();
 			break;
 		}
 
@@ -462,12 +482,20 @@ void SetMode(MODE mode)
 	//終了処理
 	switch (g_mode)
 	{
+	case MODE_TITLE:
+		UninitTitle();
+		break;
+
 	case MODE_GAME:			//ゲーム画面
 		UninitGame();
 		break;
 
 	case MODE_RESULT:		//リザルト画面
 		UninitResult();
+		break;
+
+	case MODE_RANKING:
+		UninitRanking();
 		break;
 	}
 	g_mode = mode;
@@ -476,12 +504,20 @@ void SetMode(MODE mode)
 	//初期化処理
 	switch (g_mode)
 	{
+	case MODE_TITLE:
+		InitTitle();
+		break;
+
 	case MODE_GAME:		//ゲーム画面
 		InitGame();
 		break;
 
 	case MODE_RESULT:	//リザルト画面
 		InitResult();
+		break;
+
+	case MODE_RANKING:
+		InitRanking();
 		break;
 	}
 

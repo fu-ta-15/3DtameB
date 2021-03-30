@@ -155,6 +155,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="commandaction.h" />
+    <ClInclude Include="Dinput.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
@@ -168,8 +169,10 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="portal.h" />
+    <ClInclude Include="ranking.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="skybox.h" />
+    <ClInclude Include="title.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="boss.cpp" />
@@ -178,6 +181,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="commandaction.cpp" />
+    <ClCompile Include="Dinput.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -191,8 +195,10 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="portal.cpp" />
+    <ClCompile Include="ranking.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="skybox.cpp" />
+    <ClCompile Include="title.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

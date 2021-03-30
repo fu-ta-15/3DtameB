@@ -11,7 +11,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 
-#include "dinput.h"					//入力処理に必要
+#include <dinput.h>					//入力処理に必要
 #include <windows.h>
 #include "d3dx9.h"					//描画処理に必要
 #include "xaudio2.h"				//サウンド再生に必要
@@ -58,8 +58,10 @@ typedef struct
 //=============================================================================
 typedef enum
 {
+	MODE_TITLE,
 	MODE_GAME,			//ゲーム画面
 	MODE_RESULT,		//リザルト画面
+	MODE_RANKING,
 	MODE_MAX
 }MODE;
 

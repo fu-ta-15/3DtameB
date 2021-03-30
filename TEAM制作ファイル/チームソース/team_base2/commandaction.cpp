@@ -44,6 +44,7 @@ HRESULT InitCommand(void)
 	//初期化
 	g_commandAct.nActionNum = CA_BUTTON_NUM_NAGINATA;	// 表示するボタンの数
 	g_commandAct.nActionCounter = 0;					// カウンター初期化
+	g_commandAct.nUsePower = 0;
 	for (int nCntBtn = 0; nCntBtn < g_commandAct.nActionNum; nCntBtn++)
 	{
 		//ボタンの数によって位置を変える
@@ -143,120 +144,124 @@ void UpdateCommand(void)
 		break;
 	}
 
-	//頂点バッファをロックし頂点情報へのポインタを取得
-	VERTEX_2D *pVertexButton;
-	g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton, 0);
+	if (g_commandAct.nUsePower >= CA_USEPOWER_MAX) g_commandAct.bUsable = true;
+	else g_commandAct.bUsable = false;
 
-	for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++, pVertexButton += 4)
+	if (g_commandAct.bUsable)
 	{
-		//頂点座標の更新
-		pVertexButton[0].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);		 //TRIANGLESTRIPで四角
-		pVertexButton[1].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
-		pVertexButton[2].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);
-		pVertexButton[3].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
-	}
-	//頂点バッファをアンロックする
-	g_commandAct.buttonInfo.pVtxBuff->Unlock();
+		//頂点バッファをロックし頂点情報へのポインタを取得
+		VERTEX_2D *pVertexButton;
+		g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton, 0);
 
-	if (GetKeyboardTrigger(DIK_B) == true) SetCommandActionState(true);
-	if (g_commandAct.nActionCounter >= g_commandAct.nActionNum) SetCommandActionState(false);
-
-	//コマンド入力の部分
-	if (g_commandAct.bActive == true)
-	{
-		VERTEX_2D *pVertexButton1;
-		//頂点バッファロック
-		g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton1, 0);
-
-		//入力
-		if (GetKeyboardTrigger(DIK_1) == true)			// A
+		for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++, pVertexButton += 4)
 		{
-			g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 0;	// 入力したボタンを入れる
-			pVertexButton1 += (g_commandAct.nActionCounter) * 4;			// 頂点のポインタをカウンタの場所までずらす
-			g_commandAct.bPress = true;	// 入力フラグ入れる
+			//頂点座標の更新
+			pVertexButton[0].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);		 //TRIANGLESTRIPで四角
+			pVertexButton[1].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
+			pVertexButton[2].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y + CA_BUTTON_HEIGHT, 0.0f);
+			pVertexButton[3].pos = D3DXVECTOR3(g_commandAct.buttonInfo.pos[nCntBtn].x + CA_BUTTON_WIDTH, g_commandAct.buttonInfo.pos[nCntBtn].y, 0.0f);
 		}
-		else if (GetKeyboardTrigger(DIK_2) == true)		// B
-		{
-			g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 1;
-			pVertexButton1 += (g_commandAct.nActionCounter) * 4;
-			g_commandAct.bPress = true;
-		}
-		else if (GetKeyboardTrigger(DIK_3) == true)		// X
-		{
-			g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 2;
-			pVertexButton1 += (g_commandAct.nActionCounter) * 4;
-			g_commandAct.bPress = true;
-		}
-		else if (GetKeyboardTrigger(DIK_4) == true)		// Y
-		{
-			g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 3;
-			pVertexButton1 += (g_commandAct.nActionCounter) * 4;
-
-			g_commandAct.bPress = true;
-		}
-
-		if (g_commandAct.nActionCounter >= 0 && g_commandAct.nActionCounter < g_commandAct.nActionNum && g_commandAct.bPress == true)
-		{// カウンタが範囲内で指定キーが押された時
-			if (g_commandAct.nActionOrder[g_commandAct.nActionCounter] == g_commandAct.nActionOrderOut[g_commandAct.nActionCounter])
-			{//	入力のボタンと指示が一致していた場合
-				for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton1[nCntVtx].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);	// 色変える
-
-				g_commandAct.nActionNumCorrect++;	// 正解数にプラス
-
-				g_commandAct.nActionCounter++;	// カウントアップ
-				g_commandAct.bPress = false;	// 入力フラグ切る
-			}
-			else if (g_commandAct.nActionOrder[g_commandAct.nActionCounter] != g_commandAct.nActionOrderOut[g_commandAct.nActionCounter])
-			{// 入力のボタンと指示が一致していなかった場合
-				for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton1[nCntVtx].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f);	// 色変える
-
-				g_commandAct.nActionCounter++;	// カウントアップ
-				g_commandAct.bPress = false;	// 入力フラグ切る
-			}
-		}
-
-		//アンロック
+		//頂点バッファをアンロックする
 		g_commandAct.buttonInfo.pVtxBuff->Unlock();
 
+		if (GetKeyboardTrigger(DIK_B) == true) SetCommandActionState(true);
+		if (g_commandAct.nActionCounter >= g_commandAct.nActionNum) SetCommandActionState(false);
 
-		/* 残り時間の処理 */
-		float fValueTime = 1.0f;	// 残り時間の割合
-
-		g_commandAct.remainTimeInfo.dwCurrentTime = timeGetTime();	// 現在時間
-
-		//残り時間を計算
-		g_commandAct.remainTimeInfo.dwRemainTime = (g_commandAct.remainTimeInfo.dwCurrentTime - g_commandAct.remainTimeInfo.dwStartTime) - CA_TIMEREMAIN_TIMELIMIT * 2;
-		g_commandAct.remainTimeInfo.dwRemainTime = g_commandAct.remainTimeInfo.dwRemainTime * -1;
-
-		//割合を計算
-		fValueTime = (float)(g_commandAct.remainTimeInfo.dwRemainTime - CA_TIMEREMAIN_TIMELIMIT) / (float)CA_TIMEREMAIN_TIMELIMIT;
-
-		//頂点バッファのロック
-		VERTEX_2D *pVertexFront;
-		g_commandAct.remainTimeInfo.pVtxBuff[1]->Lock(0, 0, (void**)&pVertexFront, 0);
-
-		//頂点座標、テクスチャ座標の更新
-		pVertexFront[0].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x - (CA_TIMEREMAIN_WIDTH * fValueTime), g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
-		pVertexFront[1].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x - (CA_TIMEREMAIN_WIDTH * fValueTime), g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
-		pVertexFront[2].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
-		pVertexFront[3].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
-
-		pVertexFront[0].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVertexFront[1].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVertexFront[2].tex = D3DXVECTOR2(1.0f, 1.0f);
-		pVertexFront[3].tex = D3DXVECTOR2(1.0f, 0.0f);
-
-		//頂点バッファのアンロック
-		g_commandAct.remainTimeInfo.pVtxBuff[1]->Unlock();
-
-		//残り時間が0秒になったら
-		if (g_commandAct.remainTimeInfo.dwRemainTime <= CA_TIMEREMAIN_TIMELIMIT)
+		//コマンド入力の部分
+		if (g_commandAct.bActive == true)
 		{
-			SetCommandActionState(false);
+			VERTEX_2D *pVertexButton1;
+			//頂点バッファロック
+			g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton1, 0);
+
+			//入力
+			if (GetKeyboardTrigger(DIK_1) == true)			// A
+			{
+				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 0;	// 入力したボタンを入れる
+				pVertexButton1 += (g_commandAct.nActionCounter) * 4;			// 頂点のポインタをカウンタの場所までずらす
+				g_commandAct.bPress = true;	// 入力フラグ入れる
+			}
+			else if (GetKeyboardTrigger(DIK_2) == true)		// B
+			{
+				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 1;
+				pVertexButton1 += (g_commandAct.nActionCounter) * 4;
+				g_commandAct.bPress = true;
+			}
+			else if (GetKeyboardTrigger(DIK_3) == true)		// X
+			{
+				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 2;
+				pVertexButton1 += (g_commandAct.nActionCounter) * 4;
+				g_commandAct.bPress = true;
+			}
+			else if (GetKeyboardTrigger(DIK_4) == true)		// Y
+			{
+				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 3;
+				pVertexButton1 += (g_commandAct.nActionCounter) * 4;
+
+				g_commandAct.bPress = true;
+			}
+
+			if (g_commandAct.nActionCounter >= 0 && g_commandAct.nActionCounter < g_commandAct.nActionNum && g_commandAct.bPress == true)
+			{// カウンタが範囲内で指定キーが押された時
+				if (g_commandAct.nActionOrder[g_commandAct.nActionCounter] == g_commandAct.nActionOrderOut[g_commandAct.nActionCounter])
+				{//	入力のボタンと指示が一致していた場合
+					for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton1[nCntVtx].col = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);	// 色変える
+
+					g_commandAct.nActionNumCorrect++;	// 正解数にプラス
+
+					g_commandAct.nActionCounter++;	// カウントアップ
+					g_commandAct.bPress = false;	// 入力フラグ切る
+				}
+				else if (g_commandAct.nActionOrder[g_commandAct.nActionCounter] != g_commandAct.nActionOrderOut[g_commandAct.nActionCounter])
+				{// 入力のボタンと指示が一致していなかった場合
+					for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton1[nCntVtx].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f);	// 色変える
+
+					g_commandAct.nActionCounter++;	// カウントアップ
+					g_commandAct.bPress = false;	// 入力フラグ切る
+				}
+			}
+
+			//アンロック
+			g_commandAct.buttonInfo.pVtxBuff->Unlock();
+
+
+			/* 残り時間の処理 */
+			float fValueTime = 1.0f;	// 残り時間の割合
+
+			g_commandAct.remainTimeInfo.dwCurrentTime = timeGetTime();	// 現在時間
+
+			//残り時間を計算
+			g_commandAct.remainTimeInfo.dwRemainTime = (g_commandAct.remainTimeInfo.dwCurrentTime - g_commandAct.remainTimeInfo.dwStartTime) - CA_TIMEREMAIN_TIMELIMIT * 2;
+			g_commandAct.remainTimeInfo.dwRemainTime = g_commandAct.remainTimeInfo.dwRemainTime * -1;
+
+			//割合を計算
+			fValueTime = (float)(g_commandAct.remainTimeInfo.dwRemainTime - CA_TIMEREMAIN_TIMELIMIT) / (float)CA_TIMEREMAIN_TIMELIMIT;
+
+			//頂点バッファのロック
+			VERTEX_2D *pVertexFront;
+			g_commandAct.remainTimeInfo.pVtxBuff[1]->Lock(0, 0, (void**)&pVertexFront, 0);
+
+			//頂点座標、テクスチャ座標の更新
+			pVertexFront[0].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x - (CA_TIMEREMAIN_WIDTH * fValueTime), g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+			pVertexFront[1].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x - (CA_TIMEREMAIN_WIDTH * fValueTime), g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+			pVertexFront[2].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y + CA_TIMEREMAIN_HEIGHT, 0.0f);
+			pVertexFront[3].pos = D3DXVECTOR3(g_commandAct.remainTimeInfo.pos[1].x, g_commandAct.remainTimeInfo.pos[1].y - CA_TIMEREMAIN_HEIGHT, 0.0f);
+
+			pVertexFront[0].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVertexFront[1].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVertexFront[2].tex = D3DXVECTOR2(1.0f, 1.0f);
+			pVertexFront[3].tex = D3DXVECTOR2(1.0f, 0.0f);
+
+			//頂点バッファのアンロック
+			g_commandAct.remainTimeInfo.pVtxBuff[1]->Unlock();
+
+			//残り時間が0秒になったら
+			if (g_commandAct.remainTimeInfo.dwRemainTime <= CA_TIMEREMAIN_TIMELIMIT)
+			{
+				SetCommandActionState(false);
+			}
 		}
 	}
-
-
 
 }
 
@@ -512,53 +517,56 @@ void DrawTimeRemain(void)
 /* 範囲サークルの描画 */
 void DrawActionCircle(void)
 {
-	LPDIRECT3DDEVICE9 pDevice;			// デバイスへのポインタ
-	D3DXMATRIX mtxTrans, mtxRot;		// 計算用マトリックス
+	if (g_commandAct.bUsable)
+	{
+		LPDIRECT3DDEVICE9 pDevice;			// デバイスへのポインタ
+		D3DXMATRIX mtxTrans, mtxRot;		// 計算用マトリックス
 
-	//デバイス取得
-	pDevice = GetDevice();
+		//デバイス取得
+		pDevice = GetDevice();
 
-	//合成の設定
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース（描画元）の合成方法の設定
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);	//デスティネーション（描画先）の合成方法の設定
+		//合成の設定
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース（描画元）の合成方法の設定
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);	//デスティネーション（描画先）の合成方法の設定
 
-	//カリングの設定
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+		//カリングの設定
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	//ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&g_commandAct.actionCircle.mtxWorld);
+		//ワールドマトリックスの初期化
+		D3DXMatrixIdentity(&g_commandAct.actionCircle.mtxWorld);
 
-	//向きの反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, g_commandAct.actionCircle.rot.y, g_commandAct.actionCircle.rot.x, g_commandAct.actionCircle.rot.z);
-	D3DXMatrixMultiply(&g_commandAct.actionCircle.mtxWorld, &g_commandAct.actionCircle.mtxWorld, &mtxRot);
+		//向きの反映
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, g_commandAct.actionCircle.rot.y, g_commandAct.actionCircle.rot.x, g_commandAct.actionCircle.rot.z);
+		D3DXMatrixMultiply(&g_commandAct.actionCircle.mtxWorld, &g_commandAct.actionCircle.mtxWorld, &mtxRot);
 
-	//位置を反映
-	D3DXMatrixTranslation(&mtxTrans, g_commandAct.actionCircle.pos.x, g_commandAct.actionCircle.pos.y, g_commandAct.actionCircle.pos.z);
-	D3DXMatrixMultiply(&g_commandAct.actionCircle.mtxWorld, &g_commandAct.actionCircle.mtxWorld, &mtxTrans);
+		//位置を反映
+		D3DXMatrixTranslation(&mtxTrans, g_commandAct.actionCircle.pos.x, g_commandAct.actionCircle.pos.y, g_commandAct.actionCircle.pos.z);
+		D3DXMatrixMultiply(&g_commandAct.actionCircle.mtxWorld, &g_commandAct.actionCircle.mtxWorld, &mtxTrans);
 
-	//ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &g_commandAct.actionCircle.mtxWorld);
+		//ワールドマトリックスの設定
+		pDevice->SetTransform(D3DTS_WORLD, &g_commandAct.actionCircle.mtxWorld);
 
-	//頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, g_commandAct.actionCircle.pVtxBuff, 0, sizeof(VERTEX_3D));
+		//頂点バッファをデータストリームに設定
+		pDevice->SetStreamSource(0, g_commandAct.actionCircle.pVtxBuff, 0, sizeof(VERTEX_3D));
 
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
+		//頂点フォーマットの設定
+		pDevice->SetFVF(FVF_VERTEX_3D);
 
-	//テクスチャの設定
-	pDevice->SetTexture(0, g_commandAct.actionCircle.pTexture);
+		//テクスチャの設定
+		pDevice->SetTexture(0, g_commandAct.actionCircle.pTexture);
 
-	//ポリゴンの描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+		//ポリゴンの描画
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-	//カリングの設定を戻す
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+		//カリングの設定を戻す
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
-	//通常合成に戻す
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				//カリングの設定
-	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				//αブレンド(α値の合成)の設定
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース(描画元)の合成方法の設定
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//デスティネーション(描画先)の合成方法の設定
+		//通常合成に戻す
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				//カリングの設定
+		pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				//αブレンド(α値の合成)の設定
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//ソース(描画元)の合成方法の設定
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//デスティネーション(描画先)の合成方法の設定
+	}
 }
 
 /* コマンドアクションの状態を設定する */
@@ -615,3 +623,70 @@ void SetCommandActionState(bool bActive)
 	}
 }
 
+/* コマンドアクション終了後に呼ばれる */
+void OnPlayerFinishAction(void)
+{
+	Player *pPlayer = GetPlayer();
+	Enemy *pEnemy = GetEnemy();
+
+	if (pPlayer->weapon == PWEAPON_KATANA)
+	{
+		ResetMotion(SELECTMOTION_PLAYER, false, true, true, true, NULL);
+
+		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+
+		for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+		{
+			//敵との距離 高さを考えない
+			float fDistanceToEnemy = sqrtf((pPlayer->pos.x - pEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - pEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z));
+
+			//距離が範囲以内だったら
+			if (fDistanceToEnemy <= CA_ATTACK_RADIUS)
+			{
+				//プレイヤーから敵への単位ベクトル
+				D3DXVECTOR3 vecPtoE = pEnemy[nCntEnemy].pos - pPlayer->pos;
+				D3DXVec3Normalize(&vecPtoE, &vecPtoE);
+
+				//敵ノックバック
+				pEnemy[nCntEnemy].move.x += vecPtoE.x * CA_ATTACK_KNOCKBACK_KATANA;
+				pEnemy[nCntEnemy].move.y += 0.0f;
+				pEnemy[nCntEnemy].move.z += vecPtoE.z * CA_ATTACK_KNOCKBACK_KATANA;
+
+				pEnemy[nCntEnemy].nLife -= CA_ATTACK_DAMAGE;
+				pEnemy[nCntEnemy].bInvincible = true;
+				pEnemy[nCntEnemy].dwTimeInv = timeGetTime();
+			}
+		}
+	}
+	else if (pPlayer->weapon == PWEAPON_NAGINATA)
+	{
+		ResetMotion(SELECTMOTION_PLAYER, false, true, true, true, NULL);
+
+		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
+
+		for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+		{
+			//敵との距離 高さを考えない
+			float fDistanceToEnemy = sqrtf((pPlayer->pos.x - pEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - pEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - pEnemy[nCntEnemy].pos.z));
+
+			//距離が範囲以内だったら
+			if (fDistanceToEnemy <= CA_ATTACK_RADIUS)
+			{
+				//プレイヤーから敵への単位ベクトル
+				D3DXVECTOR3 vecPtoE = pEnemy[nCntEnemy].pos - pPlayer->pos;
+				D3DXVec3Normalize(&vecPtoE, &vecPtoE);
+
+				//敵ノックバック
+				pEnemy[nCntEnemy].move.x += vecPtoE.x * CA_ATTACK_KNOCKBACK_NAGINATA;
+				pEnemy[nCntEnemy].move.y += 0;
+				pEnemy[nCntEnemy].move.z += vecPtoE.z * CA_ATTACK_KNOCKBACK_NAGINATA;
+
+				pEnemy[nCntEnemy].nLife -= CA_ATTACK_DAMAGE;
+				pEnemy[nCntEnemy].bInvincible = true;
+				pEnemy[nCntEnemy].dwTimeInv = timeGetTime();
+			}
+		}
+	}
+
+	g_commandAct.nUsePower = 0;
+}
