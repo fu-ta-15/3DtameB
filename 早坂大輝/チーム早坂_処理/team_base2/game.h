@@ -23,6 +23,7 @@ void UpdateGame(void);
 void DrawGame(void);
 Stage *GetStage(void);
 void SetWall(void);
+void SetPause(bool bPause);
 
 #endif
 

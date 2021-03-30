@@ -19,12 +19,14 @@
 #include "object.h"
 #include "commandaction.h"
 #include "score.h"
+#include "pause.h"
 
 //=============================================================================
 // グローバル変数
 //=============================================================================
 Stage g_stage;
 int g_nCntFrame;
+bool g_bPause = false;		//ポーズ中かどうか
 
 //=============================================================================
 // ゲーム画面の初期化処理
@@ -68,6 +70,9 @@ HRESULT InitGame(void)
 
 	//スコアの処理
 	InitScore();
+
+	//ポーズの初期化処理
+	InitPause();
 	
 	//-----------------------
 
@@ -120,6 +125,9 @@ void UninitGame(void)
 
 	//スコアの終了処理
 	UninitScore();
+
+	//ポーズの終了処理
+	UninitPause();
 }
 
 //=============================================================================
@@ -130,9 +138,74 @@ void UpdateGame(void)
 	g_nCntFrame++;
 	CommandAction *pCmd = GetCAction();
 
-	if (pCmd->bActive == true)
+	//ポーズ
+	if (GetKeyboardTrigger(DIK_P) == true)
 	{
-		if (g_nCntFrame % 4 == 0)
+		//効果音
+
+
+		g_bPause = g_bPause ? false : true;	//1行Ver.
+	}
+
+	if (g_bPause == true)
+	{
+		//ポーズの更新処理
+		UpdatePause();
+	}
+
+	if (g_bPause == false)
+	{
+
+		if (pCmd->bActive == true)
+		{
+			if (g_nCntFrame % 4 == 0)
+			{
+				//コリジョンの更新処理
+				UpdateCollision();
+
+				//メッシュフィールドの更新処理
+				UpdateMeshfield();
+
+				//壁(メッシュ)の更新処理
+				UpdateMeshwall();
+
+				//モーションの更新処理
+				UpdateMotion();
+
+				//モデルの更新処理
+				UpdatePlayer();
+
+				//敵の更新処理
+				UpdateEnemy();
+
+				//オブジェクトの更新処理
+				UpdateObject();
+
+				//カメラの更新処理
+				UpdateCamera();
+
+				//ライトの更新処理
+				UpdateLight();
+
+				//ポータルの更新処理
+				UpdatePortal();
+
+				//スカイボックスの更新処理
+				UpdateSky();
+
+				//スコアの更新処理
+				UpdateScore();
+
+				if (GetKeyboardTrigger(DIK_RETURN) == true)
+				{
+					g_stage.nStageNum += 1;
+					SetFade(FADE_OUT, MODE_GAME);
+				}
+			}
+			//コマンドアクションの更新処理
+			UpdateCommand();
+		}
+		else
 		{
 			//コリジョンの更新処理
 			UpdateCollision();
@@ -142,9 +215,6 @@ void UpdateGame(void)
 
 			//壁(メッシュ)の更新処理
 			UpdateMeshwall();
-
-			//モーションの更新処理
-			UpdateMotion();
 
 			//モデルの更新処理
 			UpdatePlayer();
@@ -158,6 +228,9 @@ void UpdateGame(void)
 			//カメラの更新処理
 			UpdateCamera();
 
+			//モーションの更新処理
+			UpdateMotion();
+
 			//ライトの更新処理
 			UpdateLight();
 
@@ -167,60 +240,14 @@ void UpdateGame(void)
 			//スカイボックスの更新処理
 			UpdateSky();
 
-			//スコアの更新処理
-			UpdateScore();
+			//コマンドアクションの更新処理
+			UpdateCommand();
 
 			if (GetKeyboardTrigger(DIK_RETURN) == true)
 			{
 				g_stage.nStageNum += 1;
 				SetFade(FADE_OUT, MODE_GAME);
 			}
-		}
-		//コマンドアクションの更新処理
-		UpdateCommand();
-	}
-	else
-	{
-		//コリジョンの更新処理
-		UpdateCollision();
-
-		//メッシュフィールドの更新処理
-		UpdateMeshfield();
-
-		//壁(メッシュ)の更新処理
-		UpdateMeshwall();
-
-		//モデルの更新処理
-		UpdatePlayer();
-
-		//敵の更新処理
-		UpdateEnemy();
-
-		//オブジェクトの更新処理
-		UpdateObject();
-
-		//カメラの更新処理
-		UpdateCamera();
-
-		//モーションの更新処理
-		UpdateMotion();
-
-		//ライトの更新処理
-		UpdateLight();
-
-		//ポータルの更新処理
-		UpdatePortal();
-
-		//スカイボックスの更新処理
-		UpdateSky();
-
-		//コマンドアクションの更新処理
-		UpdateCommand();
-
-		if (GetKeyboardTrigger(DIK_RETURN) == true)
-		{
-			g_stage.nStageNum += 1;
-			SetFade(FADE_OUT, MODE_GAME);
 		}
 	}
 }
@@ -259,6 +286,12 @@ void DrawGame(void)
 
 		//スコアの描画処理
 		DrawScore();
+
+		//ポーズの描画処理
+		if (g_bPause == true)
+		{
+			DrawPause();
+		}
 }
 
 //=============================================================================
@@ -278,4 +311,12 @@ void SetWall(void)
 	SetMeshwall(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI / 2, 0.0f), 700.0f, 50.0f);
 	SetMeshwall(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI / -2, 0.0f), 700.0f, 50.0f);
 	SetMeshwall(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), 700.0f, 50.0f);
+}
+
+//=============================================================================
+// ポーズの設定
+//=============================================================================
+void SetPause(bool bPause)
+{
+	g_bPause = bPause;
 }
