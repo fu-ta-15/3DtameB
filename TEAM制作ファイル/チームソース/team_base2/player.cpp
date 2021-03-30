@@ -16,6 +16,7 @@
 #include "commandaction.h"
 #include "bullet.h"
 #include "Dinput.h"
+#include "score.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -229,7 +230,7 @@ void UpdatePlayer(void)
 		if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
 		else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
 	}
-
+	AddScore(10);
 }
 
 //-----------------------------------------------------------------------------
