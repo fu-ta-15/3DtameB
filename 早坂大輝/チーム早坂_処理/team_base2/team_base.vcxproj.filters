@@ -96,6 +96,9 @@
     <ClInclude Include="score.h">
       <Filter>ヘッダー ファイル\SYSTEM</Filter>
     </ClInclude>
+    <ClInclude Include="pause.h">
+      <Filter>ヘッダー ファイル\SYSTEM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -153,6 +156,9 @@
       <Filter>ソース ファイル\RANKING</Filter>
     </ClCompile>
     <ClCompile Include="score.cpp">
+      <Filter>ソース ファイル\SYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="pause.cpp">
       <Filter>ソース ファイル\SYSTEM</Filter>
     </ClCompile>
   </ItemGroup>
