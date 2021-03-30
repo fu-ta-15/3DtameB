@@ -145,6 +145,8 @@ void UpdateBoss(void)
 		if (g_Boss.nLife <= 0)
 		{
 			g_Boss.bUse = false;
+
+			SetFade(FADE_OUT, MODE_RANKING);
 		}
 	}
 

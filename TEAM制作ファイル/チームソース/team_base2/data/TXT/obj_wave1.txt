@@ -37,7 +37,7 @@ MODEL_SET
 	#[ì|ñÿ]
 	TYPE = 4
 	POS = -450.0 0.0 150.0
-	ROT = 0.0 45.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -59,7 +59,7 @@ MODEL_SET
 	#[ì|ñÿ]
 	TYPE = 4
 	POS = 450.0 0.0 550.0
-	ROT = 0.0 10.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -69,7 +69,7 @@ MODEL_SET
 	#[ì|ñÿ]
 	TYPE = 4
 	POS = -600.0 0.0 600.0
-	ROT = 0.0 10.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -79,7 +79,7 @@ MODEL_SET
 	#[ñÿ]
 	TYPE = 5
 	POS = -300.0 0.0 90.0
-	ROT = 0.0 45.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -89,7 +89,7 @@ MODEL_SET
 	#[ñÿ]
 	TYPE = 5
 	POS = 350.0 0.0 -400.0
-	ROT = 0.0 45.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -99,7 +99,7 @@ MODEL_SET
 	#[ñÿ]
 	TYPE = 5
 	POS = -500.0 0.0 -600.0
-	ROT = 0.0 45.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -119,7 +119,7 @@ MODEL_SET
 	#[ä‚(ëÂ)]
 	TYPE = 1
 	POS = 100.0 0.0 -50.0
-	ROT = 0.0 -90.0 0.0
+	ROT = 0.0 -0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -152,7 +152,7 @@ MODEL_SET
 	#[í∑Ç¢ä‚]
 	TYPE = 3
 	POS = 650.0 0.0 10.0
-	ROT = 0.0 55.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -182,7 +182,7 @@ MODEL_SET
 	#[è¨êŒ]
 	TYPE = 6
 	POS = -200.0 0.0 570.0
-	ROT = 0.0 55.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -193,7 +193,7 @@ MODEL_SET
 	#[è¨êŒ]
 	TYPE = 6
 	POS = -200.0 0.0 -620.0
-	ROT = 0.0 55.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -204,7 +204,7 @@ MODEL_SET
 	#[è¨êŒ]
 	TYPE = 6
 	POS = 450.0 0.0 0.0
-	ROT = 0.0 55.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -214,7 +214,7 @@ MODEL_SET
 	#[è¨êŒ]
 	TYPE = 6
 	POS = 580.0 0.0 -600.0
-	ROT = 0.0 55.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET
@@ -224,7 +224,7 @@ MODEL_SET
 	#[è¨êŒ]
 	TYPE = 6
 	POS = -580.0 0.0 -100.0
-	ROT = 0.0 55.0 0.0
+	ROT = 0.0 0.0 0.0
 	SET
 
 END_MODEL_SET

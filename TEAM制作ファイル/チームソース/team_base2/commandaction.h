@@ -30,6 +30,7 @@
 #define CA_TIMEREMAIN_HEIGHT (15)		// 残り時間のバー高さ
 #define CA_TIMEREMAIN_TIMELIMIT (3000)	// 入力の制限時間(ミリ秒)
 
+#define CA_USEPOWER_MAX (2)
 #define CA_CIRCLE_RADIUS (150.0f)	// circle radius
 
 //-----------------------------------------------------------------------------
@@ -82,7 +83,8 @@ typedef struct
 	int nActionCounter;					// カウンター
 	bool bPress;						// 入力のフラグ管理
 	bool bActive;						// アクティブかどうか
-	int nTest;
+	bool bUsable;
+	int nUsePower;
 } CommandAction;
 
 //-----------------------------------------------------------------------------

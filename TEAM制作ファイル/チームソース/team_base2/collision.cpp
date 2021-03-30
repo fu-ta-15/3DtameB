@@ -10,6 +10,7 @@
 #include "enemy.h"
 #include "input.h"
 #include "boss.h"
+#include "commandaction.h"
 
 //-----------------------------------------------------------------------------
 // マクロ定義
@@ -109,11 +110,15 @@ void UpdateCollision(void)
 					//プレイヤーが無敵状態じゃない場合
 					if (pEnemy[nCntEnemy].bInvincible != true)
 					{
+						CommandAction *pCmdACT = GetCAction();
+						
 						//現在時間取得
 						pEnemy[nCntEnemy].dwTimeInv = timeGetTime();
 
 						//体力減少
 						pEnemy[nCntEnemy].nLife--;
+
+						pCmdACT->nUsePower++;
 
 						//プレイヤーから敵へのベクトル
 						D3DXVECTOR3 vecPtoE = pEnemy[nCntEnemy].pos - pPlayer->pos;
@@ -160,11 +165,15 @@ void UpdateCollision(void)
 				//プレイヤーが無敵状態じゃない場合
 				if (pBoss->bInvincible != true)
 				{
+					CommandAction *pCmdACT = GetCAction();
+
 					//現在時間取得
 					pBoss->dwTimeInv = timeGetTime();
 
 					//体力減少
 					pBoss->nLife--;
+
+					pCmdACT->nUsePower++;
 
 					//プレイヤーから敵へのベクトル
 					D3DXVECTOR3 vecPtoE = pBoss->pos - pPlayer->pos;
