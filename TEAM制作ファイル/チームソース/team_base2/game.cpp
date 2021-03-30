@@ -24,6 +24,7 @@
 #include "bullet.h"
 #include "score.h"
 #include "hpgauge.h"
+#include "sound.h"
 //=============================================================================
 // グローバル変数
 //=============================================================================
@@ -92,6 +93,22 @@ HRESULT InitGame(void)
 	//
 	if (g_stage.nStageNum == 2) SetBoss(D3DXVECTOR3(0.0f, 0.0f, 100.0f), ENEMYTYPE_BOSS);
 
+	switch (g_stage.nStageNum)
+	{
+	case 0:
+		PlaySound(SOUND_LABEL_BGM000);
+		break;
+
+	case 1:
+		PlaySound(SOUND_LABEL_BGM000);
+		break;
+
+	case 2:
+		PlaySound(SOUND_LABEL_BOSS_BGM001);
+		break;
+	default:
+		break;
+	}
 	return S_OK;
 }
 
@@ -136,6 +153,8 @@ void UninitGame(void)
 	UninitCommand();
 
 	UninitPortal();
+
+	StopSound();
 
 	//ライトの終了処理
 	UninitLight();

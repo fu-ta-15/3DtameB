@@ -70,10 +70,10 @@ HRESULT InitPortal(void)
 	pVertex[3].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 	//’¸“_ƒJƒ‰[‚ÌÝ’è
-	pVertex[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVertex[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVertex[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	pVertex[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVertex[0].col = D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f);
+	pVertex[1].col = D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f);
+	pVertex[2].col = D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f);
+	pVertex[3].col = D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f);
 
 	//ƒeƒNƒXƒ`ƒƒÀ•W‚ÌÝ’è
 	pVertex[0].tex = D3DXVECTOR2(0.0f, 1.0f);
@@ -112,6 +112,7 @@ void UninitPortal(void)
 //-----------------------------------------------------------------------------
 void UpdatePortal(void)
 {
+
 	//if portal is active
 	if (g_portal.bActive == true)
 	{
@@ -122,8 +123,15 @@ void UpdatePortal(void)
 
 		D3DXVECTOR3 PortalPosDice = { fPos_X,fPos_Y,g_portal.pos.z };
 
-		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,80.0f,100.0f }, 300, 60, 6000);
-		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,60.0f,100.0f }, 200, 60, 600);
+		g_portal.rot.z += 0.003f;
+
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.4f, 0.0f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,80.0f,100.0f }, 200, 600, { 10.0f,10.0f });
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.4f, 0.0f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,80.0f,100.0f }, 200, 600, { 10.0f,10.0f });
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.7f, 0.2f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,60.0f,100.0f }, 100, 600, { 7.0f,7.0f });
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.7f, 0.2f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,60.0f,100.0f }, 100, 600, { 7.0f,7.0f });
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(1.0f, 0.2f, 0.8f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,60.0f,100.0f }, 50, 600, { 3.0f,3.0f });
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(1.0f, 0.2f, 0.8f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,60.0f,100.0f }, 50, 600, { 3.0f,3.0f });
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), { 0.02f,0.04f,0.0f }, { 30.0f,30.0f,100.0f }, 50, 600, { 6.0f,6.0f });
 
 		// ‰ñ“]‚ÌC³ (3.14’´‚¦‚½‚ç}‹t‚É)
 		if (g_portal.rot.y > D3DX_PI)
@@ -173,6 +181,10 @@ void DrawPortal(void)
 		//ƒfƒoƒCƒXŽæ“¾
 		pDevice = GetDevice();
 
+		//Œ¸ŽZ‡¬‚ÌÝ’è
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_MIN);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVDESTALPHA);
 
 		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -204,6 +216,11 @@ void DrawPortal(void)
 
 		//ƒ|ƒŠƒSƒ“‚Ì•`‰æ
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+
+		//’Êí‡¬‚É–ß‚·
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);

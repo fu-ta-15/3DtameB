@@ -123,6 +123,9 @@
     <ClInclude Include="hpgauge.h">
       <Filter>ヘッダー ファイル\GAME</Filter>
     </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>ヘッダー ファイル\SYSTEM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="hpgauge.cpp">
       <Filter>ソース ファイル\GAME</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>ソース ファイル\SYSTEM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

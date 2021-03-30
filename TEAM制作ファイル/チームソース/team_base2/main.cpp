@@ -21,6 +21,7 @@
 #include "title.h"
 #include "ranking.h"
 #include "Dinput.h"
+#include "sound.h"
 
 #include <stdio.h>
 
@@ -285,6 +286,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//キーボードの初期化処理
 	InitKeyboard(hInstance, hWnd);
 	InitKeypad(hInstance, hWnd);
+	InitSound(hWnd);
 
 	//フェードの初期化
 	InitFade(MODE_TITLE);

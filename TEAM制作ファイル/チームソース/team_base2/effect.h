@@ -59,7 +59,7 @@ void EffectOn(void);
 void SetEffect(D3DXVECTOR3 pos, D3DXCOLOR col, float movex, float movez,float movey,int nIdx,int nLife);
 
 void EffectPortalOn(void);
-void SetEffectPortal(D3DXVECTOR3 pos,D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVECTOR3 move, D3DXVECTOR3 posdicetance, int nIdx, int nLife, int nFrame);
+void SetEffectPortal(D3DXVECTOR3 pos, D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVECTOR3 move, D3DXVECTOR3 posdicetance, int nIdx, int nLife, D3DXVECTOR2 size);
 
 Effect *GetEffect(void);
 #endif 

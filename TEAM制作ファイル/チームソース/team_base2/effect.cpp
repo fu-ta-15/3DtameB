@@ -15,8 +15,8 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // マクロ定義
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-#define EFFECT_SIZEW					(6.0f)						// 弾のサイズ
-#define EFFECT_SIZEH					(8.0f)						// 弾のサイズ
+#define EFFECT_SIZEW					(12.0f)						// 弾のサイズ
+#define EFFECT_SIZEH					(12.0f)						// 弾のサイズ
 #define COLOR_RED						(255)						// 赤色
 #define COLOR_BULUE						(255)						// 青色
 #define COLOR_GREEN						(255)						// 緑色
@@ -211,9 +211,9 @@ void DrawEffect(void)
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 100);
 
 	//減算合成の設定
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DTADDRESS_BORDER);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_BOTHSRCALPHA);
 
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				//カリングの設定
 
@@ -441,11 +441,12 @@ void EffectPortalOn(void)
 			pEffect->nCnt++;
 
 			// 位置の更新
-			pEffect->posdest.y = (0.0f - pEffect->pos.y) * 0.0001f;
-			pEffect->posdest.x = (pPortal->pos.x - pEffect->pos.x) * 0.0001f;
+			pEffect->posdest.y = (0.0f - pEffect->pos.y) * 0.0002f;
+			pEffect->posdest.x = (pPortal->pos.x - pEffect->pos.x) * 0.0002f;
 
 			pEffect->pos.y += pEffect->posdest.y;
 			pEffect->pos.x += pEffect->posdest.x;
+
 
 			// ライフの減少
 			pEffect->nLife -= 1;
@@ -465,7 +466,7 @@ void EffectPortalOn(void)
 }
 
 // ポータルのエフェクト
-void SetEffectPortal(D3DXVECTOR3 pos,D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVECTOR3 move, D3DXVECTOR3 posdicetance, int nIdx, int nLife, int nFrame)
+void SetEffectPortal(D3DXVECTOR3 pos,D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVECTOR3 move, D3DXVECTOR3 posdicetance, int nIdx, int nLife, D3DXVECTOR2 size)
 {
 	//ポインタ
 	VERTEX_3D *pVtx;
@@ -487,6 +488,12 @@ void SetEffectPortal(D3DXVECTOR3 pos,D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVEC
 		 // 移動の設定
 			float fAngle = (float)((rand() % 628) - 628) / 100.f;
 
+			// 各頂点座標
+			pVtx[0].pos = D3DXVECTOR3(pEffect->pos.x - size.x, pEffect->pos.y + size.y, pEffect->pos.z);
+			pVtx[1].pos = D3DXVECTOR3(pEffect->pos.x + size.x, pEffect->pos.y + size.y, pEffect->pos.z);
+			pVtx[2].pos = D3DXVECTOR3(pEffect->pos.x - size.x, pEffect->pos.y - size.y, pEffect->pos.z);
+			pVtx[3].pos = D3DXVECTOR3(pEffect->pos.x + size.x, pEffect->pos.y - size.y, pEffect->pos.z);
+
 			pEffect->posdest.x = posDest.x;
 			pEffect->posdest.y = posDest.y;
 			pEffect->posdest.z = posDest.z;
@@ -502,6 +509,7 @@ void SetEffectPortal(D3DXVECTOR3 pos,D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVEC
 			pEffect->move.x = sinf(fAngle - D3DX_PI) * 3.0f;
 			pEffect->move.y = cosf(fAngle + D3DX_PI) * 3.0f;
 
+
 			// 色情報を設定
 			pEffect->color.r = col.r;
 			pEffect->color.b = col.b;
@@ -516,7 +524,6 @@ void SetEffectPortal(D3DXVECTOR3 pos,D3DXVECTOR3 posDest, D3DXCOLOR col, D3DXVEC
 
 			// 寿命の設定
 			pEffect->nLife = nLife+10000;
-			pEffect->nFrame = nFrame;
 
 			pEffect->type = EFFECT_TYPE_PORTAL;
 
