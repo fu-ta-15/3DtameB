@@ -652,6 +652,9 @@ void OnPlayerFinishAction(void)
 				pEnemy[nCntEnemy].move.y += 0.0f;
 				pEnemy[nCntEnemy].move.z += vecPtoE.z * CA_ATTACK_KNOCKBACK_KATANA;
 
+				pEnemy[nCntEnemy].nLife -= CA_ATTACK_DAMAGE;
+				pEnemy[nCntEnemy].bInvincible = true;
+				pEnemy[nCntEnemy].dwTimeInv = timeGetTime();
 			}
 		}
 	}
@@ -678,6 +681,9 @@ void OnPlayerFinishAction(void)
 				pEnemy[nCntEnemy].move.y += 0;
 				pEnemy[nCntEnemy].move.z += vecPtoE.z * CA_ATTACK_KNOCKBACK_NAGINATA;
 
+				pEnemy[nCntEnemy].nLife -= CA_ATTACK_DAMAGE;
+				pEnemy[nCntEnemy].bInvincible = true;
+				pEnemy[nCntEnemy].dwTimeInv = timeGetTime();
 			}
 		}
 	}

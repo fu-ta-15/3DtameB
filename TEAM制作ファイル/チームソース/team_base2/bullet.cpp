@@ -8,6 +8,7 @@
 #include "player.h"
 #include "effect.h"
 #include "collision.h"
+#include "collision.h"
 
 //=============================================================================
 // ƒ}ƒNƒ’è‹`
@@ -121,6 +122,7 @@ void UpdateBullet(void)
 {
 	//•Ï”éŒ¾
 	BULLET *pBullet;
+	Player *pPlayer = GetPlayer();
 
 	//pBullet‚Ì‰Šú‰»
 	pBullet = &g_aBullet[0];
@@ -139,6 +141,21 @@ void UpdateBullet(void)
 			{
 
 				// ’e‚Ìó‘Ô‚ðfalse‚É‚·‚é
+				pBullet->bUse = false;
+			}
+
+			if (CollisionBoxSphere(&pPlayer->pos, &pBullet->pos, PlAYER_WIDTH, PLAYER_HEIGHT, PlAYER_WIDTH, BULLET_HIT_RADIUS))
+			{
+				D3DXVECTOR3 kbVec;
+				D3DXVec3Normalize(&kbVec, &pBullet->move);
+
+				pPlayer->nLife--;
+
+				pPlayer->bInvincible = true;
+				pPlayer->dwTime = timeGetTime();
+				pPlayer->move += kbVec * BULLET_KNOCKBACK;
+
+
 				pBullet->bUse = false;
 			}
 		}

@@ -24,6 +24,7 @@
 #define CA_ATTACK_RADIUS (150.0f)
 #define CA_ATTACK_KNOCKBACK_KATANA (10.0f)
 #define CA_ATTACK_KNOCKBACK_NAGINATA (20.0f)
+#define CA_ATTACK_DAMAGE (3)
 
 #define CA_TIMEREMAIN_OBJ (2)			// 残り時間で使うオブジェクト数
 #define CA_TIMEREMAIN_WIDTH (600)		// 残り時間のバー幅

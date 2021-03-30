@@ -245,6 +245,7 @@ void UpdateEnemy(void)
 				g_nEnemyAlive--;
 			}
 
+			
 			//ƒ‚[ƒVƒ‡ƒ“ŠÇ—
 			if (g_aEnemy[nCntEnemy].move.x != 0.0f || g_aEnemy[nCntEnemy].move.z != 0.0f)
 			{
@@ -371,9 +372,13 @@ void UpdateEnemy(void)
 			}
 
 			//ŽžŠÔŒo‰ß‚ÅUŒ‚CT‰ðœ
-			if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME)
+			if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT000)
 			{
 				//CT‰ðœ
+				g_aEnemy[nCntEnemy].bAttack = false;
+			}
+			else if (dwCurrentTime - g_aEnemy[nCntEnemy].dwTimeAtk >= ENEMY_ATTACK_COOLTIME_RANGED && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT001)
+			{
 				g_aEnemy[nCntEnemy].bAttack = false;
 			}
 			
