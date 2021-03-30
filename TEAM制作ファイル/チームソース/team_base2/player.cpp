@@ -15,6 +15,7 @@
 #include "enemy.h"
 #include "commandaction.h"
 #include "bullet.h"
+#include "Dinput.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -122,6 +123,7 @@ void UninitPlayer(void)
 void UpdatePlayer(void)
 {
 	DWORD dwCurrentTime = timeGetTime();	// 現在時間
+	DIJOYSTATE2 *pController = pGetPadCont();
 
 	//位置保存
 	g_player.posOld = g_player.pos;
@@ -150,40 +152,57 @@ void UpdatePlayer(void)
 	/* モデルの移動 */
 	if (GetKeyboardPress(DIK_W) == true)
 	{
-		if (GetKeyboardPress(DIK_D) == true) MovePlayer(45.0f, PLAYER_MOVESPEED);			// 右前
-		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(-45.0f, PLAYER_MOVESPEED);		// 左前
+		if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(45.0f), PLAYER_MOVESPEED);			// 右前
+		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian (-45.0f), PLAYER_MOVESPEED);		// 左前
 		else MovePlayer(0.0f, PLAYER_MOVESPEED);												// 前
 	}
 	else if (GetKeyboardPress(DIK_S) == true)
 	{
-		if (GetKeyboardPress(DIK_D) == true) MovePlayer(135.0f, PLAYER_MOVESPEED);			// 右後ろ
-		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(-135.0f, PLAYER_MOVESPEED);		// 左後ろ
-		else MovePlayer(-180.0f, PLAYER_MOVESPEED);												// 後ろ
+		if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(135.0f), PLAYER_MOVESPEED);			// 右後ろ
+		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-135.0f), PLAYER_MOVESPEED);		// 左後ろ
+		else MovePlayer(D3DXToRadian(-180.0f), PLAYER_MOVESPEED);												// 後ろ
 	}
-	else if (GetKeyboardPress(DIK_A) == true) MovePlayer(-90.0f, PLAYER_MOVESPEED);			// 左
-	else if (GetKeyboardPress(DIK_D) == true) MovePlayer(90.0f, PLAYER_MOVESPEED);			// 右
+	else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-90.0f), PLAYER_MOVESPEED);			// 左
+	else if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(90.0f), PLAYER_MOVESPEED);			// 右
 
 	/* プレイヤーの振り向きを滑らかにする */
 	PlayerSmoothTurn();
 
 	//行動にモーションつける
-	if (GetKeyboardTrigger(DIK_SPACE) == true)
-	{
-		if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
-		else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
-	}
-	else if (GetKeyboardPress(DIK_W) ||
-		GetKeyboardPress(DIK_S) ||
-		GetKeyboardPress(DIK_A) ||
-		GetKeyboardPress(DIK_D) == true)
-	{
+	//if (GetKeyboardTrigger(DIK_SPACE) == true)
+	//{
+	//	if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+	//	else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
+	//}
+	//else if (GetKeyboardPress(DIK_W) ||
+	//	GetKeyboardPress(DIK_S) ||
+	//	GetKeyboardPress(DIK_A) ||
+	//	GetKeyboardPress(DIK_D) == true)
+	//{
+	//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
+	//}
+	//else
+	//{
+	//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
+	//}
+
+	if (pController->lX != 0 || pController->lY != 0)
+	{//	スティックが傾いた時
+		float fAngle = atan2f((float)pController->lX, -(float)pController->lY);
+		MovePlayer(fAngle, PLAYER_MOVESPEED);
+
 		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
 	}
 	else
 	{
 		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
 	}
-	//StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
+	if (GetKeypadTrigger(D_BUUTON_A))
+	{
+		if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+		else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
+	}
+
 
 	//攻撃中は移動０にする
 	if (g_player.motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
@@ -205,9 +224,11 @@ void UpdatePlayer(void)
 		if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
 		else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
 	}
-
-	if (GetKeyboardTrigger(DIK_Z)) SetBullet(g_player.pos, D3DXVECTOR3(sinf(g_player.rot.y + D3DX_PI), 0.0f, cosf(g_player.rot.y + D3DX_PI)), 10, 10);
-
+	if (GetKeypadTrigger(D_BUUTON_RB))
+	{
+		if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
+		else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
+	}
 
 }
 
@@ -443,13 +464,13 @@ KEY *GetDefKey(void)
 }
 
 /* モデルを移動させる関数 */
-void MovePlayer(float fMoveAngleDegree, float fMoveSpeed)
+void MovePlayer(float fMoveRad, float fMoveSpeed)
 {
 	Camera *pCamera = GetCamera();	// カメラの情報取得
 
-	g_player.move.x += sinf(pCamera->rot.y + D3DXToRadian(fMoveAngleDegree)) * fMoveSpeed;
-	g_player.move.z += cosf(pCamera->rot.y + D3DXToRadian(fMoveAngleDegree)) * fMoveSpeed;
-	g_player.rotDest.y = pCamera->rot.y + D3DXToRadian(fMoveAngleDegree) + D3DX_PI;
+	g_player.move.x += sinf(pCamera->rot.y + fMoveRad) * fMoveSpeed;
+	g_player.move.z += cosf(pCamera->rot.y + fMoveRad) * fMoveSpeed;
+	g_player.rotDest.y = pCamera->rot.y + fMoveRad + D3DX_PI;
 }
 
 /* Xファイルからモデルを読み込む関数*/

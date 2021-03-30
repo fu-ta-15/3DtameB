@@ -7,6 +7,7 @@
 #include "commandaction.h"
 #include "player.h"
 #include "enemy.h"
+#include "Dinput.h"
 #include "input.h"
 #include <time.h>
 
@@ -164,7 +165,12 @@ void UpdateCommand(void)
 		//頂点バッファをアンロックする
 		g_commandAct.buttonInfo.pVtxBuff->Unlock();
 
-		if (GetKeyboardTrigger(DIK_B) == true) SetCommandActionState(true);
+		if (!g_commandAct.bActive)
+		{
+			if (GetKeyboardTrigger(DIK_B) == true) SetCommandActionState(true);
+			if (GetKeypadTrigger(D_BUUTON_LB)) SetCommandActionState(true);
+		}
+
 		if (g_commandAct.nActionCounter >= g_commandAct.nActionNum) SetCommandActionState(false);
 
 		//コマンド入力の部分
@@ -175,25 +181,29 @@ void UpdateCommand(void)
 			g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton1, 0);
 
 			//入力
-			if (GetKeyboardTrigger(DIK_1) == true)			// A
+			if (GetKeyboardTrigger(DIK_1) == true ||
+				GetKeypadTrigger(D_BUUTON_A))			// A
 			{
 				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 0;	// 入力したボタンを入れる
 				pVertexButton1 += (g_commandAct.nActionCounter) * 4;			// 頂点のポインタをカウンタの場所までずらす
 				g_commandAct.bPress = true;	// 入力フラグ入れる
 			}
-			else if (GetKeyboardTrigger(DIK_2) == true)		// B
+			else if (GetKeyboardTrigger(DIK_2) == true ||
+					 GetKeypadTrigger(D_BUUTON_B))		// B
 			{
 				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 1;
 				pVertexButton1 += (g_commandAct.nActionCounter) * 4;
 				g_commandAct.bPress = true;
 			}
-			else if (GetKeyboardTrigger(DIK_3) == true)		// X
+			else if (GetKeyboardTrigger(DIK_3) == true ||
+					 GetKeypadTrigger(D_BUUTON_X))		// X
 			{
 				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 2;
 				pVertexButton1 += (g_commandAct.nActionCounter) * 4;
 				g_commandAct.bPress = true;
 			}
-			else if (GetKeyboardTrigger(DIK_4) == true)		// Y
+			else if (GetKeyboardTrigger(DIK_4) == true ||
+					 GetKeypadTrigger(D_BUUTON_Y))		// Y
 			{
 				g_commandAct.nActionOrderOut[g_commandAct.nActionCounter] = 3;
 				pVertexButton1 += (g_commandAct.nActionCounter) * 4;
