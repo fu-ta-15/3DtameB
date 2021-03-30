@@ -1,0 +1,197 @@
+#==============================================================================
+#
+# 『オブジェクト配置』オブジェクトファイル [obj.txt]
+# Author : SUZUKI FUUTA
+#
+#==============================================================================
+
+
+#------------------------------------------------------------------------------
+# テクスチャファイル名
+#------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------
+# モデルの種類
+#------------------------------------------------------------------------------
+NUM_MODEL = 8
+
+#------------------------------------------------------------------------------
+# モデルファイル名
+#------------------------------------------------------------------------------
+MODEL_NAME = data\\MODEL\\heri_break.x		#[1]
+MODEL_NAME = data\\MODEL\\minibreak.x		#[2]
+MODEL_NAME = data\\MODEL\\dentyu00.x		#[3]
+MODEL_NAME = data\\MODEL\\dentyu01.x		#[4]
+MODEL_NAME = data\\MODEL\\debris101.x		#[5]
+MODEL_NAME = data\\MODEL\\home.break.x		#[6]
+MODEL_NAME = data\\MODEL\\contaner00.x		#[7]
+MODEL_NAME = data\\MODEL\\rock001.x			#[8]
+
+#------------------------------------------------------------------------------
+# モデル配置情報
+#------------------------------------------------------------------------------
+NUM_MODEL_SET = 15
+
+MODEL_SET
+
+	#[ビル]
+	TYPE = 2
+	POS = -350.0 0.0 550.0
+	ROT = 0.0 -0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[ビル]
+	TYPE = 2
+	POS = 350.0 0.0 550.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[ビル]
+	TYPE = 2
+	POS = 150.0 0.0 -550.0
+	ROT = 0.0 0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[ヘリ]
+	TYPE = 1
+	POS = -450.0 0.0 -450.0
+	ROT = 0.0 0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱壊れ]
+	TYPE = 3
+	POS = -200.0 0.0 500.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱壊れ]
+	TYPE = 3
+	POS = -500.0 0.0 100.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱壊れ]
+	TYPE = 3
+	POS = 500.0 0.0 300.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱壊れ]
+	TYPE = 3
+	POS = 500.0 0.0 -300.0
+	ROT = 0.0 0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱]
+	TYPE = 4
+	POS = -500.0 0.0 500.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱]
+	TYPE = 4
+	POS = 200.0 0.0 500.0
+	ROT = 0.0 0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[電柱]
+	TYPE = 4
+	POS = -500.0 0.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[瓦礫]
+	TYPE = 5
+	POS = -300.0 0.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[家]
+	TYPE = 6
+	POS = 500.0 0.0 -500.0
+	ROT = 0.0 0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[家2]
+	TYPE = 7
+	POS = 570.0 0.0 100.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[岩]
+	TYPE = 8
+	POS = -500.0 0.0 300.0
+	ROT = 0.0 0.0 0.0
+	SET
+
+END_MODEL_SET
+
+MODEL_SET
+
+	#[岩]
+	TYPE = 8
+	POS = 300.0 0.0 -300.0
+	ROT = 0.0 0 0.0
+	SET
+
+END_MODEL_SET
+
+
+END_SCRIPT
