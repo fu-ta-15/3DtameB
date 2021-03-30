@@ -111,10 +111,10 @@ void InitEnemy(void)
 	g_nEnemyAlive = 0;
 	g_bEliminated = false;
 
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
-	//SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
-	//SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
+	SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
+	SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
@@ -270,6 +270,21 @@ void UpdateEnemy(void)
 			//プレイヤーとの距離
 			float fDistanceToPlayer = sqrtf((pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - g_aEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z));
 
+			//距離が検知範囲以内だったら
+			if (fDistanceToPlayer <= ENEMY_DETECT_RADIUS)
+			{
+				//プレイヤーに向かう単位ベクトル
+				D3DXVECTOR3 vecToPlayer = pPlayer->pos - g_aEnemy[nCntEnemy].pos;
+				D3DXVec3Normalize(&vecToPlayer, &vecToPlayer);
+
+				//移動を加算
+				g_aEnemy[nCntEnemy].move += vecToPlayer * ENEMY_MOVESPEED;
+
+				//プレイヤーへのラジアン角
+				float fRadianToPlayer = atan2f(g_aEnemy[nCntEnemy].pos.x - pPlayer->pos.x, g_aEnemy[nCntEnemy].pos.z - pPlayer->pos.z);
+				g_aEnemy[nCntEnemy].rot.y = fRadianToPlayer;
+			}
+
 			//距離が攻撃範囲内だったら
 			if (fDistanceToPlayer <= ENEMY_ATTACK_RADIUS)
 			{
@@ -318,11 +333,24 @@ void UpdateEnemy(void)
 				//ポータルを起動
 				ActivatePortal(true, true);
 			}
+
+			if (GetKeyboardTrigger(DIK_J))
+			{
+				//パーツ情報を渡す
+				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT001_MODELPARTS; nCntRobot++) g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot001[nCntRobot];
+				for (int nCnt = 0; nCnt < ENEMY_ROBOT001_MODELPARTS; nCnt++)
+				{
+					g_aEnemy[nCntEnemy].DefKey[nCnt] = KeyPosRot(g_modelRobot001[nCnt].pos.x, g_modelRobot001[nCnt].pos.y, g_modelRobot001[nCnt].pos.z, 0, 0, 0);
+					g_aEnemy[nCntEnemy].aModel[nCnt].nNumModel = g_modelRobot001[nCnt].nNumModel;
+				}
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
+			}
 		}
 	}
 
-	if (GetKeyboardTrigger(DIK_1)) SetEnemy(D3DXVECTOR3(0, 0, 0), ENEMYTYPE_ROBOT000);
-	if (GetKeyboardTrigger(DIK_2)) SetEnemy(D3DXVECTOR3(0, 0, 0), ENEMYTYPE_ROBOT001);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -487,27 +515,24 @@ void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type)
 					g_aEnemy[nCntEnemy].DefKey[nCnt] = KeyPosRot(g_modelRobot[nCnt].pos.x, g_modelRobot[nCnt].pos.y, g_modelRobot[nCnt].pos.z, 0, 0, 0);
 					g_aEnemy[nCntEnemy].aModel[nCnt].nNumModel = g_modelRobot[nCnt].nNumModel;
 				}
-				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT000_COL_WIDTH;
-				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT000_COL_WIDTH;
-				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT000_COL_HEIGHT;
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
 				//初期キー
 
 				break;
 
 			case ENEMYTYPE_ROBOT001:
 				//パーツ情報を渡す
-
 				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT001_MODELPARTS; nCntRobot++) g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot001[nCntRobot];
 				for (int nCnt = 0; nCnt < ENEMY_ROBOT001_MODELPARTS; nCnt++)
 				{
 					g_aEnemy[nCntEnemy].DefKey[nCnt] = KeyPosRot(g_modelRobot001[nCnt].pos.x, g_modelRobot001[nCnt].pos.y, g_modelRobot001[nCnt].pos.z, 0, 0, 0);
 					g_aEnemy[nCntEnemy].aModel[nCnt].nNumModel = g_modelRobot001[nCnt].nNumModel;
 				}
-				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT001_COL_WIDTH;
-				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT001_COL_WIDTH;
-				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT001_COL_HEIGHT;
-
-				InitMotionRobot001();
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
 
 				break;
 			default:
@@ -634,31 +659,4 @@ void LoadXFileEnemy(const char* cXFileName, Model *model)
 	//{
 	//	D3DXCreateTextureFromFile(pDevice, pMat[nCntMat].pTextureFilename, &model->pTexture[nCntMat]);
 	//}
-}
-
-/* プレイヤーを索敵 */
-void SearchPlayer(void)
-{
-	Player *pPlayer = GetPlayer();
-
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		//プレイヤーとの距離
-		float fDistanceToPlayer = sqrtf((pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - g_aEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z));
-
-		//距離が検知範囲以内だったら
-		if (fDistanceToPlayer <= ENEMY_DETECT_RADIUS)
-		{
-			//プレイヤーに向かう単位ベクトル
-			D3DXVECTOR3 vecToPlayer = pPlayer->pos - g_aEnemy[nCntEnemy].pos;
-			D3DXVec3Normalize(&vecToPlayer, &vecToPlayer);
-
-			//移動を加算
-			g_aEnemy[nCntEnemy].move += vecToPlayer * ENEMY_MOVESPEED;
-
-			//プレイヤーへのラジアン角
-			float fRadianToPlayer = atan2f(g_aEnemy[nCntEnemy].pos.x - pPlayer->pos.x, g_aEnemy[nCntEnemy].pos.z - pPlayer->pos.z);
-			g_aEnemy[nCntEnemy].rot.y = fRadianToPlayer;
-		}
-	}
 }

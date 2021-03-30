@@ -17,7 +17,6 @@
 #include "fade.h"
 #include "result.h"
 #include "commandaction.h"
-#include "collision.h"
 
 #include <stdio.h>
 

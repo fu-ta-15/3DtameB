@@ -22,10 +22,8 @@
 #define ENEMY_ROBOT_MODELPARTS (10)	// amount of parts of robot model
 #define ENEMY_ROBOT001_MODELPARTS (8)	
 
-#define ENEMY_ROBOT000_COL_HEIGHT (20)				// ロボット000の高さ (判定用)
-#define ENEMY_ROBOT000_COL_WIDTH (20)				// 幅
-#define ENEMY_ROBOT001_COL_HEIGHT (35)				// 001
-#define ENEMY_ROBOT001_COL_WIDTH (35)				// 
+#define ENEMY_ROBOT_COL_HEIGHT (20)				// ロボット型の敵の高さ (判定用)
+#define ENEMY_ROBOT_COL_WIDTH (20)				// 幅
 
 #define ENEMY_KNOCKBACK (10)			// ノックバック量
 #define ENEMY_INVINCIBLE_TIME (500)		// 攻撃された時の無敵時間

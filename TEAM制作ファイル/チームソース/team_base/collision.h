@@ -40,6 +40,5 @@ void SetBox(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fWidth, float
 void MoveVCollision(D3DXVECTOR3 *pPos, D3DXVECTOR3 *pRot, int nIdx);
 bool CollisionBoxBox(D3DXVECTOR3 *pPosA, D3DXVECTOR3 *pPosB, float fWidthA, float fDepthA, float fWidthB, float fDepthB);
 bool CollisionBoxSphere(D3DXVECTOR3 *pBoxPos, D3DXVECTOR3 *pSpherePos, float fBoxWidth, float fBoxHeight, float fBoxDepth, float fSphereRadius);
-void ColPlayerBoxThing(D3DXVECTOR3 posThing, float fWidthThing, float fDepthThing);
 
 #endif

@@ -8,7 +8,6 @@
 #include "collision.h"
 #include "player.h"
 #include "enemy.h"
-#include "input.h"
 
 //-----------------------------------------------------------------------------
 // マクロ定義
@@ -18,6 +17,7 @@
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
+void ColPlayerEnemy(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -51,7 +51,6 @@ void InitCollision(void)
 	SetSphere(g_WeaponCol1, D3DXVECTOR3(0.0f, 0.0f, 0.0f), tred, PLAYER_ATTACK_RADIUS, 10, 0);
 	SetSphere(g_WeaponCol2, D3DXVECTOR3(0.0f, 0.0f, 0.0f), tred, PLAYER_ATTACK_RADIUS, 10, 1);
 	SetSphere(g_WeaponCol3, D3DXVECTOR3(0, 0, 0), tred, PLAYER_ATTACK_RADIUS, 10, 2);
-
 #endif // !_DEBUG
 }
 
@@ -90,7 +89,7 @@ void UpdateCollision(void)
 			D3DXVECTOR3 spherePos = D3DXVECTOR3(pPlayer->aModel[3].mtxWorld._41, pPlayer->aModel[3].mtxWorld._42, pPlayer->aModel[3].mtxWorld._43);	// 球の場所 (プレイヤーの右手の位置)
 			
 			//敵位置
-			D3DXVECTOR3 enemyPosFix = D3DXVECTOR3(pEnemy[nCntEnemy].pos.x, pEnemy[nCntEnemy].pos.y + pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].pos.z);
+			D3DXVECTOR3 enemyPosFix = D3DXVECTOR3(pEnemy[nCntEnemy].pos.x, pEnemy[nCntEnemy].pos.y + (pEnemy[nCntEnemy].fHeight / 2), pEnemy[nCntEnemy].pos.z);
 
 			//判定
 			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol3, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
@@ -130,11 +129,11 @@ void UpdateCollision(void)
 			{
 				pEnemy[nCntEnemy].bInvincible = false;
 			}
-
-			//プレイヤーと敵の移動当たり判定
-			ColPlayerBoxThing(pEnemy[nCntEnemy].pos, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fDepth);
 		}
 	}
+
+	//プレイヤーと敵の衝突判定
+	ColPlayerEnemy();
 
 	//可視コリジョンの移動
 	g_WeaponCol1 = D3DXVECTOR3(pPlayer->mtxWeaponCol[0]._41, pPlayer->mtxWeaponCol[0]._42, pPlayer->mtxWeaponCol[0]._43);
@@ -374,61 +373,68 @@ if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
 return false;
 }
 
-/* プレイヤーと物の衝突 */
-void ColPlayerBoxThing(D3DXVECTOR3 posThing, float fWidthThing, float fDepthThing)
+/* プレイヤーと敵の衝突 */
+void ColPlayerEnemy(void)
 {
+	Enemy *pEnemy = GetEnemy();
 	Player *pPlayer = GetPlayer();
-	// 当たり判定 2d 判定後めり込み戻す
-	//奥
-	if (pPlayer->pos.x + PlAYER_WIDTH > posThing.x - fWidthThing &&
-		pPlayer->pos.x - PlAYER_WIDTH < posThing.x + fWidthThing &&
-		pPlayer->pos.z - PlAYER_WIDTH < posThing.z + fDepthThing)
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
 	{
-		if (pPlayer->posOld.z >= posThing.z + fDepthThing &&
-			pPlayer->posOld.x + PlAYER_WIDTH >= posThing.x - fWidthThing &&
-			pPlayer->posOld.x - PlAYER_WIDTH <= posThing.x + fWidthThing)
+		if (pEnemy[nCntEnemy].bUse == true)
 		{
-			pPlayer->pos.z = posThing.z + fDepthThing + PlAYER_WIDTH;
+			// 当たり判定 2d 判定後めり込み戻す
+			//奥
+			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth)
+			{
+				if (pPlayer->posOld.z - PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+					pPlayer->posOld.x - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				{
+					pPlayer->pos.z = pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth + PlAYER_WIDTH;
+				}
+			}
+
+			//手前
+			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+			{
+				if (pPlayer->posOld.z + PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+					pPlayer->posOld.x - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				{
+					pPlayer->pos.z = pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth - PlAYER_WIDTH;
+				}
+
+				//左
+				if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth)
+				{
+					if (pPlayer->posOld.x + PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+						pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+						pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+					{
+						pPlayer->pos.x = pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth - PlAYER_WIDTH;
+					}
+				}
+
+				//右
+				if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				{
+					if (pPlayer->posOld.x - PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+						pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+						pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+					{
+						pPlayer->pos.x = pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth + PlAYER_WIDTH;
+					}
+				}
+			}
 		}
 	}
-
-	//手前
-	if (pPlayer->pos.x + PlAYER_WIDTH > posThing.x - fWidthThing &&
-		pPlayer->pos.x - PlAYER_WIDTH < posThing.x + fWidthThing &&
-		pPlayer->pos.z + PlAYER_WIDTH > posThing.z - fDepthThing)
-	{
-		if (pPlayer->posOld.z <= posThing.z - fDepthThing &&
-			pPlayer->posOld.x + PlAYER_WIDTH >= posThing.x - fWidthThing &&
-			pPlayer->posOld.x - PlAYER_WIDTH <= posThing.x + fWidthThing)
-		{
-			pPlayer->pos.z = posThing.z - fDepthThing - PlAYER_WIDTH;
-		}
-	}
-
-	//左
-	if (pPlayer->pos.z - PlAYER_WIDTH < posThing.z + fDepthThing &&
-		pPlayer->pos.z + PlAYER_WIDTH > posThing.z - fDepthThing &&
-		pPlayer->pos.x + PlAYER_WIDTH > posThing.x - fWidthThing)
-	{
-		if (pPlayer->posOld.x <= posThing.x - fWidthThing &&
-			pPlayer->posOld.z - PlAYER_WIDTH <= posThing.z + fDepthThing &&
-			pPlayer->posOld.z + PlAYER_WIDTH >= posThing.z - fDepthThing)
-		{
-			pPlayer->pos.x = posThing.x - fWidthThing - PlAYER_WIDTH;
-		}
-	}
-
-	//右
-	if (pPlayer->pos.z - PlAYER_WIDTH < posThing.z + fDepthThing &&
-		pPlayer->pos.z + PlAYER_WIDTH > posThing.z - fDepthThing &&
-		pPlayer->pos.x - PlAYER_WIDTH < posThing.x + fWidthThing)
-	{
-		if (pPlayer->posOld.x >= posThing.x + fWidthThing &&
-			pPlayer->posOld.z - PlAYER_WIDTH <= posThing.z + fDepthThing &&
-			pPlayer->posOld.z + PlAYER_WIDTH >= posThing.z - fDepthThing)
-		{
-			pPlayer->pos.x = posThing.x + fWidthThing + PlAYER_WIDTH;
-		}
-	}
-
 }

@@ -87,9 +87,6 @@
     <ClInclude Include="boss.h">
       <Filter>ヘッダー ファイル\GAME</Filter>
     </ClInclude>
-    <ClInclude Include="boss_attack.h">
-      <Filter>ヘッダー ファイル\GAME</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -144,9 +141,6 @@
       <Filter>ソース ファイル\GAME</Filter>
     </ClCompile>
     <ClCompile Include="boss.cpp">
-      <Filter>ソース ファイル\GAME</Filter>
-    </ClCompile>
-    <ClCompile Include="boss_attack.cpp">
       <Filter>ソース ファイル\GAME</Filter>
     </ClCompile>
   </ItemGroup>

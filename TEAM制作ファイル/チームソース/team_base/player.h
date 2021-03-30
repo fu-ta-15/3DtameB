@@ -13,8 +13,8 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
-#define PLAYER_MOVESPEED (0.65f)													// プレイヤーの移動速度
-#define PLAYER_MODEL_AMOUNT (18)
+#define PLAYER_MOVESPEED (0.5f)													// プレイヤーの移動速度
+#define PLAYER_MODEL_AMOUNT (11)
 #define PLAYER_ATTACK_RADIUS (12.0f)											// プレイヤーの攻撃範囲
 #define PlAYER_WIDTH (7.5f)
 #define PLAYER_HEIGHT (50.0f)

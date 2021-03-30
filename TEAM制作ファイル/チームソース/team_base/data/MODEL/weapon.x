@@ -227,7 +227,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\wall002.jpg";
+    "E:\\HAL\\projects\\ツール\\モーションビューワ\\MotionViewer\\data\\TEXTURE\\wall002.jpg";
    }
   }
  }

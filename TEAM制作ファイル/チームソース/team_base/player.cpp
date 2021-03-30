@@ -56,7 +56,7 @@ void InitPlayer(void)
 	g_player.nLifeMax = PLAYER_HEALTH;
 
 	//テキスト読み込み
-	ReadCharacterInfo(&g_ModelInfo, "data\\TXT\\motion_team_model1.txt");
+	ReadCharacterInfo(&g_ModelInfo, "data\\TXT\\motion.txt");
 
 	//読み込んだ情報を使ってXファイル読み込み
 	for (int nCntModel = 0; nCntModel < g_ModelInfo.nModelNum; nCntModel++)
@@ -139,10 +139,10 @@ void UpdatePlayer(void)
 	g_player.move.y -= 0.2f;
 
 	//移動制限
-	//if (g_player.pos.x > FIELD_MAXSIZE) g_player.pos.x = FIELD_MAXSIZE;
-	//if (g_player.pos.x < -FIELD_MAXSIZE) g_player.pos.x = -FIELD_MAXSIZE;
-	//if (g_player.pos.z > FIELD_MAXSIZE) g_player.pos.z = FIELD_MAXSIZE;
-	//if (g_player.pos.z < -FIELD_MAXSIZE) g_player.pos.z = -FIELD_MAXSIZE;
+	if (g_player.pos.x > FIELD_MAXSIZE) g_player.pos.x = FIELD_MAXSIZE;
+	if (g_player.pos.x < -FIELD_MAXSIZE) g_player.pos.x = -FIELD_MAXSIZE;
+	if (g_player.pos.z > FIELD_MAXSIZE) g_player.pos.z = FIELD_MAXSIZE;
+	if (g_player.pos.z < -FIELD_MAXSIZE) g_player.pos.z = -FIELD_MAXSIZE;
 	if (g_player.pos.y <= 0.0f)
 	{
 		g_player.move.y = 0.0f;
@@ -171,20 +171,19 @@ void UpdatePlayer(void)
 	//行動にモーションつける
 	if (GetKeyboardTrigger(DIK_SPACE) == true)
 	{
-		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_ATTACK, NULL);
 	}
 	else if (GetKeyboardPress(DIK_W) ||
 		GetKeyboardPress(DIK_S) ||
 		GetKeyboardPress(DIK_A) ||
 		GetKeyboardPress(DIK_D) == true)
 	{
-		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
+		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_WALK, NULL);
 	}
 	else
 	{
-		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
+		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_NEUTRAL, NULL);
 	}
-	//StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
 
 	//攻撃中は移動０にする
 	if (g_player.motionType == MOTIONTYPE_ATTACK)
