@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "input.h"
 #include "player.h"
+#include "Dinput.h"
 
 //=============================================================================
 // マクロ定義
@@ -14,6 +15,7 @@
 #define MOVE_CAMERA (4.0f)				// 移動量
 #define CAMERA_DISTANCE (350.0f)		// 距離
 #define CAMERA_MOUSE_SENSITIVITY (550)	// マウスの感度
+#define CAMERA_PAD_SPEED (0.05f)	
 #define CAMERA_ROT_LIMIT_UPPER
 #define CAMERA_ROT_LIMIT_LOWER
 
@@ -51,14 +53,21 @@ void UninitCamera(void)
 void UpdateCamera(void)
 {
 	Player *pPlayer = GetPlayer();
+	DIJOYSTATE2 *pController = pGetPadCont();					// コントローラー情報のポインタ
+
+	if (pController->lZ > 0) g_camera.rot.y += CAMERA_PAD_SPEED;
+	if (pController->lZ < 0) g_camera.rot.y -= CAMERA_PAD_SPEED;
+	if (pController->lRz > 0) g_camera.rot.z -= CAMERA_PAD_SPEED;
+	if (pController->lRz < 0) g_camera.rot.z += CAMERA_PAD_SPEED;
 
 	//マウスの移動量を視点の回転に追加
-	g_camera.rot.y += GetMouseVelocity().x / 550;
-	g_camera.rot.z -= GetMouseVelocity().y / 550;
+	//g_camera.rot.y += GetMouseVelocity().x / 550;
+	//g_camera.rot.z -= GetMouseVelocity().y / 550;
 
 	if (g_camera.rot.z > D3DX_PI / 2.0f) g_camera.rot.z = D3DX_PI / 2.0f;
-	else if (g_camera.rot.z < -D3DX_PI / 2.0f) g_camera.rot.z = -D3DX_PI / 2.0f;
-	if (g_camera.rot.z > 0) g_camera.rot.z = 0.0f;	// 下に突き抜けないようにする
+	else if (g_camera.rot.z < -D3DX_PI / 2.1f) g_camera.rot.z = -D3DX_PI / 2.1f;
+
+	if (g_camera.rot.z > -0.05f) g_camera.rot.z = -0.05f;	// 下に突き抜けないようにする
 
 	//D3DXPI超えた時の対処
 	if (g_camera.rot.x > D3DX_PI) g_camera.rot.x -= D3DX_PI * 2.0f;

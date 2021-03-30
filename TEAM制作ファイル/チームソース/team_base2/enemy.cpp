@@ -46,6 +46,7 @@ typedef struct
 //-----------------------------------------------------------------------------
 void LoadXFileEnemy(const char* cXFileName, Model *model);
 void SearchPlayer(void);
+void EnemyPos(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -114,14 +115,7 @@ void InitEnemy(void)
 	g_nEnemyAlive = 0;
 	g_bEliminated = false;
 
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
-	//SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
-	SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
-	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
-	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	EnemyPos();
 }
 
 //-----------------------------------------------------------------------------
@@ -179,8 +173,8 @@ void UninitEnemy(void)
 		{
 			if (g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel != NULL)
 			{//	MESH RELEASE
-				g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel->Release();
-				g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel = NULL;
+				//g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel->Release();
+				//g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel = NULL;
 			}
 			if (g_aEnemy[nCntEnemy].aModel[nCnt].pBuffMatModel != NULL)
 			{//	BUFFMAT RELEASE
@@ -543,6 +537,8 @@ void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type)
 	{
 		if (g_aEnemy[nCntEnemy].bUse == false)
 		{
+			g_aEnemy[nCntEnemy].posOld = g_aEnemy[nCntEnemy].pos;
+
 			//位置を指定
 			g_aEnemy[nCntEnemy].pos = pos;
 
@@ -717,4 +713,22 @@ void LoadXFileEnemy(const char* cXFileName, Model *model)
 void SearchPlayer(void)
 {
 	Player *pPlayer = GetPlayer();
+}
+
+/* 敵の配置 */
+void EnemyPos(void)
+{
+	Stage *pStage = GetStage();
+
+	if (pStage->nStageNum == 0)
+	{
+		SetEnemy(D3DXVECTOR3(400, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
+		SetEnemy(D3DXVECTOR3(-400, 0.0f, 0), ENEMYTYPE_ROBOT000);
+		SetEnemy(D3DXVECTOR3(0, 0.0f, 400), ENEMYTYPE_ROBOT000);
+		SetEnemy(D3DXVECTOR3(0, 0.0f, -400), ENEMYTYPE_ROBOT000);
+	}
+	else if (pStage->nStageNum == 1)
+	{
+		SetEnemy(D3DXVECTOR3(0, 0.0f, -400), ENEMYTYPE_ROBOT000);
+	}
 }

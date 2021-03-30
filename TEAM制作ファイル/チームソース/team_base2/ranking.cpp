@@ -5,8 +5,10 @@
 //
 //=============================================================================
 #include "ranking.h"
+#include "score.h"
 #include "input.h"
 #include "fade.h"
+#include "Dinput.h"
 
 //=============================================================================
 // マクロ定義
@@ -18,27 +20,26 @@
 #define MAX_RANKING_RANK		(5)					//順位の数
 
 #define RANKING_LOGO_X			(SCREEN_WIDTH / 2)	//ランキングロゴの頂点座標(X)
-#define RANKING_LOGO_Y			(120.0f)				//ランキングロゴの頂点座標(Y)
+#define RANKING_LOGO_Y			(120.0f)			//ランキングロゴの頂点座標(Y)
 #define RANKING_LOGO_WIDTH		(600.0f)			//ランキングロゴの幅
-#define RANKING_LOGO_HEIGHT		(90.0f)				//ランキングロゴの高さ
+#define RANKING_LOGO_HEIGHT		(160.0f)			//ランキングロゴの高さ
 
-#define RANKING_RANK_X			(500.0f)			//ランキングランクの頂点座標(X)
-#define RANKING_RANK_Y			(400.0f)			//ランキングランクの頂点座標(Y)
-#define RANKING_RANK_WIDTH		(140.0f)			//ランキングランクの幅
-#define RANKING_RANK_HEIGHT		(80.0f)				//ランキングランクの高さ
-#define RANKING_RANK_SPACE		(100.0f)			//ランキングランクを配置する間隔
+#define RANKING_RANK_X			(300.0f)			//ランキングランクの頂点座標(X)
+#define RANKING_RANK_Y			(300.0f)			//ランキングランクの頂点座標(Y)
+#define RANKING_RANK_WIDTH		(180.0f)			//ランキングランクの幅
+#define RANKING_RANK_HEIGHT		(100.0f)			//ランキングランクの高さ
+#define RANKING_RANK_SPACE		(150.0f)			//ランキングランクを配置する間隔
 
-#define RANKING_SCORE_X			(750.0f)			//ランキングスコアの頂点座標(X)
-#define RANKING_SCORE_Y			(400.0f)			//ランキングスコアの頂点座標(Y)
-#define RANKING_SCORE_WIDTH		(60.0f)				//ランキングスコアの幅
-#define RANKING_SCORE_HEIGHT	(100.0f)			//ランキングスコアの高さ
-#define RANKING_SCORE_SPACE		(70.0f)				//ランキングスコアを配置する間隔
+#define RANKING_SCORE_X			(700.0f)			//ランキングスコアの頂点座標(X)
+#define RANKING_SCORE_Y			(300.0f)			//ランキングスコアの頂点座標(Y)
+#define RANKING_SCORE_WIDTH		(70.0f)				//ランキングスコアの幅
+#define RANKING_SCORE_HEIGHT	(110.0f)			//ランキングスコアの高さ
+#define RANKING_SCORE_SPACE		(80.0f)				//ランキングスコアを配置する間隔
 
 #define FLASH_SCORE_INTERVAL	(40)				//点滅のインターバル
 
 #define MAX_VERTEX				(4)					//頂点数
 
-#define MAX_SCORE (8)
 //=============================================================================
 // グローバル変数
 //=============================================================================
@@ -48,7 +49,7 @@ D3DXVECTOR3 g_posRankingLogo;										//ランキングロゴの頂点座標
 D3DXVECTOR3 g_posRankingRank;										//ランキングランクの頂点座標
 D3DXVECTOR3 g_posRankingScore;										//ランキングスコアの頂点座標
 D3DXCOLOR g_ScoreCol[MAX_RANKING_RANK];								//スコアの色
-int g_aScore[MAX_RANKING_RANK] = { 4000,3000,2000,1000,500 };		//初期スコア
+int g_aScore[MAX_RANKING_RANK] = { 5000,4000,3000,2000,1000 };		//初期スコア
 int g_nCntScore;													//表示するスコアの数
 int g_nSubScore;													//スコアの保存先
 bool g_bFlash;														//点滅
@@ -84,12 +85,12 @@ HRESULT InitRanking(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_bg.png", &g_pTextureRanking[0]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_logo.png", &g_pTextureRanking[1]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_1st.png", &g_pTextureRanking[2]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_2nd.png", &g_pTextureRanking[3]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_3rd.png", &g_pTextureRanking[4]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_4th.png", &g_pTextureRanking[5]);
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/ranking_5th.png", &g_pTextureRanking[6]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/Ranking.png", &g_pTextureRanking[1]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/1st.png", &g_pTextureRanking[2]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/2nd.png", &g_pTextureRanking[3]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/3rd.png", &g_pTextureRanking[4]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/4th.png", &g_pTextureRanking[5]);
+	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/5th.png", &g_pTextureRanking[6]);
 	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/number001.png", &g_pTextureRanking[7]);
 
 	//頂点バッファの生成
@@ -127,7 +128,7 @@ HRESULT InitRanking(void)
 	Ranking();
 
 	//BGM
-
+	
 
 	return S_OK;
 }
@@ -138,7 +139,7 @@ HRESULT InitRanking(void)
 void UninitRanking(void)
 {
 	//サウンド停止
-
+	
 
 	//頂点バッファの開放
 	if (g_pVtxBuffRanking != NULL)
@@ -174,15 +175,13 @@ void UpdateRanking(void)
 	}
 
 	//画面遷移
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
+	if (GetKeyboardTrigger(DIK_RETURN) == true ||
+		GetKeypadTrigger(D_BUUTON_A))
 	{
-		//if ((nFade == FADE_NONE))
-		//{
-		//	//効果音
-		//	
 
-		//	//SetFade(FADE_OUT, MODE_TITLE);
-		//}
+		//効果音
+
+		SetFade(FADE_OUT, MODE_TITLE);
 	}
 }
 
@@ -224,7 +223,7 @@ void DrawRanking(void)
 void Ranking(void)
 {
 	//変数宣言
-	int nScore = 0;
+	int nScore = GetScore();
 	int nSubScore = 0;
 
 	if (g_aScore[4] <= nScore)

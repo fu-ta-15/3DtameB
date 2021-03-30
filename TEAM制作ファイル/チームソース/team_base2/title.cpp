@@ -9,6 +9,7 @@
 #include "player.h"
 #include "fade.h"
 #include "meshfield.h"
+#include "Dinput.h"
 //#include "sound.h"
 
 //=================================================================================================================
@@ -179,7 +180,9 @@ void UpdateTitle(void)
 	VERTEX_2D *pVtx;
 
 	//エンターキーが押された場合
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
+	if (GetKeyboardTrigger(DIK_RETURN) == true ||
+		GetKeypadTrigger(D_BUUTON_A) ||
+		GetKeypadTrigger(D_BUUTON_START))
 	{
 		g_bEnter = true;	//エンターが押された
 

@@ -20,7 +20,7 @@
 #define BOSS_COL_HEIGHT (50)	// É{ÉXÇÃçÇÇ≥ (îªíËóp)
 #define BOSS_COL_WIDTH (35)		// ïù
 
-#define BOSS_HP_MAX (10)
+#define BOSS_HP_MAX (15)
 
 #define BOSS_ATTACK_MINTIME (120)
 #define BOSS_ATTACK_MAXTIME (360)

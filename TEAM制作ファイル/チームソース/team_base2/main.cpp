@@ -20,6 +20,7 @@
 #include "collision.h"
 #include "title.h"
 #include "ranking.h"
+#include "Dinput.h"
 
 #include <stdio.h>
 
@@ -283,6 +284,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	//キーボードの初期化処理
 	InitKeyboard(hInstance, hWnd);
+	InitKeypad(hInstance, hWnd);
 
 	//フェードの初期化
 	InitFade(MODE_TITLE);
@@ -299,6 +301,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 void Uninit(void)
 {
 	//キーボードの終了処理
+	UninitKeypad();
 	UninitKeyboard();
 
 	//フェードの終了
@@ -336,6 +339,7 @@ void Update(void)
 {
 	//キーボードの更新処理
 	UpdateKeyboard();
+	UpdateKeypad();
 
 	//更新処理
 	switch (g_mode)

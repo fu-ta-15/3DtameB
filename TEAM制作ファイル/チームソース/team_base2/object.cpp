@@ -6,6 +6,8 @@
 //-----------------------------------------------------------------------------
 #include "object.h"
 #include "collision.h"
+#include "enemy.h"
+
 #include <stdio.h>
 
 
@@ -54,6 +56,7 @@ typedef struct
 //-----------------------------------------------------------------------------
 void LoadXFileObj(const char* cXFileName, int nCountModel);
 void GetMinMaxVtx(int nIdx);
+void ColEnemyBoxThing(D3DXVECTOR3 posThing, float fWidthThing, float fDepthThing);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -132,6 +135,7 @@ void UpdateObject(void)
 		if (g_Obj[nCntObj].bUse)
 		{
 			ColPlayerBoxThing(g_Obj[nCntObj].pos, g_Obj[nCntObj].vtxMax.x, g_Obj[nCntObj].vtxMax.z);
+			ColEnemyBoxThing(g_Obj[nCntObj].pos, g_Obj[nCntObj].vtxMax.x, g_Obj[nCntObj].vtxMax.z);
 		}
 	}
 }
@@ -388,4 +392,66 @@ void GetMinMaxVtx(int nIdx)
 
 	//頂点バッファをアンロック
 	g_Obj[nIdx].pMesh->UnlockVertexBuffer();
+}
+
+/* 敵と物の衝突 (仮) */
+void ColEnemyBoxThing(D3DXVECTOR3 posThing, float fWidthThing, float fDepthThing)
+{
+	Enemy *pEnemy = GetEnemy();
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++, pEnemy++)
+	{
+		// 当たり判定 2d 判定後めり込み戻す
+		//奥
+		if (pEnemy->pos.x + pEnemy->fWidth > posThing.x - fWidthThing &&
+			pEnemy->pos.x - pEnemy->fWidth < posThing.x + fWidthThing &&
+			pEnemy->pos.z - pEnemy->fWidth < posThing.z + fDepthThing)
+		{
+			if (pEnemy->posOld.z >= posThing.z + fDepthThing &&
+				pEnemy->posOld.x + pEnemy->fWidth >= posThing.x - fWidthThing &&
+				pEnemy->posOld.x - pEnemy->fWidth <= posThing.x + fWidthThing)
+			{
+				pEnemy->pos.z = posThing.z + fDepthThing + pEnemy->fWidth;
+			}
+		}
+
+		//手前
+		if (pEnemy->pos.x + pEnemy->fWidth > posThing.x - fWidthThing &&
+			pEnemy->pos.x - pEnemy->fWidth < posThing.x + fWidthThing &&
+			pEnemy->pos.z + pEnemy->fWidth > posThing.z - fDepthThing)
+		{
+			if (pEnemy->posOld.z <= posThing.z - fDepthThing &&
+				pEnemy->posOld.x + pEnemy->fWidth >= posThing.x - fWidthThing &&
+				pEnemy->posOld.x - pEnemy->fWidth <= posThing.x + fWidthThing)
+			{
+				pEnemy->pos.z = posThing.z - fDepthThing - pEnemy->fWidth;
+			}
+		}
+
+		//左
+		if (pEnemy->pos.z - pEnemy->fWidth < posThing.z + fDepthThing &&
+			pEnemy->pos.z + pEnemy->fWidth > posThing.z - fDepthThing &&
+			pEnemy->pos.x + pEnemy->fWidth > posThing.x - fWidthThing)
+		{
+			if (pEnemy->posOld.x <= posThing.x - fWidthThing &&
+				pEnemy->posOld.z - pEnemy->fWidth <= posThing.z + fDepthThing &&
+				pEnemy->posOld.z + pEnemy->fWidth >= posThing.z - fDepthThing)
+			{
+				pEnemy->pos.x = posThing.x - fWidthThing - pEnemy->fWidth;
+			}
+		}
+
+		//右
+		if (pEnemy->pos.z - pEnemy->fWidth < posThing.z + fDepthThing &&
+			pEnemy->pos.z + pEnemy->fWidth > posThing.z - fDepthThing &&
+			pEnemy->pos.x - pEnemy->fWidth < posThing.x + fWidthThing)
+		{
+			if (pEnemy->posOld.x >= posThing.x + fWidthThing &&
+				pEnemy->posOld.z - pEnemy->fWidth <= posThing.z + fDepthThing &&
+				pEnemy->posOld.z + pEnemy->fWidth >= posThing.z - fDepthThing)
+			{
+				pEnemy->pos.x = posThing.x + fWidthThing + pEnemy->fWidth;
+			}
+		}
+	}
 }
