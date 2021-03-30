@@ -114,6 +114,9 @@
     <ClInclude Include="ranking.h">
       <Filter>ヘッダー ファイル\RANKING</Filter>
     </ClInclude>
+    <ClInclude Include="Dinput.h">
+      <Filter>ヘッダー ファイル\SYSTEM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp">
@@ -184,6 +187,9 @@
     </ClCompile>
     <ClCompile Include="ranking.cpp">
       <Filter>ソース ファイル\RANKING</Filter>
+    </ClCompile>
+    <ClCompile Include="Dinput.cpp">
+      <Filter>ソース ファイル\SYSTEM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
