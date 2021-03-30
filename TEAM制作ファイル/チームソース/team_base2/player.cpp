@@ -58,6 +58,7 @@ void InitPlayer(void)
 	g_player.dwTime = NULL;
 	g_player.nLife = PLAYER_HEALTH;
 	g_player.nLifeMax = PLAYER_HEALTH;
+	g_player.bUse = true;
 
 	//テキスト読み込み
 	ReadCharacterInfo(&g_ModelInfo, "data\\TXT\\motion_team_model1.txt");
@@ -123,114 +124,122 @@ void UninitPlayer(void)
 //-----------------------------------------------------------------------------
 void UpdatePlayer(void)
 {
-	DWORD dwCurrentTime = timeGetTime();	// 現在時間
-	DIJOYSTATE2 *pController = pGetPadCont();
-
-	//位置保存
-	g_player.posOld = g_player.pos;
-
-	//移動量追加
-	g_player.pos += g_player.move;
-
-	//移動量減衰
-	g_player.move.x += (0 - g_player.move.x) * 0.2f;
-	g_player.move.z += (0 - g_player.move.z) * 0.2f;
-
-	//重力
-	g_player.move.y -= 0.2f;
-
-	//移動制限
-	//if (g_player.pos.x > FIELD_MAXSIZE) g_player.pos.x = FIELD_MAXSIZE;
-	//if (g_player.pos.x < -FIELD_MAXSIZE) g_player.pos.x = -FIELD_MAXSIZE;
-	//if (g_player.pos.z > FIELD_MAXSIZE) g_player.pos.z = FIELD_MAXSIZE;
-	//if (g_player.pos.z < -FIELD_MAXSIZE) g_player.pos.z = -FIELD_MAXSIZE;
-	if (g_player.pos.y <= 0.0f)
+	if (g_player.bUse)
 	{
-		g_player.move.y = 0.0f;
-		g_player.pos.y = 0.0f;
-	}
+		DWORD dwCurrentTime = timeGetTime();	// 現在時間
+		DIJOYSTATE2 *pController = pGetPadCont();
 
-	/* モデルの移動 */
-	if (GetKeyboardPress(DIK_W) == true)
-	{
-		if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(45.0f), PLAYER_MOVESPEED);			// 右前
-		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian (-45.0f), PLAYER_MOVESPEED);		// 左前
-		else MovePlayer(0.0f, PLAYER_MOVESPEED);												// 前
-	}
-	else if (GetKeyboardPress(DIK_S) == true)
-	{
-		if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(135.0f), PLAYER_MOVESPEED);			// 右後ろ
-		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-135.0f), PLAYER_MOVESPEED);		// 左後ろ
-		else MovePlayer(D3DXToRadian(-180.0f), PLAYER_MOVESPEED);												// 後ろ
-	}
-	else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-90.0f), PLAYER_MOVESPEED);			// 左
-	else if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(90.0f), PLAYER_MOVESPEED);			// 右
+		//位置保存
+		g_player.posOld = g_player.pos;
 
-	/* プレイヤーの振り向きを滑らかにする */
-	PlayerSmoothTurn();
+		//移動量追加
+		g_player.pos += g_player.move;
 
-	//行動にモーションつける
-	//if (GetKeyboardTrigger(DIK_SPACE) == true)
-	//{
-	//	if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
-	//	else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
-	//}
-	//else if (GetKeyboardPress(DIK_W) ||
-	//	GetKeyboardPress(DIK_S) ||
-	//	GetKeyboardPress(DIK_A) ||
-	//	GetKeyboardPress(DIK_D) == true)
-	//{
-	//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
-	//}
-	//else
-	//{
-	//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
-	//}
+		//移動量減衰
+		g_player.move.x += (0 - g_player.move.x) * 0.2f;
+		g_player.move.z += (0 - g_player.move.z) * 0.2f;
 
-	if (pController->lX != 0 || pController->lY != 0)
-	{//	スティックが傾いた時
-		float fAngle = atan2f((float)pController->lX, -(float)pController->lY);
-		MovePlayer(fAngle, PLAYER_MOVESPEED);
+		//重力
+		g_player.move.y -= 0.2f;
 
-		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
+		//移動制限
+		if (g_player.pos.x > FIELD_MAXSIZE) g_player.pos.x = FIELD_MAXSIZE;
+		if (g_player.pos.x < -FIELD_MAXSIZE) g_player.pos.x = -FIELD_MAXSIZE;
+		if (g_player.pos.z > FIELD_MAXSIZE) g_player.pos.z = FIELD_MAXSIZE;
+		if (g_player.pos.z < -FIELD_MAXSIZE) g_player.pos.z = -FIELD_MAXSIZE;
+		if (g_player.pos.y <= 0.0f)
+		{
+			g_player.move.y = 0.0f;
+			g_player.pos.y = 0.0f;
+		}
+
+		/* モデルの移動 */
+		if (GetKeyboardPress(DIK_W) == true)
+		{
+			if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(45.0f), PLAYER_MOVESPEED);			// 右前
+			else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-45.0f), PLAYER_MOVESPEED);		// 左前
+			else MovePlayer(0.0f, PLAYER_MOVESPEED);												// 前
+		}
+		else if (GetKeyboardPress(DIK_S) == true)
+		{
+			if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(135.0f), PLAYER_MOVESPEED);			// 右後ろ
+			else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-135.0f), PLAYER_MOVESPEED);		// 左後ろ
+			else MovePlayer(D3DXToRadian(-180.0f), PLAYER_MOVESPEED);												// 後ろ
+		}
+		else if (GetKeyboardPress(DIK_A) == true) MovePlayer(D3DXToRadian(-90.0f), PLAYER_MOVESPEED);			// 左
+		else if (GetKeyboardPress(DIK_D) == true) MovePlayer(D3DXToRadian(90.0f), PLAYER_MOVESPEED);			// 右
+
+		/* プレイヤーの振り向きを滑らかにする */
+		PlayerSmoothTurn();
+
+		//行動にモーションつける
+		//if (GetKeyboardTrigger(DIK_SPACE) == true)
+		//{
+		//	if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+		//	else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
+		//}
+		//else if (GetKeyboardPress(DIK_W) ||
+		//	GetKeyboardPress(DIK_S) ||
+		//	GetKeyboardPress(DIK_A) ||
+		//	GetKeyboardPress(DIK_D) == true)
+		//{
+		//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
+		//}
+		//else
+		//{
+		//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
+		//}
+
+		if (pController->lX != 0 || pController->lY != 0)
+		{//	スティックが傾いた時
+			float fAngle = atan2f((float)pController->lX, -(float)pController->lY);
+			MovePlayer(fAngle, PLAYER_MOVESPEED);
+
+			StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
+		}
+		else
+		{
+			StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
+		}
+		if (GetKeypadTrigger(D_BUUTON_A))
+		{
+			if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
+			else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
+		}
+
+
+		//攻撃中は移動０にする
+		if (g_player.motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
+			g_player.motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
+		{
+			g_player.move = D3DXVECTOR3(0, 0, 0);
+		}
+
+		//時間経過で無敵時間解除
+		if (dwCurrentTime - g_player.dwTime >= PLAYER_INVINCIBLE_TIME)
+		{
+			//無敵解除
+			g_player.bInvincible = false;
+		}
+
+
+		if (GetKeyboardTrigger(DIK_H) == true)
+		{
+			if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
+			else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
+		}
+		if (GetKeypadTrigger(D_BUUTON_RB))
+		{
+			if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
+			else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
+		}
+
+		if (g_player.nLife <= 0)
+		{
+			g_player.bUse = false;
+			SetFade(FADE_OUT, MODE_RANKING);
+		}
 	}
-	else
-	{
-		StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
-	}
-	if (GetKeypadTrigger(D_BUUTON_A))
-	{
-		if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
-		else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
-	}
-
-
-	//攻撃中は移動０にする
-	if (g_player.motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
-		g_player.motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
-	{
-		g_player.move = D3DXVECTOR3(0, 0, 0);
-	}
-
-	//時間経過で無敵時間解除
-	if (dwCurrentTime - g_player.dwTime >= PLAYER_INVINCIBLE_TIME)
-	{
-		//無敵解除
-		g_player.bInvincible = false;
-	}
-
-
-	if (GetKeyboardTrigger(DIK_H) == true)
-	{
-		if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
-		else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
-	}
-	if (GetKeypadTrigger(D_BUUTON_RB))
-	{
-		if (g_player.weapon == PWEAPON_KATANA) g_player.weapon = PWEAPON_NAGINATA;
-		else if (g_player.weapon == PWEAPON_NAGINATA) g_player.weapon = PWEAPON_KATANA;
-	}
-	AddScore(10);
 }
 
 //-----------------------------------------------------------------------------
@@ -238,215 +247,217 @@ void UpdatePlayer(void)
 //-----------------------------------------------------------------------------
 void DrawPlayer(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();									// デバイス取得
-	D3DXMATRIX mtxRot, mtxTrans;												// 計算用マトリックス
-	D3DMATERIAL9 matDef;														// 現在のマテリアル保存用
-	D3DXMATERIAL *pMat;															// マテリアルデータへのポインタ
-
-	//プレイヤーのワールドマトリックスの初期化
-	D3DXMatrixIdentity(&g_player.mtxWorld);
-
-	//プレイヤーの向き反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, g_player.rot.y, g_player.rot.x, g_player.rot.z);
-	D3DXMatrixMultiply(&g_player.mtxWorld, &g_player.mtxWorld, &mtxRot);
-
-	//プレイヤーの位置反映
-	D3DXMatrixTranslation(&mtxTrans, g_player.pos.x, g_player.pos.y, g_player.pos.z);
-	D3DXMatrixMultiply(&g_player.mtxWorld, &g_player.mtxWorld, &mtxTrans);
-
-	//プレイヤーのワールドマトリックス設定
-	pDevice->SetTransform(D3DTS_WORLD, &g_player.mtxWorld);
-
-	//現在のマテリアル取得
-	pDevice->GetMaterial(&matDef);
-
-	//モデルパーツ
-	for (int nCntModel = 0; nCntModel < g_player.nNumModel - 1; nCntModel++)
+	if (g_player.bUse)
 	{
-		D3DXMATRIX mtxRotModel, mtxTransModel;	// 計算用マトリックス
-		D3DXMATRIX mtxParent;					// 親のマトリックス
+		LPDIRECT3DDEVICE9 pDevice = GetDevice();									// デバイス取得
+		D3DXMATRIX mtxRot, mtxTrans;												// 計算用マトリックス
+		D3DMATERIAL9 matDef;														// 現在のマテリアル保存用
+		D3DXMATERIAL *pMat;															// マテリアルデータへのポインタ
 
-		//各パーツのワールドマトリックス初期化
-		D3DXMatrixIdentity(&g_player.aModel[nCntModel].mtxWorld);
+		//プレイヤーのワールドマトリックスの初期化
+		D3DXMatrixIdentity(&g_player.mtxWorld);
 
-		//各パーツの向きを反映
-		D3DXMatrixRotationYawPitchRoll(&mtxRotModel, g_player.aModel[nCntModel].rot.y, g_player.aModel[nCntModel].rot.x, g_player.aModel[nCntModel].rot.z);
-		D3DXMatrixMultiply(&g_player.aModel[nCntModel].mtxWorld, &g_player.aModel[nCntModel].mtxWorld, &mtxRotModel);
+		//プレイヤーの向き反映
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, g_player.rot.y, g_player.rot.x, g_player.rot.z);
+		D3DXMatrixMultiply(&g_player.mtxWorld, &g_player.mtxWorld, &mtxRot);
 
-		//各パーツの位置を反映
-		D3DXMatrixTranslation(&mtxTransModel, g_player.aModel[nCntModel].pos.x, g_player.aModel[nCntModel].pos.y, g_player.aModel[nCntModel].pos.z);
-		D3DXMatrixMultiply(&g_player.aModel[nCntModel].mtxWorld, &g_player.aModel[nCntModel].mtxWorld, &mtxTransModel);
+		//プレイヤーの位置反映
+		D3DXMatrixTranslation(&mtxTrans, g_player.pos.x, g_player.pos.y, g_player.pos.z);
+		D3DXMatrixMultiply(&g_player.mtxWorld, &g_player.mtxWorld, &mtxTrans);
 
-		//各パーツの親のマトリックスを設定
-		if (g_player.aModel[nCntModel].nIdxModelParent != -1)
+		//プレイヤーのワールドマトリックス設定
+		pDevice->SetTransform(D3DTS_WORLD, &g_player.mtxWorld);
+
+		//現在のマテリアル取得
+		pDevice->GetMaterial(&matDef);
+
+		//モデルパーツ
+		for (int nCntModel = 0; nCntModel < g_player.nNumModel - 1; nCntModel++)
 		{
-			mtxParent = g_player.aModel[g_player.aModel[nCntModel].nIdxModelParent].mtxWorld;
-		}
-		else
-		{
-			mtxParent = g_player.mtxWorld;	// プレイヤーのマトリックスを設定
-		}
+			D3DXMATRIX mtxRotModel, mtxTransModel;	// 計算用マトリックス
+			D3DXMATRIX mtxParent;					// 親のマトリックス
 
-		//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
-		D3DXMatrixMultiply(&g_player.aModel[nCntModel].mtxWorld, &g_player.aModel[nCntModel].mtxWorld, &mtxParent);
+			//各パーツのワールドマトリックス初期化
+			D3DXMatrixIdentity(&g_player.aModel[nCntModel].mtxWorld);
 
-		//各パーツのワールドマトリックス設定
-		pDevice->SetTransform(D3DTS_WORLD, &g_player.aModel[nCntModel].mtxWorld);
+			//各パーツの向きを反映
+			D3DXMatrixRotationYawPitchRoll(&mtxRotModel, g_player.aModel[nCntModel].rot.y, g_player.aModel[nCntModel].rot.x, g_player.aModel[nCntModel].rot.z);
+			D3DXMatrixMultiply(&g_player.aModel[nCntModel].mtxWorld, &g_player.aModel[nCntModel].mtxWorld, &mtxRotModel);
 
-		//マテリアルデータへのポインタを取得
-		pMat = (D3DXMATERIAL*)g_player.aModel[nCntModel].pBuffMatModel->GetBufferPointer();
+			//各パーツの位置を反映
+			D3DXMatrixTranslation(&mtxTransModel, g_player.aModel[nCntModel].pos.x, g_player.aModel[nCntModel].pos.y, g_player.aModel[nCntModel].pos.z);
+			D3DXMatrixMultiply(&g_player.aModel[nCntModel].mtxWorld, &g_player.aModel[nCntModel].mtxWorld, &mtxTransModel);
 
-		//無敵状態か見てモデルの色を変える
-		if (g_player.bInvincible == true)
-		{//無敵状態
-			for (int nCntMat = 0; nCntMat < (int)g_player.aModel[nCntModel].nNumMatModel; nCntMat++)
+			//各パーツの親のマトリックスを設定
+			if (g_player.aModel[nCntModel].nIdxModelParent != -1)
 			{
-				D3DXMATERIAL matDef[20];
+				mtxParent = g_player.aModel[g_player.aModel[nCntModel].nIdxModelParent].mtxWorld;
+			}
+			else
+			{
+				mtxParent = g_player.mtxWorld;	// プレイヤーのマトリックスを設定
+			}
 
-				matDef[nCntMat] = pMat[nCntMat];
+			//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
+			D3DXMatrixMultiply(&g_player.aModel[nCntModel].mtxWorld, &g_player.aModel[nCntModel].mtxWorld, &mtxParent);
 
-				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f);
+			//各パーツのワールドマトリックス設定
+			pDevice->SetTransform(D3DTS_WORLD, &g_player.aModel[nCntModel].mtxWorld);
 
-				//マテリアル設定
-				pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+			//マテリアルデータへのポインタを取得
+			pMat = (D3DXMATERIAL*)g_player.aModel[nCntModel].pBuffMatModel->GetBufferPointer();
 
-				//テクスチャの設定
-				pDevice->SetTexture(0, NULL);
+			//無敵状態か見てモデルの色を変える
+			if (g_player.bInvincible == true)
+			{//無敵状態
+				for (int nCntMat = 0; nCntMat < (int)g_player.aModel[nCntModel].nNumMatModel; nCntMat++)
+				{
+					D3DXMATERIAL matDef[20];
 
-				//モデルパーツの描画
-				g_player.aModel[nCntModel].pMeshModel->DrawSubset(nCntMat);
+					matDef[nCntMat] = pMat[nCntMat];
 
-				pMat[nCntMat] = matDef[nCntMat];
+					pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f);
+
+					//マテリアル設定
+					pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+					//テクスチャの設定
+					pDevice->SetTexture(0, NULL);
+
+					//モデルパーツの描画
+					g_player.aModel[nCntModel].pMeshModel->DrawSubset(nCntMat);
+
+					pMat[nCntMat] = matDef[nCntMat];
+				}
+			}
+			else if (g_player.bInvincible == false)
+			{//通常状態
+				for (int nCntMat = 0; nCntMat < (int)g_player.aModel[nCntModel].nNumMatModel; nCntMat++)
+				{
+					//pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0, 1.0f, 1.0f);
+
+					//マテリアル設定
+					pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+					//テクスチャの設定
+					pDevice->SetTexture(0, NULL);
+
+					//モデルパーツの描画
+					g_player.aModel[nCntModel].pMeshModel->DrawSubset(nCntMat);
+				}
 			}
 		}
-		else if (g_player.bInvincible == false)
-		{//通常状態
-			for (int nCntMat = 0; nCntMat < (int)g_player.aModel[nCntModel].nNumMatModel; nCntMat++)
-			{
-				//pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0, 1.0f, 1.0f);
 
-				//マテリアル設定
-				pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
-
-				//テクスチャの設定
-				pDevice->SetTexture(0, NULL);
-
-				//モデルパーツの描画
-				g_player.aModel[nCntModel].pMeshModel->DrawSubset(nCntMat);
-			}
-		}
-	}
-
-	//武器パーツ
-	D3DXMATRIX mtxRotWpn, mtxTransWpn;	// 計算用
-	D3DXMATRIX mtxParentWpn;			// 親のマトリクス
-
-	if (g_player.weapon == PWEAPON_KATANA)
-	{
-		//各パーツのワールドマトリックス初期化
-		D3DXMatrixIdentity(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
-
-		//各パーツの向きを反映
-		D3DXMatrixRotationYawPitchRoll(&mtxRotWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.z);
-		D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxRotWpn);
-
-		//各パーツの位置を反映
-		D3DXMatrixTranslation(&mtxTransWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.z);
-		D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxTransWpn);
-
-		//親マトリクス設定
-		mtxParentWpn = g_player.aModel[g_player.aModel[PLAYER_MODEL_AMOUNT - 1].nIdxModelParent].mtxWorld;
-
-		//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
-		D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxParentWpn);
-
-		//各パーツのワールドマトリックス設定
-		pDevice->SetTransform(D3DTS_WORLD, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
-
-		//マテリアルデータへのポインタを取得
-		pMat = (D3DXMATERIAL*)g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pBuffMatModel->GetBufferPointer();
-
-		//マテリアル設定と描画
-		for (int nCntMat = 0; nCntMat < (int)g_player.aModel[PLAYER_MODEL_AMOUNT - 1].nNumMatModel; nCntMat++)
-		{
-			//マテリアル設定
-			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
-
-			//テクスチャの設定
-			pDevice->SetTexture(0, NULL);
-
-			//モデルパーツの描画
-			g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pMeshModel->DrawSubset(nCntMat);
-		}
-	}
-	else if (g_player.weapon == PWEAPON_NAGINATA)
-	{
-		//各パーツのワールドマトリックス初期化
-		D3DXMatrixIdentity(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
-
-		//各パーツの向きを反映
-		D3DXMatrixRotationYawPitchRoll(&mtxRotWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.z);
-		D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxRotWpn);
-
-		//各パーツの位置を反映
-		D3DXMatrixTranslation(&mtxTransWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.z);
-		D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxTransWpn);
-
-		//親マトリクス設定
-		mtxParentWpn = g_player.aModel[g_player.aModel[PLAYER_MODEL_AMOUNT - 1].nIdxModelParent].mtxWorld;
-
-		//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
-		D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxParentWpn);
-
-		//各パーツのワールドマトリックス設定
-		pDevice->SetTransform(D3DTS_WORLD, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
-
-		//マテリアルデータへのポインタを取得
-		pMat = (D3DXMATERIAL*)g_player.AltWeapon.pBuffMatModel->GetBufferPointer();
-
-		//マテリアル設定と描画
-		for (int nCntMat = 0; nCntMat < (int)g_player.AltWeapon.nNumMatModel; nCntMat++)
-		{
-			//マテリアル設定
-			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
-
-			//テクスチャの設定
-			pDevice->SetTexture(0, NULL);
-
-			//モデルパーツの描画
-			g_player.AltWeapon.pMeshModel->DrawSubset(nCntMat);
-		}
-	}
-
-
-	//test
-	for (int nCntCol = 0; nCntCol < PLAYER_WEAPON_COLLISION_COMPONENTS; nCntCol++)
-	{
 		//武器パーツ
-		D3DXMATRIX mtxRotWpnC, mtxTransWpnC;	// 計算用
-		D3DXMATRIX mtxParentWpnC;			// 親のマトリクス
+		D3DXMATRIX mtxRotWpn, mtxTransWpn;	// 計算用
+		D3DXMATRIX mtxParentWpn;			// 親のマトリクス
 
-		//各パーツのワールドマトリックス初期化
-		D3DXMatrixIdentity(&g_player.mtxWeaponCol[nCntCol]);
+		if (g_player.weapon == PWEAPON_KATANA)
+		{
+			//各パーツのワールドマトリックス初期化
+			D3DXMatrixIdentity(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
 
-		//各パーツの位置を反映
-		D3DXMatrixTranslation(&mtxTransWpnC, g_player.posWeaponCol[nCntCol].x, g_player.posWeaponCol[nCntCol].y, g_player.posWeaponCol[nCntCol].z);
-		D3DXMatrixMultiply(&g_player.mtxWeaponCol[nCntCol], &g_player.mtxWeaponCol[nCntCol], &mtxTransWpnC);
+			//各パーツの向きを反映
+			D3DXMatrixRotationYawPitchRoll(&mtxRotWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.z);
+			D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxRotWpn);
 
-		//親マトリクス設定
-		mtxParentWpnC = g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld;
+			//各パーツの位置を反映
+			D3DXMatrixTranslation(&mtxTransWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.z);
+			D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxTransWpn);
 
-		//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
-		D3DXMatrixMultiply(&g_player.mtxWeaponCol[nCntCol], &g_player.mtxWeaponCol[nCntCol], &mtxParentWpnC);
+			//親マトリクス設定
+			mtxParentWpn = g_player.aModel[g_player.aModel[PLAYER_MODEL_AMOUNT - 1].nIdxModelParent].mtxWorld;
 
-		//各パーツのワールドマトリックス設定
-		pDevice->SetTransform(D3DTS_WORLD, &g_player.mtxWeaponCol[nCntCol]);
+			//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
+			D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxParentWpn);
+
+			//各パーツのワールドマトリックス設定
+			pDevice->SetTransform(D3DTS_WORLD, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
+
+			//マテリアルデータへのポインタを取得
+			pMat = (D3DXMATERIAL*)g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pBuffMatModel->GetBufferPointer();
+
+			//マテリアル設定と描画
+			for (int nCntMat = 0; nCntMat < (int)g_player.aModel[PLAYER_MODEL_AMOUNT - 1].nNumMatModel; nCntMat++)
+			{
+				//マテリアル設定
+				pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+				//テクスチャの設定
+				pDevice->SetTexture(0, NULL);
+
+				//モデルパーツの描画
+				g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pMeshModel->DrawSubset(nCntMat);
+			}
+		}
+		else if (g_player.weapon == PWEAPON_NAGINATA)
+		{
+			//各パーツのワールドマトリックス初期化
+			D3DXMatrixIdentity(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
+
+			//各パーツの向きを反映
+			D3DXMatrixRotationYawPitchRoll(&mtxRotWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].rot.z);
+			D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxRotWpn);
+
+			//各パーツの位置を反映
+			D3DXMatrixTranslation(&mtxTransWpn, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.x, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.y, g_player.aModel[PLAYER_MODEL_AMOUNT - 1].pos.z);
+			D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxTransWpn);
+
+			//親マトリクス設定
+			mtxParentWpn = g_player.aModel[g_player.aModel[PLAYER_MODEL_AMOUNT - 1].nIdxModelParent].mtxWorld;
+
+			//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
+			D3DXMatrixMultiply(&g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld, &mtxParentWpn);
+
+			//各パーツのワールドマトリックス設定
+			pDevice->SetTransform(D3DTS_WORLD, &g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld);
+
+			//マテリアルデータへのポインタを取得
+			pMat = (D3DXMATERIAL*)g_player.AltWeapon.pBuffMatModel->GetBufferPointer();
+
+			//マテリアル設定と描画
+			for (int nCntMat = 0; nCntMat < (int)g_player.AltWeapon.nNumMatModel; nCntMat++)
+			{
+				//マテリアル設定
+				pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+				//テクスチャの設定
+				pDevice->SetTexture(0, NULL);
+
+				//モデルパーツの描画
+				g_player.AltWeapon.pMeshModel->DrawSubset(nCntMat);
+			}
+		}
+
+
+		//test
+		for (int nCntCol = 0; nCntCol < PLAYER_WEAPON_COLLISION_COMPONENTS; nCntCol++)
+		{
+			//武器パーツ
+			D3DXMATRIX mtxRotWpnC, mtxTransWpnC;	// 計算用
+			D3DXMATRIX mtxParentWpnC;			// 親のマトリクス
+
+			//各パーツのワールドマトリックス初期化
+			D3DXMatrixIdentity(&g_player.mtxWeaponCol[nCntCol]);
+
+			//各パーツの位置を反映
+			D3DXMatrixTranslation(&mtxTransWpnC, g_player.posWeaponCol[nCntCol].x, g_player.posWeaponCol[nCntCol].y, g_player.posWeaponCol[nCntCol].z);
+			D3DXMatrixMultiply(&g_player.mtxWeaponCol[nCntCol], &g_player.mtxWeaponCol[nCntCol], &mtxTransWpnC);
+
+			//親マトリクス設定
+			mtxParentWpnC = g_player.aModel[PLAYER_MODEL_AMOUNT - 1].mtxWorld;
+
+			//算出した各パーツのワールドマトリックスと親のマトリックスを掛け合わせる
+			D3DXMatrixMultiply(&g_player.mtxWeaponCol[nCntCol], &g_player.mtxWeaponCol[nCntCol], &mtxParentWpnC);
+
+			//各パーツのワールドマトリックス設定
+			pDevice->SetTransform(D3DTS_WORLD, &g_player.mtxWeaponCol[nCntCol]);
+		}
+
+
+		//保存していたマテリアルを戻す
+		pDevice->SetMaterial(&matDef);
 	}
-
-
-	//保存していたマテリアルを戻す
-	pDevice->SetMaterial(&matDef);
-
 }
 
 //-----------------------------------------------------------------------------

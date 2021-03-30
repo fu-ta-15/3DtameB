@@ -8,6 +8,7 @@
 #include "score.h"
 #include "input.h"
 #include "fade.h"
+#include "Dinput.h"
 
 //=============================================================================
 // É}ÉNÉçíËã`
@@ -174,13 +175,13 @@ void UpdateRanking(void)
 	}
 
 	//âÊñ ëJà⁄
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
+	if (GetKeyboardTrigger(DIK_RETURN) == true ||
+		GetKeypadTrigger(D_BUUTON_A))
 	{
 
 		//å¯â âπ
-		
 
-		//SetFade(FADE_OUT, MODE_TITLE);
+		SetFade(FADE_OUT, MODE_TITLE);
 	}
 }
 

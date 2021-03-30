@@ -104,6 +104,7 @@ typedef struct
 	D3DXMATRIX mtxWeaponCol[PLAYER_WEAPON_COLLISION_COMPONENTS];	// 
 	D3DXVECTOR3 posWeaponCol[PLAYER_WEAPON_COLLISION_COMPONENTS];	// 
 
+	bool bUse;
 	int nScore;
 	int nLifeMax;					// Н≈СеСћЧЌ
 	int nLife;						// СћЧЌ

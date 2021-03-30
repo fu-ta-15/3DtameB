@@ -173,8 +173,8 @@ void UninitEnemy(void)
 		{
 			if (g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel != NULL)
 			{//	MESH RELEASE
-				g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel->Release();
-				g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel = NULL;
+				//g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel->Release();
+				//g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel = NULL;
 			}
 			if (g_aEnemy[nCntEnemy].aModel[nCnt].pBuffMatModel != NULL)
 			{//	BUFFMAT RELEASE

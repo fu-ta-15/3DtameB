@@ -23,7 +23,7 @@
 #include "effect.h"
 #include "bullet.h"
 #include "score.h"
-
+#include "hpgauge.h"
 //=============================================================================
 // グローバル変数
 //=============================================================================
@@ -81,6 +81,8 @@ HRESULT InitGame(void)
 
 	InitScore();
 
+	InitHPGauge();
+
 	//コリジョン処理の初期化
 	InitCollision();
 
@@ -99,6 +101,8 @@ HRESULT InitGame(void)
 void UninitGame(void)
 {
 	UninitMotion();
+
+	UninitHPGauge();
 
 	UninitScore();
 
@@ -196,6 +200,8 @@ void UpdateGame(void)
 
 			UpdateScore();
 
+			UpdateHPGauge();
+
 			if (GetKeyboardTrigger(DIK_RETURN) == true)
 			{
 				g_stage.nStageNum += 1;
@@ -254,6 +260,8 @@ void UpdateGame(void)
 
 		UpdateScore();
 
+		UpdateHPGauge();
+
 		if (GetKeyboardTrigger(DIK_RETURN) == true)
 		{
 			g_stage.nStageNum += 1;
@@ -296,6 +304,8 @@ void DrawGame(void)
 
 		DrawScore();
 
+		DrawHPGauge();
+		
 		//ポータルの描画処理
 		DrawPortal();
 

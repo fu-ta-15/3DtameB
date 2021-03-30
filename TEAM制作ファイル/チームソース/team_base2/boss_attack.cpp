@@ -214,6 +214,10 @@ void AttackDetail(void)
 	Player *pPlayer = GetPlayer();
 
 	pPlayer->move.y += 5.0f;	// ã‚É”ò‚Î‚·
+
+	pPlayer->nLife -= BOSS_ATTACK_DMG;
+	pPlayer->bInvincible = true;
+	pPlayer->dwTime = timeGetTime();
 }
 
 /* °‚Ìó‘ÔXV */
