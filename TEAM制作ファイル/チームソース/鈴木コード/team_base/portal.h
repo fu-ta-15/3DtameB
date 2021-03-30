@@ -11,8 +11,8 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
-#define PORTAL_WIDTH (50)		// portal width
-#define PORTAL_HEIGHT (150)		// portal height
+#define PORTAL_WIDTH (30)		// portal width
+#define PORTAL_HEIGHT (30)		// portal height
 
 //-----------------------------------------------------------------------------
 // ポータルの構造体
@@ -34,5 +34,7 @@ void UninitPortal(void);
 void UpdatePortal(void);
 void DrawPortal(void);
 void ActivatePortal(bool bActive, bool bDraw);
+Portal GetPortal(void);
+
 
 #endif

@@ -14,12 +14,25 @@
 // マクロ定義
 //-----------------------------------------------------------------------------
 #define PLAYER_MOVESPEED (0.5f)													// プレイヤーの移動速度
+#define PLAYER_MODEL_AMOUNT (11)
 #define PLAYER_ATTACK_RADIUS (12.0f)											// プレイヤーの攻撃範囲
 #define PlAYER_WIDTH (7.5f)
 #define PLAYER_HEIGHT (50.0f)
 #define PLAYER_INVINCIBLE_TIME (500)	// 攻撃された時の無敵時間
 #define PLAYER_HEALTH (10)				// プレイヤーの体力
-#define PLAYER_MODEL_AMOUNT (10)
+
+#define PLAYER_WEAPON_TYPE (2)			// プレイヤーの武器の種類
+#define PLAYER_WEAPON_COLLISION_COMPONENTS (3)
+
+//-----------------------------------------------------------------------------
+// プレイヤーが持っている武器
+//-----------------------------------------------------------------------------
+typedef enum
+{
+	PWEAPON_KATANA,		// 刀
+	PWEAPON_NAGINATA,	// 薙刀
+	PWEAPON_MAX
+} PWEAPON;
 
 //-----------------------------------------------------------------------------
 // ファイルから読んでくるキャラクターのモデル情報の構造体
@@ -63,6 +76,7 @@ typedef struct
 	D3DXVECTOR3 rotDest;					// 目標の向き
 	D3DXMATRIX mtxWorld;					// ワールドマトリックス
 	Model aModel[PLAYER_MODEL_AMOUNT];		// モデル(パーツ)
+	Model AltWeapon;						// 武器（パーツ）
 	int nNumModel;							// モデル(パーツ)数
 
 	bool bPlayMotion;						// モーション再生状態
@@ -74,7 +88,7 @@ typedef struct
 	int nNumKey;							// キー数
 	int nKey;								// キーナンバー
 	int nCounterMotion;						// モーションカウンター
-		
+
 	bool bBlendMotion;						// ブレンドするかどうか
 	MOTIONTYPE motionTypeBlend;				// 次のモーション情報
 	bool bLoopMotionBlend;					// 
@@ -84,6 +98,9 @@ typedef struct
 	int nCounterBlend;
 	int nFrameBlend;
 
+	PWEAPON weapon;					// 現在持っている武器
+	D3DXMATRIX mtxWeaponCol[PLAYER_WEAPON_COLLISION_COMPONENTS];	// 
+	D3DXVECTOR3 posWeaponCol[PLAYER_WEAPON_COLLISION_COMPONENTS];	// 
 
 	int nLifeMax;					// 最大体力
 	int nLife;						// 体力

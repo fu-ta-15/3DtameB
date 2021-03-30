@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
-#define MOTION_MAX (10) // max amount of motion
+#define MOTION_MAX (20) // max amount of motion
 
 //-----------------------------------------------------------------------------
 // モーションの種類
@@ -21,7 +21,23 @@ typedef enum
 {
 	MOTIONTYPE_NEUTRAL = 0,			// ニュートラルモーション
 	MOTIONTYPE_ATTACK,				// 攻撃モーション
+	MOTIONTYPE_SLASH,
 	MOTIONTYPE_WALK,				// 歩きモーション
+
+	MOTIONTYPE_ROBOT000_NEUTRAL,
+	MOTIONTYPE_ROBOT000_WALK,
+	MOTIONTYPE_ROBOT000_ATTACK,
+	MOTIONTYPE_ROBOT000_DAMAGED,
+
+	MOTIONTYPE_ROBOT001_NEUTRAL,
+	MOTIONTYPE_ROBOT001_WALK,
+	MOTIONTYPE_ROBOT001_ATTACK,
+	MOTIONTYPE_ROBOT001_DAMAGED,
+
+	MOTIONTYPE_BOSS_NEUTRAL,
+	MOTIONTYPE_BOSS_WALK,
+	MOTIONTYPE_BOSS_ATTACK,
+
 	MOTIONTYPE_MAX
 } MOTIONTYPE;
 
@@ -33,6 +49,7 @@ typedef enum
 	SELECTMOTION_PLAYER,		// 関数を使う時に選択する用
 	SELECTMOTION_PLAYERBLEND,
 	SELECTMOTION_ENEMY,
+	SELECTMOTION_BOSS,
 	SELECTMOTION_MAX
 } SELECTMOTION;
 
@@ -55,7 +72,7 @@ typedef struct
 typedef struct
 {
 	int nFrame;			// 再生フレーム
-	KEY aKey[10];		// キー (パーツ最大数分)
+	KEY aKey[15];		// キー (パーツ最大数分)
 } KEY_INFO;
 
 //-----------------------------------------------------------------------------
@@ -65,7 +82,7 @@ typedef struct
 {
 	bool bLoop;					// ループの有無
 	int nNumKey;				// キーの総数
-	KEY_INFO aKeyInfo[10];		// キー情報	(キーの最大数)
+	KEY_INFO aKeyInfo[15];		// キー情報	(キーの最大数)
 } MOTION_INFO;
 
 //-----------------------------------------------------------------------------

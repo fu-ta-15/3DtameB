@@ -10,6 +10,8 @@
 #include "input.h"
 #include "fade.h"
 #include "portal.h"
+#include "meshfield.h"
+
 #include <stdio.h>
 
 //-----------------------------------------------------------------------------
@@ -26,9 +28,9 @@
 //-----------------------------------------------------------------------------
 typedef struct
 {
-	int nEnemyNum;										// モデルの数	
-	int nEnemyIdx[MAX_ENEMY_TYPE];						// モデルの番号
-	char cEnemyFileName[MAX_ENEMY_TYPE][MAX_STR];		// モデルのファイル名
+	int nEnemyNum;											// モデルの数	
+	int nEnemyIdx[MAX_ENEMY_TYPE];							// モデルの番号
+	char cEnemyFileName[MAX_ENEMY_TYPE][MAX_STR];			// モデルのファイル名
 	char cEnemyTextureName[MAX_ENEMY_TYPE][MAX_STR];		// テクスチャのファイル名
 	float fEnemyPos[MAX_ENEMY_TYPE][VECTOR_NUM];			// モデルの位置(オフセット)
 	float fEnemyRot[MAX_ENEMY_TYPE][VECTOR_NUM];			// モデルの向き
@@ -36,7 +38,6 @@ typedef struct
 	D3DXVECTOR3 pos;
 	D3DXVECTOR3 rot;
 } EnemyInfo;
-
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
@@ -49,13 +50,13 @@ void LoadXFileEnemy(const char* cXFileName, Model *model);
 Enemy g_aEnemy[ENEMY_AMOUNT_MAX];				// 敵の情報
 int g_nEnemyAlive = 0;							// 敵の生存数
 
-CharacterPartsInfo g_partsRobot;				// 読み込んだパーツ情報(ロボット)
-KEY g_defKeyRobot[ENEMY_ROBOT_MODELPARTS];		// 
+CharacterPartsInfo g_partsRobot;				// 読み込んだパーツ情報(ロボット000)
+CharacterPartsInfo g_partsRobot001;				// 001
 
-Model g_modelRobot[ENEMY_ROBOT_MODELPARTS];		// ロボットのモデル情報
+Model g_modelRobot[ENEMY_ROBOT_MODELPARTS];			// ロボットのモデル情報
+Model g_modelRobot001[ENEMY_ROBOT001_MODELPARTS];	// 001
 
 bool g_bEliminated;								// 全滅したか
-DWORD g_dwTimeTransition;						// 画面遷移時間計算
 
 EnemyInfo g_ObjInfo;
 
@@ -67,35 +68,36 @@ void InitEnemy(void)
 	LPDIRECT3DDEVICE9 pDevice = GetDevice();		// デバイスの取得
 
 	//テキストから読み込み
-	ReadCharacterInfo(&g_partsRobot, "data//TXT//motion_kogata.txt");
-
+	ReadCharacterInfo(&g_partsRobot, "data//TXT//motionkogata.txt");
+	ReadCharacterInfo(&g_partsRobot001, "data//TXT//motion_mediumsize.txt");
 
 	//読み込んだ情報を使ってXファイル読み込み
-	for (int nCntModel = 0; nCntModel < g_partsRobot.nModelNum; nCntModel++)
-	{
-		LoadXFileEnemy(&g_partsRobot.cModelFileName[nCntModel][0], &g_modelRobot[nCntModel]);
-	}
+	for (int nCntModel = 0; nCntModel < g_partsRobot.nModelNum; nCntModel++) LoadXFileEnemy(&g_partsRobot.cModelFileName[nCntModel][0], &g_modelRobot[nCntModel]);
+	for (int nCntModel = 0; nCntModel < g_partsRobot001.nModelNum; nCntModel++) LoadXFileEnemy(&g_partsRobot001.cModelFileName[nCntModel][0], &g_modelRobot001[nCntModel]);
 
 	//各パーツの階層構造設定
 	for (int nCntModel = 0; nCntModel < ENEMY_ROBOT_MODELPARTS; nCntModel++)
-	{
+	{// Robot000
 		g_modelRobot[nCntModel].nNumModel = g_partsRobot.nModelNum;
 		g_modelRobot[nCntModel].nIdxModelParent = g_partsRobot.nModelParent[nCntModel];
 		g_modelRobot[nCntModel].pos = D3DXVECTOR3(g_partsRobot.fModelPos[nCntModel][0], g_partsRobot.fModelPos[nCntModel][1], g_partsRobot.fModelPos[nCntModel][2]);
 		g_modelRobot[nCntModel].rot = D3DXVECTOR3(g_partsRobot.fModelRot[nCntModel][0], g_partsRobot.fModelRot[nCntModel][1], g_partsRobot.fModelRot[nCntModel][2]);
 	}
-
-	//初期キー
-	for (int nCnt = 0; nCnt < ENEMY_ROBOT_MODELPARTS; nCnt++)
-	{
-		g_defKeyRobot[nCnt] = KeyPosRot(g_modelRobot[nCnt].pos.x, g_modelRobot[nCnt].pos.y, g_modelRobot[nCnt].pos.z, 0, 0, 0);
+	for (int nCntModel = 0; nCntModel < ENEMY_ROBOT001_MODELPARTS; nCntModel++)
+	{// Robot001
+		g_modelRobot001[nCntModel].nNumModel = g_partsRobot001.nModelNum;
+		g_modelRobot001[nCntModel].nIdxModelParent = g_partsRobot001.nModelParent[nCntModel];
+		g_modelRobot001[nCntModel].pos = D3DXVECTOR3(g_partsRobot001.fModelPos[nCntModel][0], g_partsRobot001.fModelPos[nCntModel][1], g_partsRobot001.fModelPos[nCntModel][2]);
+		g_modelRobot001[nCntModel].rot = D3DXVECTOR3(g_partsRobot001.fModelRot[nCntModel][0], g_partsRobot001.fModelRot[nCntModel][1], g_partsRobot001.fModelRot[nCntModel][2]);
 	}
+
 
 	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
 	{
 		//初期設定
 		g_aEnemy[nCntEnemy].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置の初期設定
 		g_aEnemy[nCntEnemy].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向きの初期設定
+		g_aEnemy[nCntEnemy].move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値の初期設定
 		g_aEnemy[nCntEnemy].bUse = false;
 		g_aEnemy[nCntEnemy].bInvincible = false;
 		g_aEnemy[nCntEnemy].nLife = ENEMY_HP_MAX;
@@ -107,10 +109,16 @@ void InitEnemy(void)
 		g_aEnemy[nCntEnemy].nIdx = NULL;
 	}
 	g_nEnemyAlive = 0;
-	g_dwTimeTransition = NULL;
 	g_bEliminated = false;
 
-	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, 250.0f), ENEMYTYPE_ROBOT000);
+	SetEnemy(D3DXVECTOR3(250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT000);
+	SetEnemy(D3DXVECTOR3(-250.0f, 0.0f, 0.0f), ENEMYTYPE_ROBOT001);
+	SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
+	//SetEnemy(D3DXVECTOR3(0.0f, 0.0f, -250.0f), ENEMYTYPE_ROBOT001);
 }
 
 //-----------------------------------------------------------------------------
@@ -118,7 +126,76 @@ void InitEnemy(void)
 //-----------------------------------------------------------------------------
 void UninitEnemy(void)
 {
+	for (int nCnt = 0; nCnt < ENEMY_ROBOT_MODELPARTS; nCnt++)
+	{
+		if (g_modelRobot[nCnt].pMeshModel != NULL)
+		{//	MESH RELEASE
+			g_modelRobot[nCnt].pMeshModel->Release();
+			g_modelRobot[nCnt].pMeshModel = NULL;
+		}
+		if (g_modelRobot[nCnt].pBuffMatModel != NULL)
+		{//	BUFFMAT RELEASE
+			g_modelRobot[nCnt].pBuffMatModel->Release();
+			g_modelRobot[nCnt].pBuffMatModel = NULL;
+		}
+		for (int nCntTEX = 0; nCntTEX < 10; nCntTEX++)
+		{//	TEXTURE RELEASE
+			if (g_modelRobot[nCnt].pTexture[nCntTEX] != NULL)
+			{
+				g_modelRobot[nCnt].pTexture[nCntTEX]->Release();
+				g_modelRobot[nCnt].pTexture[nCntTEX] = NULL;
+			}
+		}
+	}
+
+	for (int nCnt = 0; nCnt < ENEMY_ROBOT001_MODELPARTS; nCnt++)
+	{
+		if (g_modelRobot001[nCnt].pMeshModel != NULL)
+		{//	MESH RELEASE
+			g_modelRobot001[nCnt].pMeshModel->Release();
+			g_modelRobot001[nCnt].pMeshModel = NULL;
+		}
+		if (g_modelRobot001[nCnt].pBuffMatModel != NULL)
+		{//	BUFFMAT RELEASE
+			g_modelRobot001[nCnt].pBuffMatModel->Release();
+			g_modelRobot001[nCnt].pBuffMatModel = NULL;
+		}
+		for (int nCntTEX = 0; nCntTEX < 10; nCntTEX++)
+		{//	TEXTURE RELEASE
+			if (g_modelRobot001[nCnt].pTexture[nCntTEX] != NULL)
+			{
+				g_modelRobot001[nCnt].pTexture[nCntTEX]->Release();
+				g_modelRobot001[nCnt].pTexture[nCntTEX] = NULL;
+			}
+		}
+	}
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+	{
+		for (int nCnt = 0; nCnt < g_aEnemy[nCntEnemy].aModel[0].nNumModel; nCnt++)
+		{
+			if (g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel != NULL)
+			{//	MESH RELEASE
+				g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel->Release();
+				g_aEnemy[nCntEnemy].aModel[nCnt].pMeshModel = NULL;
+			}
+			if (g_aEnemy[nCntEnemy].aModel[nCnt].pBuffMatModel != NULL)
+			{//	BUFFMAT RELEASE
+				g_aEnemy[nCntEnemy].aModel[nCnt].pBuffMatModel->Release();
+				g_aEnemy[nCntEnemy].aModel[nCnt].pBuffMatModel = NULL;
+			}
+			for (int nCntTEX = 0; nCntTEX < 10; nCntTEX++)
+			{//	TEXTURE RELEASE
+				if (g_aEnemy[nCntEnemy].aModel[nCnt].pTexture[nCntTEX] != NULL)
+				{
+					g_aEnemy[nCntEnemy].aModel[nCnt].pTexture[nCntTEX]->Release();
+					g_aEnemy[nCntEnemy].aModel[nCnt].pTexture[nCntTEX] = NULL;
+				}
+			}
+		}
+	}
 }
+
 
 //-----------------------------------------------------------------------------
 // 更新処理
@@ -138,13 +215,22 @@ void UpdateEnemy(void)
 			g_aEnemy[nCntEnemy].pos += g_aEnemy[nCntEnemy].move;
 
 			//移動量減衰
-			g_aEnemy[nCntEnemy].move.x = g_aEnemy[nCntEnemy].move.x * 0.2f;
-			g_aEnemy[nCntEnemy].move.z = g_aEnemy[nCntEnemy].move.z * 0.2f;
+			g_aEnemy[nCntEnemy].move.x += (0 - g_aEnemy[nCntEnemy].move.x) * 0.2f;
+			g_aEnemy[nCntEnemy].move.z += (0 - g_aEnemy[nCntEnemy].move.z) * 0.2f;
 
 			//重力
-			g_aEnemy[nCntEnemy].move.y -= ENEMY_FALLSPEED;
+			g_aEnemy[nCntEnemy].move.y -= 0.2f;
 
-			if (g_aEnemy[nCntEnemy].pos.y < 0) g_aEnemy[nCntEnemy].pos.y = 0;
+			//移動制限
+			if (g_aEnemy[nCntEnemy].pos.x > FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.x = FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.x < -FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.x = -FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.z > FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.z = FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.z < -FIELD_MAXSIZE) g_aEnemy[nCntEnemy].pos.z = -FIELD_MAXSIZE;
+			if (g_aEnemy[nCntEnemy].pos.y <= 0.0f)
+			{
+				g_aEnemy[nCntEnemy].move.y = 0.0f;
+				g_aEnemy[nCntEnemy].pos.y = 0.0f;
+			}
 
 			//体力なくなったら
 			if (g_aEnemy[nCntEnemy].nLife <= 0)
@@ -159,12 +245,27 @@ void UpdateEnemy(void)
 			//モーション管理
 			if (g_aEnemy[nCntEnemy].move.x != 0.0f || g_aEnemy[nCntEnemy].move.z != 0.0f)
 			{
-				StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_WALK, nCntEnemy);
+				switch (g_aEnemy[nCntEnemy].type)
+				{
+				case ENEMYTYPE_ROBOT000:
+					StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT000_WALK, nCntEnemy);
+					break;
+				case ENEMYTYPE_ROBOT001:
+					StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT001_WALK, nCntEnemy);
+				}
 			}
 			else
 			{
-				StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_NEUTRAL, nCntEnemy);
+				switch (g_aEnemy[nCntEnemy].type)
+				{
+				case ENEMYTYPE_ROBOT000:
+					StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT000_NEUTRAL, nCntEnemy);
+					break;
+				case ENEMYTYPE_ROBOT001:
+					StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT001_NEUTRAL, nCntEnemy);
+				}
 			}
+			//StartMotion(SELECTMOTION_ENEMY, MOTIONTYPE_ROBOT001_WALK, nCntEnemy);
 
 			//プレイヤーとの距離
 			float fDistanceToPlayer = sqrtf((pPlayer->pos.x - g_aEnemy[nCntEnemy].pos.x) * ((pPlayer->pos.x) - g_aEnemy[nCntEnemy].pos.x) + (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z) * (pPlayer->pos.z - g_aEnemy[nCntEnemy].pos.z));
@@ -232,8 +333,24 @@ void UpdateEnemy(void)
 				//ポータルを起動
 				ActivatePortal(true, true);
 			}
+
+			if (GetKeyboardTrigger(DIK_J))
+			{
+				//パーツ情報を渡す
+				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT001_MODELPARTS; nCntRobot++) g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot001[nCntRobot];
+				for (int nCnt = 0; nCnt < ENEMY_ROBOT001_MODELPARTS; nCnt++)
+				{
+					g_aEnemy[nCntEnemy].DefKey[nCnt] = KeyPosRot(g_modelRobot001[nCnt].pos.x, g_modelRobot001[nCnt].pos.y, g_modelRobot001[nCnt].pos.z, 0, 0, 0);
+					g_aEnemy[nCntEnemy].aModel[nCnt].nNumModel = g_modelRobot001[nCnt].nNumModel;
+				}
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
+			}
 		}
 	}
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -246,7 +363,7 @@ void DrawEnemy(void)
 	//ロボットタイプの敵描画
 	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
 	{
-		if (g_aEnemy[nCntEnemy].bUse == true && g_aEnemy[nCntEnemy].type == ENEMYTYPE_ROBOT)
+		if (g_aEnemy[nCntEnemy].bUse == true)
 		{
 			LPDIRECT3DDEVICE9 pDevice = GetDevice();									// デバイス取得
 			D3DXMATRIX mtxRot, mtxTrans;												// 計算用マトリックス
@@ -271,7 +388,7 @@ void DrawEnemy(void)
 			//現在のマテリアル取得
 			pDevice->GetMaterial(&matDef);
 
-			for (int nCntModel = 0; nCntModel < ENEMY_ROBOT_MODELPARTS; nCntModel++)
+			for (int nCntModel = 0; nCntModel < g_aEnemy[nCntEnemy].aModel[0].nNumModel; nCntModel++)
 			{
 				D3DXMATRIX mtxRotModel, mtxTransModel;	// 計算用マトリックス
 				D3DXMATRIX mtxParent;					// 親のマトリックス
@@ -360,7 +477,7 @@ Model *GetEnemyModelParts(ENEMYTYPE type)
 {
 	switch (type)
 	{
-	case ENEMYTYPE_ROBOT:
+	case ENEMYTYPE_ROBOT000:
 		return &g_modelRobot[0];
 		break;
 
@@ -388,16 +505,36 @@ void SetEnemy(D3DXVECTOR3 pos, ENEMYTYPE type)
 			//種類付け
 			g_aEnemy[nCntEnemy].type = type;
 
-			//パーツ情報を渡す
 			switch (type)
 			{
-			case ENEMYTYPE_ROBOT:
-				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT_MODELPARTS; nCntRobot++)
+			case ENEMYTYPE_ROBOT000:
+				//パーツ情報を渡す
+				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT_MODELPARTS; nCntRobot++) g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot[nCntRobot];
+				for (int nCnt = 0; nCnt < ENEMY_ROBOT_MODELPARTS; nCnt++)
 				{
-					g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot[nCntRobot];
+					g_aEnemy[nCntEnemy].DefKey[nCnt] = KeyPosRot(g_modelRobot[nCnt].pos.x, g_modelRobot[nCnt].pos.y, g_modelRobot[nCnt].pos.z, 0, 0, 0);
+					g_aEnemy[nCntEnemy].aModel[nCnt].nNumModel = g_modelRobot[nCnt].nNumModel;
 				}
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
+				//初期キー
+
 				break;
 
+			case ENEMYTYPE_ROBOT001:
+				//パーツ情報を渡す
+				for (int nCntRobot = 0; nCntRobot < ENEMY_ROBOT001_MODELPARTS; nCntRobot++) g_aEnemy[nCntEnemy].aModel[nCntRobot] = g_modelRobot001[nCntRobot];
+				for (int nCnt = 0; nCnt < ENEMY_ROBOT001_MODELPARTS; nCnt++)
+				{
+					g_aEnemy[nCntEnemy].DefKey[nCnt] = KeyPosRot(g_modelRobot001[nCnt].pos.x, g_modelRobot001[nCnt].pos.y, g_modelRobot001[nCnt].pos.z, 0, 0, 0);
+					g_aEnemy[nCntEnemy].aModel[nCnt].nNumModel = g_modelRobot001[nCnt].nNumModel;
+				}
+				g_aEnemy[nCntEnemy].fWidth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fDepth = ENEMY_ROBOT_COL_WIDTH;
+				g_aEnemy[nCntEnemy].fHeight = ENEMY_ROBOT_COL_HEIGHT;
+
+				break;
 			default:
 				break;
 			}
@@ -518,8 +655,8 @@ void LoadXFileEnemy(const char* cXFileName, Model *model)
 	D3DXMATERIAL *pMat = (D3DXMATERIAL*)model->pBuffMatModel->GetBufferPointer();
 
 	//テクスチャを取得
-	for (int nCntMat = 0; nCntMat < (int)model->nNumMatModel; nCntMat++)
-	{
-		D3DXCreateTextureFromFile(pDevice, pMat[nCntMat].pTextureFilename, &model->pTexture[nCntMat]);
-	}
+	//for (int nCntMat = 0; nCntMat < (int)model->nNumMatModel; nCntMat++)
+	//{
+	//	D3DXCreateTextureFromFile(pDevice, pMat[nCntMat].pTextureFilename, &model->pTexture[nCntMat]);
+	//}
 }

@@ -17,11 +17,15 @@
 //-----------------------------------------------------------------------------
 // ƒvƒƒgƒ^ƒCƒvéŒ¾
 //-----------------------------------------------------------------------------
+void ColPlayerEnemy(void);
 
 //-----------------------------------------------------------------------------
 // ƒOƒ[ƒoƒ‹•Ï”
 //-----------------------------------------------------------------------------
 VCollision g_aVCollision[MAX_VISIBLE_COLLISION];								// ‰Â‹‰»ƒRƒŠƒWƒ‡ƒ“‚Ìî•ñ
+D3DXVECTOR3 g_WeaponCol1;
+D3DXVECTOR3 g_WeaponCol2;
+D3DXVECTOR3 g_WeaponCol3;
 
 //-----------------------------------------------------------------------------
 // ‰Šú‰»ˆ—
@@ -29,8 +33,24 @@ VCollision g_aVCollision[MAX_VISIBLE_COLLISION];								// ‰Â‹‰»ƒRƒŠƒWƒ‡ƒ“‚Ìî•
 void InitCollision(void)
 {
 #ifdef _DEBUG
+	Player *pPlayer = GetPlayer();
 
+	//‰Šú‰»
+	for (int nCntVCol = 0; nCntVCol < MAX_VISIBLE_COLLISION; nCntVCol++)
+	{
+		g_aVCollision[nCntVCol].bUse = false;
+		g_aVCollision[nCntVCol].nIdx = 0;
+		g_aVCollision[nCntVCol].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		g_aVCollision[nCntVCol].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	}
+	D3DXCOLOR tred = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.5f);
 
+	g_WeaponCol1 = D3DXVECTOR3(pPlayer->mtxWeaponCol[0]._41, pPlayer->mtxWeaponCol[0]._42, pPlayer->mtxWeaponCol[0]._43);
+	g_WeaponCol2 = D3DXVECTOR3(pPlayer->mtxWeaponCol[1]._41, pPlayer->mtxWeaponCol[1]._42, pPlayer->mtxWeaponCol[1]._43);
+	g_WeaponCol3 = D3DXVECTOR3(pPlayer->mtxWeaponCol[2]._41, pPlayer->mtxWeaponCol[2]._42, pPlayer->mtxWeaponCol[2]._43);
+	SetSphere(g_WeaponCol1, D3DXVECTOR3(0.0f, 0.0f, 0.0f), tred, PLAYER_ATTACK_RADIUS, 10, 0);
+	SetSphere(g_WeaponCol2, D3DXVECTOR3(0.0f, 0.0f, 0.0f), tred, PLAYER_ATTACK_RADIUS, 10, 1);
+	SetSphere(g_WeaponCol3, D3DXVECTOR3(0, 0, 0), tred, PLAYER_ATTACK_RADIUS, 10, 2);
 #endif // !_DEBUG
 }
 
@@ -58,7 +78,7 @@ void UpdateCollision(void)
 	Player *pPlayer = GetPlayer();
 	Enemy *pEnemy = GetEnemy();
 	
-	DWORD currentTime = timeGetTime();	// Œ»İ‚ÌŠÔ
+	DWORD currentTime = timeGetTime();	// Œ»İ‚ÌŠÔ	
 
 	//“G‚ÆƒvƒŒƒCƒ„[‚ÌUŒ‚”»’è
 	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
@@ -69,9 +89,12 @@ void UpdateCollision(void)
 			D3DXVECTOR3 spherePos = D3DXVECTOR3(pPlayer->aModel[3].mtxWorld._41, pPlayer->aModel[3].mtxWorld._42, pPlayer->aModel[3].mtxWorld._43);	// ‹…‚ÌêŠ (ƒvƒŒƒCƒ„[‚Ì‰Eè‚ÌˆÊ’u)
 			
 			//“GˆÊ’u
-			D3DXVECTOR3 enemyPosFix = D3DXVECTOR3(pEnemy[nCntEnemy].pos.x, pEnemy[nCntEnemy].pos.y + 20.0f, pEnemy[nCntEnemy].pos.z);
+			D3DXVECTOR3 enemyPosFix = D3DXVECTOR3(pEnemy[nCntEnemy].pos.x, pEnemy[nCntEnemy].pos.y + (pEnemy[nCntEnemy].fHeight / 2), pEnemy[nCntEnemy].pos.z);
+
 			//”»’è
-			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &spherePos, 20, 20, 20, PLAYER_ATTACK_RADIUS);
+			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol3, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
+			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol1, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
+			pEnemy[nCntEnemy].bHit = CollisionBoxSphere(&enemyPosFix, &g_WeaponCol2, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fHeight, pEnemy[nCntEnemy].fDepth, PLAYER_ATTACK_RADIUS);
 
 			//”»’è‚ªtrue‚Ìê‡
 			if (pEnemy[nCntEnemy].bHit == true)
@@ -108,6 +131,18 @@ void UpdateCollision(void)
 			}
 		}
 	}
+
+	//ƒvƒŒƒCƒ„[‚Æ“G‚ÌÕ“Ë”»’è
+	ColPlayerEnemy();
+
+	//‰Â‹ƒRƒŠƒWƒ‡ƒ“‚ÌˆÚ“®
+	g_WeaponCol1 = D3DXVECTOR3(pPlayer->mtxWeaponCol[0]._41, pPlayer->mtxWeaponCol[0]._42, pPlayer->mtxWeaponCol[0]._43);
+	g_WeaponCol2 = D3DXVECTOR3(pPlayer->mtxWeaponCol[1]._41, pPlayer->mtxWeaponCol[1]._42, pPlayer->mtxWeaponCol[1]._43);
+	g_WeaponCol3 = D3DXVECTOR3(pPlayer->mtxWeaponCol[2]._41, pPlayer->mtxWeaponCol[2]._42, pPlayer->mtxWeaponCol[2]._43);
+
+	MoveVCollision(&g_WeaponCol1, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0);
+	MoveVCollision(&g_WeaponCol2, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1);
+	MoveVCollision(&g_WeaponCol3, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), 2);
 }
 
 //-----------------------------------------------------------------------------
@@ -307,33 +342,99 @@ bool CollisionBoxSphere(D3DXVECTOR3 *pBoxPos, D3DXVECTOR3 *pSpherePos, float fBo
 	}
 
 	//’·•ûŒ`—Ìˆæ‚É“ü‚Á‚Ä‚¢‚½‚ç
-	if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) + fSphereRadius &&
-		pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) - fSphereRadius &&
-		pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
-		pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
-		pSpherePos->y < pBoxPos->y + fBoxHeight &&
-		pSpherePos->y > pBoxPos->y - fBoxHeight)
-	{
-		return true;
-	}
-	if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
-		pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
-		pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) + fSphereRadius &&
-		pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) - fSphereRadius &&
-		pSpherePos->y < pBoxPos->y + fBoxHeight &&
-		pSpherePos->y > pBoxPos->y - fBoxHeight)
-	{
-		return true;
-	}
-	if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
-		pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
-		pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
-		pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
-		pSpherePos->y < pBoxPos->y + fBoxHeight + fSphereRadius &&
-		pSpherePos->y > pBoxPos->y - fBoxHeight - fSphereRadius)
-	{
-		return true;
-	}
+if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) + fSphereRadius &&
+	pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) - fSphereRadius &&
+	pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
+	pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
+	pSpherePos->y < pBoxPos->y + fBoxHeight &&
+	pSpherePos->y > pBoxPos->y - fBoxHeight)
+{
+	return true;
+}
+if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
+	pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
+	pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) + fSphereRadius &&
+	pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) - fSphereRadius &&
+	pSpherePos->y < pBoxPos->y + fBoxHeight &&
+	pSpherePos->y > pBoxPos->y - fBoxHeight)
+{
+	return true;
+}
+if (pSpherePos->x < pBoxPos->x + (fBoxWidth / 2) &&
+	pSpherePos->x > pBoxPos->x - (fBoxWidth / 2) &&
+	pSpherePos->z < pBoxPos->z + (fBoxDepth / 2) &&
+	pSpherePos->z > pBoxPos->z - (fBoxDepth / 2) &&
+	pSpherePos->y < pBoxPos->y + fBoxHeight + fSphereRadius &&
+	pSpherePos->y > pBoxPos->y - fBoxHeight - fSphereRadius)
+{
+	return true;
+}
 
-	return false;
+return false;
+}
+
+/* ƒvƒŒƒCƒ„[‚Æ“G‚ÌÕ“Ë */
+void ColPlayerEnemy(void)
+{
+	Enemy *pEnemy = GetEnemy();
+	Player *pPlayer = GetPlayer();
+
+	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
+	{
+		if (pEnemy[nCntEnemy].bUse == true)
+		{
+			// “–‚½‚è”»’è 2d ”»’èŒã‚ß‚è‚İ–ß‚·
+			//‰œ
+			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth)
+			{
+				if (pPlayer->posOld.z - PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+					pPlayer->posOld.x - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				{
+					pPlayer->pos.z = pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth + PlAYER_WIDTH;
+				}
+			}
+
+			//è‘O
+			if (pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+				pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+			{
+				if (pPlayer->posOld.z + PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->posOld.x + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+					pPlayer->posOld.x - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				{
+					pPlayer->pos.z = pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth - PlAYER_WIDTH;
+				}
+
+				//¶
+				if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.x + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth)
+				{
+					if (pPlayer->posOld.x + PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth &&
+						pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+						pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+					{
+						pPlayer->pos.x = pEnemy[nCntEnemy].pos.x - pEnemy[nCntEnemy].fWidth - PlAYER_WIDTH;
+					}
+				}
+
+				//‰E
+				if (pPlayer->pos.z - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.z + PlAYER_WIDTH > pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth &&
+					pPlayer->pos.x - PlAYER_WIDTH < pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth)
+				{
+					if (pPlayer->posOld.x - PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth &&
+						pPlayer->posOld.z - PlAYER_WIDTH <= pEnemy[nCntEnemy].pos.z + pEnemy[nCntEnemy].fDepth &&
+						pPlayer->posOld.z + PlAYER_WIDTH >= pEnemy[nCntEnemy].pos.z - pEnemy[nCntEnemy].fDepth)
+					{
+						pPlayer->pos.x = pEnemy[nCntEnemy].pos.x + pEnemy[nCntEnemy].fWidth + PlAYER_WIDTH;
+					}
+				}
+			}
+		}
+	}
 }

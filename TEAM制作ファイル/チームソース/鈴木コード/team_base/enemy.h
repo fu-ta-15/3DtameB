@@ -20,8 +20,10 @@
 #define ENEMY_AMOUNT_MAX (ENENY_AMOUNT_SNAKE + ENEMY_AMOUNT_ROBOT)			// 用意している敵の最大数
 #define ENEMY_MODEL_PARTS_MAX (10)	// 使用できる最大パーツ数
 #define ENEMY_ROBOT_MODELPARTS (10)	// amount of parts of robot model
-#define ENEMY_HEIGHT (20)				// 敵の高さ
-#define ENEMY_WIDTH (20)				// 敵の幅
+#define ENEMY_ROBOT001_MODELPARTS (8)	
+
+#define ENEMY_ROBOT_COL_HEIGHT (20)				// ロボット型の敵の高さ (判定用)
+#define ENEMY_ROBOT_COL_WIDTH (20)				// 幅
 
 #define ENEMY_KNOCKBACK (10)			// ノックバック量
 #define ENEMY_INVINCIBLE_TIME (500)		// 攻撃された時の無敵時間
@@ -37,7 +39,8 @@
 //-----------------------------------------------------------------------------
 typedef enum
 {
-	ENEMYTYPE_ROBOT,	// robot
+	ENEMYTYPE_ROBOT000,	// robot
+	ENEMYTYPE_ROBOT001,
 	ENEMYTYPE_BOSS,
 	ENEMYTYPE_MAX
 } ENEMYTYPE;
@@ -55,6 +58,9 @@ typedef struct
 	D3DXMATRIX mtxWorld;						// ワールドマトリックス
 	ENEMYTYPE type;								// 敵の種類
 	Model aModel[ENEMY_MODEL_PARTS_MAX];		// パーツ
+	float fWidth;								// 幅
+	float fDepth;								// 奥行
+	float fHeight;								// 高さ
 
 	bool bPlayMotion;							// モーション再生状態
 	MOTION_INFO aMotionInfo[MOTION_MAX];		// モーション情報	 (モーションの最大数)
@@ -65,6 +71,7 @@ typedef struct
 	int nNumKey;								// キー数
 	int nKey;									// キーナンバー
 	int nCounterMotion;							// モーションカウンター
+	KEY DefKey[ENEMY_MODEL_PARTS_MAX];	// 初期配置
 
 	int nLifeMax;								// 最大体力
 	int nLife;									// 体力

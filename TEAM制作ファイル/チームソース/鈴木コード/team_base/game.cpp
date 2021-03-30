@@ -17,11 +17,16 @@
 #include "collision.h"
 #include "skybox.h"
 #include "object.h"
+#include "commandaction.h"
+#include "boss.h"
+#include "effect.h"
+#include "gauge.h"
 
 //=============================================================================
 // グローバル変数
 //=============================================================================
 Stage g_stage;
+int g_nCntFrame;
 
 //=============================================================================
 // ゲーム画面の初期化処理
@@ -39,14 +44,21 @@ HRESULT InitGame(void)
 
 	//ポータルの初期化処理
 	InitPortal();
-
-	//コリジョン処理の初期化
-	InitCollision();
 	
-	//---ステージに依るもの---
+	//コマンドアクション初期化処理
+	InitCommand();
+
+	//---ステージに依るもの----
+
+	//ゲージ
+	InitGauge();
 
 	//敵の初期化処理
 	InitEnemy();
+
+	InitEffect();
+
+	InitBoss();
 
 	//オブジェクトの初期化処理
 	InitObject();
@@ -62,6 +74,11 @@ HRESULT InitGame(void)
 	
 	//スカイボックスの処理
 	InitSky();
+	
+	//-----------------------
+
+	//コリジョン処理の初期化
+	InitCollision();
 
 	//モーションの初期化処理
 	InitMotion();
@@ -74,11 +91,17 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
+	UninitGauge();
+
 	//スカイボックスの終了処理
 	UninitSky();
 
 	//メッシュフィールドの終了処理
 	UninitMeshfield();
+
+	UninitBoss();
+
+	UninitEffect();
 
 	//敵の終了処理
 	UninitEnemy();
@@ -88,6 +111,9 @@ void UninitGame(void)
 
 	//壁(メッシュ)の終了処理
 	UninitMeshwall();
+
+	//コマンドアクション終了処理
+	UninitCommand();
 
 	//モデルの終了処理
 	UninitPlayer();
@@ -110,43 +136,110 @@ void UninitGame(void)
 //=============================================================================
 void UpdateGame(void)
 {
-	//コリジョンの更新処理
-	UpdateCollision();
+	g_nCntFrame++;
+	CommandAction *pCmd = GetCAction();
 
-	//メッシュフィールドの更新処理
-	UpdateMeshfield();
-
-	//壁(メッシュ)の更新処理
-	UpdateMeshwall();
-
-	//モデルの更新処理
-	UpdatePlayer();
-
-	//敵の更新処理
-	UpdateEnemy();
-
-	//オブジェクトの更新処理
-	UpdateObject();
-
-	//カメラの更新処理
-	UpdateCamera();
-
-	//モーションの更新処理
-	UpdateMotion();
-
-	//ライトの更新処理
-	UpdateLight();
-
-	//ポータルの更新処理
-	UpdatePortal();
-
-	//スカイボックスの更新処理
-	UpdateSky();
-
-	if (GetKeyboardTrigger(DIK_RETURN) == true)
+	if (pCmd->bActive == true)
 	{
-		g_stage.nStageNum += 1;
-		SetFade(FADE_OUT, MODE_GAME);
+		if (g_nCntFrame % 4 == 0)
+		{
+			//コリジョンの更新処理
+			UpdateCollision();
+
+			//メッシュフィールドの更新処理
+			UpdateMeshfield();
+
+			//壁(メッシュ)の更新処理
+			UpdateMeshwall();
+
+			//モーションの更新処理
+			UpdateMotion();
+
+			//モデルの更新処理
+			UpdatePlayer();
+
+			UpdateEffect();
+
+			//敵の更新処理
+			UpdateEnemy();
+
+			UpdateBoss();
+
+			//オブジェクトの更新処理
+			UpdateObject();
+
+			//ライトの更新処理
+			UpdateLight();
+
+			//ポータルの更新処理
+			UpdatePortal();
+
+			//スカイボックスの更新処理
+			UpdateSky();
+
+			if (GetKeyboardTrigger(DIK_RETURN) == true)
+			{
+				g_stage.nStageNum += 1;
+				SetFade(FADE_OUT, MODE_GAME);
+			}
+		}
+		//カメラの更新処理
+		UpdateCamera();
+
+		//コマンドアクションの更新処理
+		UpdateCommand();
+	}
+	else
+	{
+		//コリジョンの更新処理
+		UpdateCollision();
+
+		SetGeauge(GAUGE_TYPE_PORTAL, GAUGE_COVER_PORTAL, D3DXVECTOR3(100.0f, -500.0f, 0.0f), D3DXVECTOR2(1000.0f, 100.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+		UpdateGauge();
+
+		//メッシュフィールドの更新処理
+		UpdateMeshfield();
+
+		//壁(メッシュ)の更新処理
+		UpdateMeshwall();
+
+		UpdateEffect();
+
+		//モデルの更新処理
+		UpdatePlayer();
+
+		//敵の更新処理
+		UpdateEnemy();
+
+		UpdateBoss();
+
+		//オブジェクトの更新処理
+		UpdateObject();
+
+		//カメラの更新処理
+		UpdateCamera();
+
+		//モーションの更新処理
+		UpdateMotion();
+
+		//ライトの更新処理
+		UpdateLight();
+
+		//ポータルの更新処理
+		UpdatePortal();
+
+		//スカイボックスの更新処理
+		UpdateSky();
+
+		//コマンドアクションの更新処理
+		UpdateCommand();
+
+		if (GetKeyboardTrigger(DIK_RETURN) == true)
+		{
+			g_stage.nStageNum += 1;
+			SetFade(FADE_OUT, MODE_GAME);
+		}
 	}
 }
 
@@ -155,30 +248,41 @@ void UpdateGame(void)
 //=============================================================================
 void DrawGame(void)
 {
-	//コリジョンの描画処理
-	DrawCollision();
+	DrawGaugeCover();
+	DrawGauge();
+		//メッシュフィールドの描画処理
+		DrawMeshfield();
 
-	//メッシュフィールドの描画処理
-	DrawMeshfield();
+		//壁(メッシュ)の描画処理
+		DrawMeshwall();
 
-	//壁(メッシュ)の描画処理
-	DrawMeshwall();
+		//モデルの描画処理
+		DrawPlayer();
 
-	//モデルの描画処理
-	DrawPlayer();
+		//敵の描画処理
+		DrawEnemy();
 
-	//敵の描画処理
-	DrawEnemy();
+		DrawBoss();
 
-	//オブジェクトの描画処理
-	DrawObject();
+		//オブジェクトの描画処理
+		DrawObject();
 
-	//スカイボックスの描画
-	DrawSky();
+		//スカイボックスの描画
+		DrawSky();
 
-	//ポータルの描画処理
-	DrawPortal();
+		//ポータルの描画処理
+		DrawPortal();
 
+
+		DrawEffect();
+
+		//コマンドアクション描画処理
+		DrawCommand();
+
+
+
+		//コリジョンの描画処理
+		DrawCollision();
 }
 
 //=============================================================================
