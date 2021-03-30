@@ -12,6 +12,7 @@
 #include "portal.h"
 #include "meshfield.h"
 #include "collision.h"
+#include "boss_attack.h"
 
 #include <stdio.h>
 
@@ -23,6 +24,7 @@
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
 void LoadXFileBoss(const char* cXFileName, Model *model);
+void SetRandomAttack(void);
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -54,23 +56,17 @@ void InitBoss(void)
 		g_modelBoss[nCntModel].rot = D3DXVECTOR3(g_partsBoss.fModelRot[nCntModel][0], g_partsBoss.fModelRot[nCntModel][1], g_partsBoss.fModelRot[nCntModel][2]);
 	}
 
-	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
-	{
-		//初期設定
-		g_Boss.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置の初期設定
-		g_Boss.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向きの初期設定
-		g_Boss.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値の初期設定
-		g_Boss.bUse = false;
-		g_Boss.bInvincible = false;
-		g_Boss.nLife = ENEMY_HP_MAX;
-		g_Boss.nLifeMax = ENEMY_HP_MAX;
-		g_Boss.bHit = false;
-		g_Boss.bAttack = false;
-		g_Boss.dwTimeAtk = NULL;
-		g_Boss.dwTimeInv = NULL;
-	}
-
-	SetBoss(D3DXVECTOR3(0.0f, 0.0f, 100.0f), ENEMYTYPE_BOSS);
+	//初期設定
+	g_Boss.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置の初期設定
+	g_Boss.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向きの初期設定
+	g_Boss.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値の初期設定
+	g_Boss.bUse = false;
+	g_Boss.bInvincible = false;
+	g_Boss.nLife = BOSS_HP_MAX;
+	g_Boss.nLifeMax = BOSS_HP_MAX;
+	g_Boss.bHit = false;
+	g_Boss.bAttack = false;
+	g_Boss.dwTimeInv = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -129,10 +125,31 @@ void UninitBoss(void)
 //-----------------------------------------------------------------------------
 void UpdateBoss(void)
 {
-	StartMotion(SELECTMOTION_BOSS, MOTIONTYPE_BOSS_NEUTRAL, NULL);	// とりあえずニュートラルさせとく
+	if (g_Boss.bUse)
+	{
+		Player *pPlayer = GetPlayer();
 
-	//ボスとプレイヤーの移動当たり判定
-	ColPlayerBoxThing(g_Boss.pos, g_Boss.fWidth, g_Boss.fDepth);
+		StartMotion(SELECTMOTION_BOSS, MOTIONTYPE_BOSS_NEUTRAL, NULL);	// とりあえずニュートラルさせとく
+
+		//ボスとプレイヤーの移動当たり判定
+		ColPlayerBoxThing(g_Boss.pos, g_Boss.fWidth, g_Boss.fDepth);
+
+		//ボスが常にプレイヤーの方向を向くようにする
+		float fRadianToPlayer = atan2f(g_Boss.pos.x - pPlayer->pos.x, g_Boss.pos.z - pPlayer->pos.z);
+		g_Boss.rot.y = fRadianToPlayer;
+
+		//ランダム時間でボスが攻撃を開始する
+		SetRandomAttack();
+
+		//ボスのHPが尽きた時
+		if (g_Boss.nLife <= 0)
+		{
+			g_Boss.bUse = false;
+
+			SetFade(FADE_OUT, MODE_RANKING);
+		}
+	}
+
 }
 
 //-----------------------------------------------------------------------------
@@ -149,7 +166,6 @@ void DrawBoss(void)
 			D3DXMATRIX mtxRot, mtxTrans;												// 計算用マトリックス
 			D3DMATERIAL9 matDef;														// 現在のマテリアル保存用
 			D3DXMATERIAL *pMat;															// マテリアルデータへのポインタ
-			D3DXMATERIAL *pMatAlt;														// 代えのマテリアル
 
 			//プレイヤーのワールドマトリックスの初期化
 			D3DXMatrixIdentity(&g_Boss.mtxWorld);
@@ -202,27 +218,32 @@ void DrawBoss(void)
 
 				//マテリアルデータへのポインタを取得
 				pMat = (D3DXMATERIAL*)g_Boss.aModel[nCntModel].pBuffMatModel->GetBufferPointer();
-				pMatAlt = (D3DXMATERIAL*)g_Boss.aModel[nCntModel].pBuffMatModel->GetBufferPointer();
 
 				//無敵状態か見てモデルの色を変える
 				if (g_Boss.bInvincible == true)
 				{//無敵状態
-					pMatAlt->MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f);
 					for (int nCntMat = 0; nCntMat < (int)g_Boss.aModel[nCntModel].nNumMatModel; nCntMat++)
 					{
+						D3DXMATERIAL matDef[20];
+
+						matDef[nCntMat] = pMat[nCntMat];
+
+						pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f);
+
 						//マテリアル設定
-						pDevice->SetMaterial(&pMatAlt[nCntMat].MatD3D);
+						pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
 						//テクスチャの設定
 						pDevice->SetTexture(0, NULL);
 
 						//モデルパーツの描画
 						g_Boss.aModel[nCntModel].pMeshModel->DrawSubset(nCntMat);
+
+						pMat[nCntMat] = matDef[nCntMat];
 					}
 				}
 				else if (g_Boss.bInvincible == false)
 				{//通常状態
-					pMat->MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0, 1.0f, 1.0f);
 					for (int nCntMat = 0; nCntMat < (int)g_Boss.aModel[nCntModel].nNumMatModel; nCntMat++)
 					{
 						//マテリアル設定
@@ -280,6 +301,9 @@ void SetBoss(D3DXVECTOR3 pos, ENEMYTYPE type)
 			break;
 		}
 
+		g_Boss.nLife = BOSS_HP_MAX;
+		g_Boss.nLifeMax = BOSS_HP_MAX;
+
 		//使用中に移行
 		g_Boss.bUse = true;
 	}
@@ -310,4 +334,28 @@ void LoadXFileBoss(const char* cXFileName, Model *model)
 	//{
 	//	D3DXCreateTextureFromFile(pDevice, pMat[nCntMat].pTextureFilename, &model->pTexture[nCntMat]);
 	//}
+}
+
+/* ボスがランダム時間で攻撃してくる */
+void SetRandomAttack(void)
+{
+	Player *pPlayer = GetPlayer();		 // player info
+
+	srand((unsigned)time(0));	// rand初期化
+
+	//攻撃してない時からの時間を測る
+	if (!g_Boss.bAttack)
+	{
+		g_Boss.nAttackFrame++;
+		g_Boss.nAttackRand = rand() % BOSS_ATTACK_MAXTIME;
+	}
+
+	//ランダム時間が経過したら攻撃開始
+	if (g_Boss.nAttackFrame >= g_Boss.nAttackRand + BOSS_ATTACK_MINTIME)
+	{
+		BeginBossAttack(pPlayer->pos);
+		StartMotion(SELECTMOTION_BOSS, MOTIONTYPE_BOSS_ATTACK, NULL);
+
+		g_Boss.nAttackFrame = 0;
+	}
 }

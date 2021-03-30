@@ -58,8 +58,10 @@ typedef struct
 //=============================================================================
 typedef enum
 {
+	MODE_TITLE,
 	MODE_GAME,			//ƒQ[ƒ€‰æ–Ê
 	MODE_RESULT,		//ƒŠƒUƒ‹ƒg‰æ–Ê
+	MODE_RANKING,
 	MODE_MAX
 }MODE;
 

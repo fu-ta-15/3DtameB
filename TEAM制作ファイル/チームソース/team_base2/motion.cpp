@@ -17,7 +17,6 @@
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
 //-----------------------------------------------------------------------------
-void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy);
 void PlayerMotion(bool bPlayMotion);
 void EnemyMotion(bool bPlayMotion, int nIdx);
 void BossMotion(bool bPlayMotion);
@@ -1355,32 +1354,32 @@ void InitMotionBoss(void)
 
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].nNumKey = 4;
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].bLoop = false;
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].nFrame = 10;
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].nFrame = 10;
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].nFrame = 10;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].nFrame = 40;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].nFrame = 20;
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].nFrame = 20;
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[3].nFrame = 30;
 
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.28f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.35f, 1.19f, 1.95f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[0].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.19f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 1.23f, 0.53f, 0.69f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[6] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[1].aKey[7] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[0] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.19f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[1] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[2] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.47f, 0.57f, -0.50f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[3] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[4] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 	pBoss->aMotionInfo[MOTIONTYPE_BOSS_ATTACK].aKeyInfo[2].aKey[5] = KeyPosRot(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);

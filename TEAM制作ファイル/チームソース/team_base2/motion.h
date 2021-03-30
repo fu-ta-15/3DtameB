@@ -102,5 +102,6 @@ void StartMotion(SELECTMOTION motionSelect, MOTIONTYPE motionType, int nIdxEnemy
 void MotionText(const char* cXFileName);
 void InitMotionRobot000(void);
 void InitMotionRobot001(void);
+void ResetMotion(SELECTMOTION resetType, bool bPartsReset, bool bCounterReset, bool bKeyReset, bool bMotionTrig, int nIdxEnemy);
 
 #endif

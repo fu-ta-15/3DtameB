@@ -20,6 +20,8 @@
 #include "commandaction.h"
 #include "boss.h"
 #include "boss_attack.h"
+#include "effect.h"
+#include "bullet.h"
 
 //=============================================================================
 // グローバル変数
@@ -46,6 +48,10 @@ HRESULT InitGame(void)
 	
 	//コマンドアクション初期化処理
 	InitCommand();
+	
+	InitEffect();
+
+	InitBullet();
 
 	//---ステージに依るもの----
 
@@ -65,7 +71,7 @@ HRESULT InitGame(void)
 	InitMeshwall();
 
 	//壁の配置
-	if (g_stage.nStageNum == 1) SetWall();
+	//if (g_stage.nStageNum == 1) SetWall();
 	
 	//スカイボックスの処理
 	InitSky();
@@ -78,6 +84,9 @@ HRESULT InitGame(void)
 	//モーションの初期化処理
 	InitMotion();
 
+	//
+	if (g_stage.nStageNum == 2) SetBoss(D3DXVECTOR3(0.0f, 0.0f, 100.0f), ENEMYTYPE_BOSS);
+
 	return S_OK;
 }
 
@@ -86,44 +95,46 @@ HRESULT InitGame(void)
 //=============================================================================
 void UninitGame(void)
 {
-
-	//敵の終了処理
-	UninitEnemy();
-
-	//スカイボックスの終了処理
-	UninitSky();
-
-	//メッシュフィールドの終了処理
-	UninitMeshfield();
-
-	UninitBossATK();
-	UninitBoss();
-
-
-
-	//オブジェクトの終了処理
-	UninitObject();
-
-	//壁(メッシュ)の終了処理
-	UninitMeshwall();
-
-	//コマンドアクション終了処理
-	UninitCommand();
-
-	//モデルの終了処理
-	UninitPlayer();
-
-	//カメラの終了処理
-	UninitCamera();
-
-	//ライトの終了処理
-	UninitLight();
+	UninitMotion();
 
 	//コリジョン終了処理	
 	UninitCollision();
 
-	//ポータルの終了処理
+	//スカイボックスの終了処理
+	UninitSky();
+
+	//壁(メッシュ)の終了処理
+	UninitMeshwall();
+
+	//メッシュフィールドの終了処理
+	UninitMeshfield();
+
+	//オブジェクトの終了処理
+	UninitObject();
+
+	UninitBossATK();
+
+	UninitBoss();
+
+	//敵の終了処理
+	UninitEnemy();
+
+	UninitBullet();
+
+	UninitEffect();
+
+	//コマンドアクション終了処理
+	UninitCommand();
+
 	UninitPortal();
+
+	//ライトの終了処理
+	UninitLight();
+
+	//カメラの終了処理
+	UninitCamera();
+
+	UninitPlayer();
 }
 
 //=============================================================================
@@ -136,6 +147,9 @@ void UpdateGame(void)
 
 	if (pCmd->bActive == true)
 	{
+		//コマンドアクションの更新処理
+		UpdateCommand();
+
 		if (g_nCntFrame % 4 == 0)
 		{
 			//コリジョンの更新処理
@@ -159,6 +173,10 @@ void UpdateGame(void)
 			UpdateBoss();
 			UpdateBossATK();
 
+			UpdateEffect();
+
+			UpdateBullet();
+
 			//オブジェクトの更新処理
 			UpdateObject();
 
@@ -180,11 +198,13 @@ void UpdateGame(void)
 		//カメラの更新処理
 		UpdateCamera();
 
-		//コマンドアクションの更新処理
-		UpdateCommand();
+
 	}
 	else
 	{
+		//コマンドアクションの更新処理
+		UpdateCommand();
+
 		//コリジョンの更新処理
 		UpdateCollision();
 
@@ -193,6 +213,9 @@ void UpdateGame(void)
 
 		//壁(メッシュ)の更新処理
 		UpdateMeshwall();
+
+		//モーションの更新処理
+		UpdateMotion();
 
 		//モデルの更新処理
 		UpdatePlayer();
@@ -203,14 +226,15 @@ void UpdateGame(void)
 		UpdateBoss();
 		UpdateBossATK();
 
+		UpdateEffect();
+
+		UpdateBullet();
+
 		//オブジェクトの更新処理
 		UpdateObject();
 
 		//カメラの更新処理
 		UpdateCamera();
-
-		//モーションの更新処理
-		UpdateMotion();
 
 		//ライトの更新処理
 		UpdateLight();
@@ -220,9 +244,6 @@ void UpdateGame(void)
 
 		//スカイボックスの更新処理
 		UpdateSky();
-
-		//コマンドアクションの更新処理
-		UpdateCommand();
 
 		if (GetKeyboardTrigger(DIK_RETURN) == true)
 		{
@@ -253,6 +274,10 @@ void DrawGame(void)
 
 		DrawBoss();
 		DrawBossATK();
+
+		DrawEffect();
+
+		DrawBullet();
 
 		//オブジェクトの描画処理
 		DrawObject();

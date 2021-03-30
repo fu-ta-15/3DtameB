@@ -51,6 +51,7 @@ typedef struct
 	LPD3DXBUFFER pBuffMat;					// マテリアルへのポインタ
 	DWORD nNumMat;							// マテリアルの数
 	LPDIRECT3DTEXTURE9 pTexture[10];		// テクスチャへのポインタ
+	D3DXMATRIX mtxWorldMin, mtxWorldMax;
 	D3DXVECTOR3 vtxMin, vtxMax;
 	OBJECT_TYPE Type;
 

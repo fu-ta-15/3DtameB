@@ -9,10 +9,13 @@
 #include "player.h"
 #include "game.h"
 #include "fade.h"
+#include "effect.h"
 
 //-----------------------------------------------------------------------------
 // マクロ定義
 //-----------------------------------------------------------------------------
+
+
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -20,6 +23,7 @@
 LPDIRECT3DVERTEXBUFFER9  g_pVtxBuffPortal = NULL;									// 頂点バッファへのポインタ
 LPDIRECT3DTEXTURE9 g_pTexturePortal = NULL;											// ポリゴンのテクスチャへのポインタ
 Portal g_portal;																	// ポータルの情報
+
 
 //-----------------------------------------------------------------------------
 // ポータルの初期化処理
@@ -32,13 +36,13 @@ HRESULT InitPortal(void)
 	pDevice = GetDevice();
 
 	//ポータルの情報初期化
-	g_portal.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	g_portal.pos = D3DXVECTOR3(0.0f, 75.0f, 0.0f);
 	g_portal.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	g_portal.bActive = false;
 	g_portal.bDraw = false;
 
 	//テクスチャ読み込み
-	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//circle.png", &g_pTexturePortal);
+	D3DXCreateTextureFromFile(pDevice, "data//TEXTURE//Particle04_clear_hard.png", &g_pTexturePortal);
 
 	//頂点バッファ生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * VERTEX_AMOUNT,					//サイズ
@@ -54,9 +58,9 @@ HRESULT InitPortal(void)
 	g_pVtxBuffPortal->Lock(0, 0, (void**)&pVertex, 0);
 
 	//頂点座標設定
-	pVertex[0].pos = D3DXVECTOR3(-PORTAL_WIDTH, 0.0f, 0.0f);
+	pVertex[0].pos = D3DXVECTOR3(-PORTAL_WIDTH, -PORTAL_HEIGHT, 0.0f);
 	pVertex[1].pos = D3DXVECTOR3(-PORTAL_WIDTH, PORTAL_HEIGHT, 0.0f);
-	pVertex[2].pos = D3DXVECTOR3(PORTAL_WIDTH, 0.0f, 0.0f);
+	pVertex[2].pos = D3DXVECTOR3(PORTAL_WIDTH, -PORTAL_HEIGHT, 0.0f);
 	pVertex[3].pos = D3DXVECTOR3(PORTAL_WIDTH, PORTAL_HEIGHT, 0.0f);
 
 	//法線ベクトルの設定
@@ -113,6 +117,25 @@ void UpdatePortal(void)
 	{
 		Player *pPlayer = GetPlayer();
 
+		float fPos_X = (float)((rand() % 628) - 628);
+		float fPos_Y = (float)((rand() % 628) - 628);
+
+		D3DXVECTOR3 PortalPosDice = { fPos_X,fPos_Y,g_portal.pos.z };
+
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,80.0f,100.0f }, 300, 60, 6000);
+		SetEffectPortal(PortalPosDice, g_portal.pos, D3DXCOLOR(0.5f, 0.2f, 0.6f, 1.0f), { 0.02f,0.04f,0.0f }, { 80.0f,60.0f,100.0f }, 200, 60, 600);
+
+		// 回転の修正 (3.14超えたら±逆に)
+		if (g_portal.rot.y > D3DX_PI)
+		{
+			g_portal.rot.y -= D3DX_PI * 2.0f;
+		}
+		else if (g_portal.rot.y < -D3DX_PI)
+		{
+			g_portal.rot.y += D3DX_PI * 2.0f;
+		}
+
+
 		//ポータルとプレイヤーの衝突判定
 		if (CollisionBoxBox(&pPlayer->pos, &g_portal.pos, PlAYER_WIDTH, PlAYER_WIDTH, PORTAL_WIDTH, 10.0f) == true)
 		{
@@ -150,19 +173,14 @@ void DrawPortal(void)
 		//デバイス取得
 		pDevice = GetDevice();
 
-		//減算合成の設定
-		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
-		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-		//カリングの設定
-		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+		pDevice->SetRenderState(D3DRS_ALPHAREF, 100);
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				//カリングの設定
 
 		//ワールドマトリックスの初期化
 		D3DXMatrixIdentity(&g_portal.mtxWorld);
-
-		//ビューマトリックスを取得
-		pDevice->GetTransform(D3DTS_VIEW, &mtxView);
 
 		//向きの反映
 		D3DXMatrixRotationYawPitchRoll(&mtxRot, g_portal.rot.y, g_portal.rot.x, g_portal.rot.z);
@@ -187,13 +205,10 @@ void DrawPortal(void)
 		//ポリゴンの描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-		//カリングの設定を戻す
-		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
+		pDevice->SetRenderState(D3DRS_ALPHAREF, 0x00);
 
-		//通常合成に戻す
-		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	}
 }
 
@@ -209,4 +224,9 @@ void ActivatePortal(bool bActive, bool bDraw)
 	//ポータルを描画するかどうか
 	if (bDraw == true) g_portal.bDraw = true;
 	else g_portal.bDraw = false;
+}
+
+Portal GetPortal(void)
+{
+	return g_portal;
 }

@@ -31,9 +31,13 @@
 #define ENEMY_INVINCIBLE_TIME (500)		// UŒ‚‚³‚ê‚½Žž‚Ì–³“GŽžŠÔ
 #define ENEMY_FALLSPEED (0.4f)			// —Ž‰º‘¬“x
 #define ENEMY_DETECT_RADIUS (200)		// “GŠ´’m‹——£
+#define ENEMY_DETECT_RADIUS_RANGED (500)
 #define ENEMY_MOVESPEED (0.2f)			// ˆÚ“®‘¬“x
 #define ENEMY_ATTACK_RADIUS (35)		// UŒ‚”ÍˆÍ
+#define ENEMY_ATTACK_RADIUS_RANGED (300)
 #define ENEMY_ATTACK_COOLTIME (1000)	// UŒ‚CT
+#define ENEMY_ATTACK_COOLTIME_RANGED (3000)
+#define ENEMY_ATTACK_BULLETSPEED (2)
 #define ENEMY_HP_MAX (3)				// “G‚Ì‘Ì—Í
 
 //-----------------------------------------------------------------------------

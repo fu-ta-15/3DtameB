@@ -9,6 +9,8 @@
 #include "player.h"
 #include "enemy.h"
 #include "input.h"
+#include "boss.h"
+#include "commandaction.h"
 
 //-----------------------------------------------------------------------------
 // マクロ定義
@@ -78,10 +80,11 @@ void UpdateCollision(void)
 {
 	Player *pPlayer = GetPlayer();
 	Enemy *pEnemy = GetEnemy();
+	Boss *pBoss = GetBoss();
 	
 	DWORD currentTime = timeGetTime();	// 現在の時間	
 
-	//敵とプレイヤーの攻撃判定
+	//敵に対する攻撃判定
 	for (int nCntEnemy = 0; nCntEnemy < ENEMY_AMOUNT_MAX; nCntEnemy++)
 	{
 		if (pEnemy[nCntEnemy].bUse == true)
@@ -101,16 +104,21 @@ void UpdateCollision(void)
 			if (pEnemy[nCntEnemy].bHit == true)
 			{
 				//プレイヤーが攻撃状態の場合
-				if (pPlayer->motionType == MOTIONTYPE_ATTACK)
+				if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
+					pPlayer->motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
 				{
 					//プレイヤーが無敵状態じゃない場合
 					if (pEnemy[nCntEnemy].bInvincible != true)
 					{
+						CommandAction *pCmdACT = GetCAction();
+						
 						//現在時間取得
 						pEnemy[nCntEnemy].dwTimeInv = timeGetTime();
 
 						//体力減少
 						pEnemy[nCntEnemy].nLife--;
+
+						pCmdACT->nUsePower++;
 
 						//プレイヤーから敵へのベクトル
 						D3DXVECTOR3 vecPtoE = pEnemy[nCntEnemy].pos - pPlayer->pos;
@@ -133,6 +141,57 @@ void UpdateCollision(void)
 
 			//プレイヤーと敵の移動当たり判定
 			ColPlayerBoxThing(pEnemy[nCntEnemy].pos, pEnemy[nCntEnemy].fWidth, pEnemy[nCntEnemy].fDepth);
+		}
+	}
+
+	//ボスに対する攻撃判定
+	if (pBoss->bUse)
+	{
+		//敵位置
+		D3DXVECTOR3 BossPos = D3DXVECTOR3(pBoss->pos.x, pBoss->pos.y + pBoss->fHeight, pBoss->pos.z);
+
+		//判定
+		pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol3, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
+		pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol1, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
+		pBoss->bHit = CollisionBoxSphere(&BossPos, &g_WeaponCol2, pBoss->fWidth, pBoss->fHeight, pBoss->fDepth, PLAYER_ATTACK_RADIUS);
+
+		//判定がtrueの場合
+		if (pBoss->bHit == true)
+		{
+			//プレイヤーが攻撃状態の場合
+			if (pPlayer->motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||
+				pPlayer->motionType == MOTIONTYPE_CYBORG_NAGINATA_ATTACK)
+			{
+				//プレイヤーが無敵状態じゃない場合
+				if (pBoss->bInvincible != true)
+				{
+					CommandAction *pCmdACT = GetCAction();
+
+					//現在時間取得
+					pBoss->dwTimeInv = timeGetTime();
+
+					//体力減少
+					pBoss->nLife--;
+
+					pCmdACT->nUsePower++;
+
+					//プレイヤーから敵へのベクトル
+					D3DXVECTOR3 vecPtoE = pBoss->pos - pPlayer->pos;
+					vecPtoE = D3DXVECTOR3(vecPtoE.x, 10.0f, vecPtoE.z);
+					D3DXVec3Normalize(&vecPtoE, &vecPtoE);
+
+					//ノックバック
+					pBoss->move += vecPtoE * ENEMY_KNOCKBACK;
+
+					//無敵時間に
+					pBoss->bInvincible = true;
+				}
+			}
+		}
+		//攻撃された時から時間経過したら無敵解除
+		if (currentTime - pBoss->dwTimeInv >= ENEMY_INVINCIBLE_TIME)
+		{
+			pBoss->bInvincible = false;
 		}
 	}
 

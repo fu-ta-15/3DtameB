@@ -22,13 +22,16 @@
 #define CA_BUTTON_POS_Y (SCREEN_WIDTH / 2)
 
 #define CA_ATTACK_RADIUS (150.0f)
-#define CA_ATTACK_KNOCKBACK (50.0f)
+#define CA_ATTACK_KNOCKBACK_KATANA (10.0f)
+#define CA_ATTACK_KNOCKBACK_NAGINATA (20.0f)
+#define CA_ATTACK_DAMAGE (3)
 
 #define CA_TIMEREMAIN_OBJ (2)			// 残り時間で使うオブジェクト数
 #define CA_TIMEREMAIN_WIDTH (600)		// 残り時間のバー幅
 #define CA_TIMEREMAIN_HEIGHT (15)		// 残り時間のバー高さ
 #define CA_TIMEREMAIN_TIMELIMIT (3000)	// 入力の制限時間(ミリ秒)
 
+#define CA_USEPOWER_MAX (2)
 #define CA_CIRCLE_RADIUS (150.0f)	// circle radius
 
 //-----------------------------------------------------------------------------
@@ -81,7 +84,8 @@ typedef struct
 	int nActionCounter;					// カウンター
 	bool bPress;						// 入力のフラグ管理
 	bool bActive;						// アクティブかどうか
-	int nTest;
+	bool bUsable;
+	int nUsePower;
 } CommandAction;
 
 //-----------------------------------------------------------------------------
