@@ -10,7 +10,7 @@
 #include "fade.h"
 #include "meshfield.h"
 #include "Dinput.h"
-//#include "sound.h"
+#include "sound.h"
 
 //=================================================================================================================
 // マクロ定義
@@ -142,7 +142,7 @@ HRESULT InitTitle(void)
 	//頂点バッファをアンロックする
 	g_pVtxBuffTitle->Unlock();
 
-	//PlaySound(SOUND_LABEL_BGM000);	//タイトル時のサウンド
+	PlaySound(SOUND_LABEL_BGM004);	//タイトル時のサウンド
 
 	return S_OK;
 }
@@ -186,7 +186,7 @@ void UpdateTitle(void)
 	{
 		g_bEnter = true;	//エンターが押された
 
-		//StopSound(SOUND_LABEL_BGM000);	//サウンドを止める 
+		StopSound();	//サウンドを止める 
 		SetFade(FADE_OUT, MODE_GAME);	//ゲーム画面に飛ぶ＆フェードアウト
 	}
 	if (g_bEnter == true)

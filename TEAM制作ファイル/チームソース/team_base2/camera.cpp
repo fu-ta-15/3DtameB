@@ -61,8 +61,8 @@ void UpdateCamera(void)
 	if (pController->lRz < 0) g_camera.rot.z += CAMERA_PAD_SPEED;
 
 	//マウスの移動量を視点の回転に追加
-	//g_camera.rot.y += GetMouseVelocity().x / 550;
-	//g_camera.rot.z -= GetMouseVelocity().y / 550;
+	g_camera.rot.y += GetMouseVelocity().x / 550;
+	g_camera.rot.z -= GetMouseVelocity().y / 550;
 
 	if (g_camera.rot.z > D3DX_PI / 2.0f) g_camera.rot.z = D3DX_PI / 2.0f;
 	else if (g_camera.rot.z < -D3DX_PI / 2.1f) g_camera.rot.z = -D3DX_PI / 2.1f;

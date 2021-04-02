@@ -172,41 +172,32 @@ void UpdatePlayer(void)
 		/* プレイヤーの振り向きを滑らかにする */
 		PlayerSmoothTurn();
 
-		//行動にモーションつける
-		//if (GetKeyboardTrigger(DIK_SPACE) == true)
-		//{
-		//	if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
-		//	else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
-		//}
-		//else if (GetKeyboardPress(DIK_W) ||
-		//	GetKeyboardPress(DIK_S) ||
-		//	GetKeyboardPress(DIK_A) ||
-		//	GetKeyboardPress(DIK_D) == true)
-		//{
-		//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
-		//}
-		//else
-		//{
-		//	StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
-		//}
-
+		//移動 パッド
 		if (pController->lX != 0 || pController->lY != 0)
 		{//	スティックが傾いた時
 			float fAngle = atan2f((float)pController->lX, -(float)pController->lY);
 			MovePlayer(fAngle, PLAYER_MOVESPEED);
+		}
 
-			StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
-		}
-		else
-		{
-			StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
-		}
-		if (GetKeypadTrigger(D_BUUTON_A))
-		{
+		//モーション管理
+		if (GetKeypadTrigger(D_BUUTON_A) ||
+			GetKeyboardTrigger(DIK_SPACE))
+		{//	攻撃
 			if (g_player.weapon == PWEAPON_KATANA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_KATANA_ATTACK, NULL);
 			else if (g_player.weapon == PWEAPON_NAGINATA) StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NAGINATA_ATTACK, NULL);
 		}
-
+		else if (pController->lX != 0 || pController->lY != 0 ||
+			GetKeyboardPress(DIK_W) ||
+			GetKeyboardPress(DIK_S) ||
+			GetKeyboardPress(DIK_A) ||
+			GetKeyboardPress(DIK_D))
+		{//	移動
+			StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_WALK, NULL);
+		}
+		else
+		{//	ニュートラル
+			StartMotion(SELECTMOTION_PLAYER, MOTIONTYPE_CYBORG_NEUTRAL, NULL);
+		}
 
 		//攻撃中は移動０にする
 		if (g_player.motionType == MOTIONTYPE_CYBORG_KATANA_ATTACK ||

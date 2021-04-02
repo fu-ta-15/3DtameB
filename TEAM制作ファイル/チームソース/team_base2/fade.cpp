@@ -5,6 +5,7 @@
 //
 //-----------------------------------------------------------------------------
 #include "fade.h"
+#include "commandaction.h"
 
 //-----------------------------------------------------------------------------
 //　グローバル変数
@@ -170,4 +171,7 @@ void SetFade(FADE fade, MODE modeNext)
 
 	//次のモードの種類を受け取る
 	g_modeNext = modeNext;
+
+	//初期化
+	SetCommandActionState(false);
 }

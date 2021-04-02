@@ -8,6 +8,7 @@
 #include "score.h"
 #include "input.h"
 #include "fade.h"
+#include "game.h"
 #include "Dinput.h"
 
 //=============================================================================
@@ -178,9 +179,11 @@ void UpdateRanking(void)
 	if (GetKeyboardTrigger(DIK_RETURN) == true ||
 		GetKeypadTrigger(D_BUUTON_A))
 	{
+		Stage *pStage = GetStage();
 
-		//Œø‰Ê‰¹
+		pStage->nStageNum = 0;
 
+		//
 		SetFade(FADE_OUT, MODE_TITLE);
 	}
 }

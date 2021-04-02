@@ -25,7 +25,6 @@ void DrawTimeRemain(void);			// ↑の描画
 HRESULT InitActionCircle(void);		// 範囲サークルの初期化
 void DrawActionCircle(void);		// ↑の描画
 
-void SetCommandActionState(bool bActive);
 void OnPlayerFinishAction(void);
 
 //-----------------------------------------------------------------------------
@@ -621,15 +620,19 @@ void SetCommandActionState(bool bActive)
 
 		//頂点バッファロック
 		VERTEX_2D *pVertexButton;
-		g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton, 0);
-
-		for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++, pVertexButton += 4)
+		if (g_commandAct.buttonInfo.pVtxBuff != NULL)
 		{
-			for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton[nCntVtx].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			g_commandAct.buttonInfo.pVtxBuff->Lock(0, 0, (void**)&pVertexButton, 0);
+
+			for (int nCntBtn = 0; nCntBtn < CA_BUTTON_NUM; nCntBtn++, pVertexButton += 4)
+			{
+				for (int nCntVtx = 0; nCntVtx < VERTEX_AMOUNT; nCntVtx++) pVertexButton[nCntVtx].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+
+			//アンロック
+			g_commandAct.buttonInfo.pVtxBuff->Unlock();
 		}
 
-		//アンロック
-		g_commandAct.buttonInfo.pVtxBuff->Unlock();
 	}
 }
 

@@ -36,7 +36,8 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 	{"data/BGM/bgm_maoudamashii_cyber43.wav", -1},		
 	{"data/BGM/game_maoudamashii_2_boss06.wav", -1},
 	{ "data/BGM/bgm_maoudamashii_cyber34.wav", -1 },
-	{"data/BGM/warp.wav", 1}
+	{"data/BGM/warp.wav", 1},
+	{"data/BGM/MusMus-BGM-051 (online-audio-converter.com).wav", 1}
 };
 
 //=============================================================================

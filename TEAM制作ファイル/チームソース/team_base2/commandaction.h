@@ -96,6 +96,7 @@ void UninitCommand(void);
 void UpdateCommand(void);
 void DrawCommand(void);
 CommandAction *GetCAction(void);
+void SetCommandActionState(bool bActive);
 
 #endif
 
